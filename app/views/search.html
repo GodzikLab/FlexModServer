@@ -1,0 +1,68 @@
+<div ng-controller="SearchCtrl">
+    <div class="row" >
+        <h1>Search results for JobID {{r.id}}</h1>
+    </div>
+    <div class="row" >
+
+        <div class="col-xs-12 col-sm-11 col-sm-offset-1"> 
+           
+            <div role="group" aria-label="...">
+                <a type="button" class="btn btn-default">SSE</a>
+                <a type="button" class="btn btn-default">FFAS</a>
+                <a type="button" class="btn btn-default">PDBFlex</a>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="table-responsive">
+            <table class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th>MasterID</th>
+                        <th>Score</th>
+                        <th>Identity</th>
+                        <th>Flexibility</th>
+                        <th>RMSD</th>
+                        <th>ClusterSize</th>
+                        <th> Representatives</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="hit in r.hits">
+                        <td><a ng-href="http://pdbflex.org/cluster.html#!/{{hit.masterID}}/{{hit.masterDbID}}/{{hit.masterID}}"><b>{{hit.masterID}}</b></td>
+                        <td>{{hit.score}}</td>
+                        <td>{{hit.ident}}</td>
+                        <td>{{hit.flex}}</td>
+                        <td>{{hit.rmsd}}</td>
+                        <td>{{hit.size}}</td>
+                        <td>
+                            <div class="container-fluid">
+                                <div class="row-fluid">
+                                    <div class="col-md-12">
+                                        <ul class="horizontal-slide">
+                                            <li class="col-xs-3 col-md-2 "  ng-repeat="r in hit.representatives">
+                                                <img ng-src="{{r.img}}" style="margin:auto;" class="img-responsive img-representative-tmb">
+                                                <div class="text-center">{{r.pdbid}}</div>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<!--
+ pdb images 
+<script type="text/javascript" >
+            $(document).ready(function () {
+                rcsbPdbImageLib.useShadowBox = false;
+                rcsbPdbImageLib.addOnloadEvent(function () {
+                    rcsbPdbImageLib.initLib();
+                })
+            });
+</script>
+ end pdb images -->
