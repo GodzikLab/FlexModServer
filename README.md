@@ -6,7 +6,7 @@ Source code for ModFlex server
 
 Run `grunt` for building and `grunt serve` for preview.
 
-Run `grunt watch` for live reloads. 
+Run `grunt serve` for live reloads. 
 
 ## Testing
 
