@@ -12,9 +12,9 @@ angular
     .module('modFlexApp', [
         'ngCookies',
         'ngResource',
-        'ngRoute'
-//        ,
-//        'ui.bootstrap'
+        'ngRoute',
+        'ngAnimate',
+        'ui.bootstrap'
     ])
     .config(function ($routeProvider) {
         $routeProvider

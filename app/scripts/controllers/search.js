@@ -10,7 +10,7 @@
 angular.module('modFlexApp')
     .controller('SearchCtrl', ['$scope', '$location', function ($scope, $location) {
             $scope.isActive = ($location.url() === "/search");
-
+            $scope.filtLigand = false;
 
             // replace this json with server script call later
             var result = {
@@ -25,9 +25,9 @@ angular.module('modFlexApp')
                         rmsd: 2.467,
                         size: 3,
                         representatives: [
-                            {id: 0, pdbid: '102m', active: true, img: "http://www.rcsb.org/pdb/images/1ksr_asr_r_250.jpg"},
-                            {id: 1, pdbid: '104m', img: "http://www.rcsb.org/pdb/images/1ksr_asr_r_250.jpg"},
-                            {id: 2, pdbid: '111m', img: "http://www.rcsb.org/pdb/images/1ksr_asr_r_250.jpg"}
+                            {pdbid: '102m', selected: true, hasLigand: true, img: "http://www.rcsb.org/pdb/images/1ksr_asr_r_250.jpg"},
+                            {pdbid: '104m', img: "http://www.rcsb.org/pdb/images/1ksr_asr_r_250.jpg"},
+                            {pdbid: '111m', img: "http://www.rcsb.org/pdb/images/1ksr_asr_r_250.jpg"}
                         ]
                     },
                     {
@@ -39,16 +39,16 @@ angular.module('modFlexApp')
                         rmsd: 2.467,
                         size: 10,
                         representatives: [
-                            {id: 1, pdbid: '102m', active: true, img: "http://www.rcsb.org/pdb/images/1ksr_asr_r_250.jpg"},
-                            {id: 2, pdbid: '104m', img: "http://www.rcsb.org/pdb/images/1ksr_asr_r_250.jpg"},
-                            {id: 3, pdbid: '111m', img: "http://www.rcsb.org/pdb/images/1ksr_asr_r_250.jpg"},
-                            {id: 4, pdbid: '102m', img: "http://www.rcsb.org/pdb/images/1ksr_asr_r_250.jpg"},
-                            {id: 5, pdbid: '104m', img: "http://www.rcsb.org/pdb/images/1ksr_asr_r_250.jpg"},
-                            {id: 6, pdbid: '111m', img: "http://www.rcsb.org/pdb/images/1ksr_asr_r_250.jpg"},
-                            {id: 7, pdbid: '111m', img: "http://www.rcsb.org/pdb/images/1ksr_asr_r_250.jpg"},
-                            {id: 8, pdbid: '102m', img: "http://www.rcsb.org/pdb/images/1ksr_asr_r_250.jpg"},
-                            {id: 9, pdbid: '104m', img: "http://www.rcsb.org/pdb/images/1ksr_asr_r_250.jpg"},
-                            {id: 10, pdbid: '111m', img: "http://www.rcsb.org/pdb/images/1ksr_asr_r_250.jpg"}
+                            {pdbid: '102m', hasLigand: true, img: "http://www.rcsb.org/pdb/images/1ksr_asr_r_250.jpg"},
+                            {pdbid: '104m', img: "http://www.rcsb.org/pdb/images/1ksr_asr_r_250.jpg"},
+                            {pdbid: '111m', selected: true, img: "http://www.rcsb.org/pdb/images/1ksr_asr_r_250.jpg"},
+                            {pdbid: '102m', img: "http://www.rcsb.org/pdb/images/1ksr_asr_r_250.jpg"},
+                            {pdbid: '104m', hasLigand: true, img: "http://www.rcsb.org/pdb/images/1ksr_asr_r_250.jpg"},
+                            {pdbid: '111m', img: "http://www.rcsb.org/pdb/images/1ksr_asr_r_250.jpg"},
+                            {pdbid: '111m', img: "http://www.rcsb.org/pdb/images/1ksr_asr_r_250.jpg"},
+                            {pdbid: '102m', img: "http://www.rcsb.org/pdb/images/1ksr_asr_r_250.jpg"},
+                            {pdbid: '104m', hasLigand: true, img: "http://www.rcsb.org/pdb/images/1ksr_asr_r_250.jpg"},
+                            {pdbid: '111m', img: "http://www.rcsb.org/pdb/images/1ksr_asr_r_250.jpg"}
                         ]
                     },
                     {
@@ -60,11 +60,11 @@ angular.module('modFlexApp')
                         rmsd: 2.467,
                         size: 4,
                         representatives: [
-                            {id: 1, pdbid: '102m', active: true, img: "http://www.rcsb.org/pdb/images/1ksr_asr_r_250.jpg"},
-                            {id: 2, pdbid: '104m', img: "http://www.rcsb.org/pdb/images/1ksr_asr_r_250.jpg"},
-                            {id: 3, pdbid: '111m', img: "http://www.rcsb.org/pdb/images/1ksr_asr_r_250.jpg"},
-                            {id: 4, pdbid: '102m', img: "http://www.rcsb.org/pdb/images/1ksr_asr_r_250.jpg"},
-                            {id: 5, pdbid: '104m', img: "http://www.rcsb.org/pdb/images/1ksr_asr_r_250.jpg"}
+                            {pdbid: '102m', active: true, img: "http://www.rcsb.org/pdb/images/1ksr_asr_r_250.jpg"},
+                            {pdbid: '104m', img: "http://www.rcsb.org/pdb/images/1ksr_asr_r_250.jpg"},
+                            { pdbid: '111m', img: "http://www.rcsb.org/pdb/images/1ksr_asr_r_250.jpg"},
+                            { pdbid: '102m', img: "http://www.rcsb.org/pdb/images/1ksr_asr_r_250.jpg"},
+                            { pdbid: '104m', img: "http://www.rcsb.org/pdb/images/1ksr_asr_r_250.jpg"}
 
                         ]
                     }
@@ -73,6 +73,33 @@ angular.module('modFlexApp')
             };
 
             $scope.r = result;
+
+
+            $scope.getSelected = function () {
+                var list = [];
+                for (var i in $scope.r) {
+                    if (i.selected) {
+                        var j = i;
+                        list.push(j);
+                    }
+                }
+                return list;
+            };
+
+
+            $scope.switchLigandFilter = function () {
+                $scope.filtLigand = !$scope.filtLigand;
+            }
+
+            $scope.matchFilters = function () {
+                return function (r) {
+                    if ($scope.filtLigand) {
+                        return r.hasLigand === true;
+                    } else {
+                        return r;
+                    }
+                };
+            };
         }]
         )
     ;
