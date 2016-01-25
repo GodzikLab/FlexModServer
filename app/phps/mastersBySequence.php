@@ -29,7 +29,9 @@
 		#{"queryKey":"1A50:A|PDBID|CHAIN|SEQUENCE","templateKey":"1wxj_A","score":"4.000e-26","identity":32.02,"similarity":52.71,"identAA":65,"simAA":107,"aliLen":203}
 		foreach ($hitIDs as $hitObject) {
 			$matchID = $hitObject["templateKey"];			
-
+			$matchScore = $hitObject['score'];
+			$matchIdentity = $hitObject['identity'];
+			$matchSimilarity = $hitObject['similarity'];
 			$matchSplit = explode('_',$matchID);
 			$pdbID = $matchSplit[0];
 			$chain = $matchSplit[1];
@@ -78,20 +80,47 @@
 			foreach($subClusters as $subCluster) {
 				// echo($subCluster);
 				$subClusterID = $subCluster['name'];
+				$subClusterPDB = substr($subClusterID, 0,4);
+				$subClusterChain = substr($subClusterID, 4,1);
+
+				$url = "http://pdbflex.org/fsn/php/getPDBInfo.php?pdb=".$subClusterPDB."&chain=".$subClusterChain;
+
+				$options = array(
+				    'http' => array(
+				        // 'header'  => "Content-type: application/x-www-form-urlencoded\r\n",
+				        'method'  => 'GET',
+				        // 'content' => http_build_query($data),
+				    ),
+				);
+
+				$context  = stream_context_create($options);
+				$pdbInfoJSONString = file_get_contents($url, false, $context);
+
+				$pdbInfo = json_decode($pdbInfoJSONString,TRUE);
+				$ligands = $pdbInfo["ligands"];
+
 				// echo($subClusterID);
-				array_push($subClusterArray,$subClusterID);
+				array_push($subClusterArray,$pdbInfo);
 			}
 
 			$masterInfo = array();
 			$masterInfo['PDB'] = $masterPDBID;
 			$masterInfo['chain'] = $masterChainID;
-			$masterInfo['clusterID'] = $masterClusterID;
-			$masterInfo['subClusters'] = $subClusterArray;
+			$masterInfo['masterID'] = $clusterName;
+			$masterInfo['masterDbID'] = $masterClusterID;
+			$masterInfo['score'] = $matchScore;
+			$masterInfo['ident'] = $matchIdentity;
+			$masterInfo['flex'] = 5;
+			$masterInfo['rmsd'] = 2.467;
+			$masterInfo['size'] = count($subClusterArray);
+			$masterInfo['representatives'] = $subClusterArray;
 			// echo($masterInfo);
 			array_push($allMasters, $masterInfo);
+			// break;
 		}
 		
 		echo(json_encode($allMasters));
+		
 	}
 	
 	#"http://pdbflex.org/fsn-data/rmsdClusters/fullPlots/".$clusterName."result.json";
