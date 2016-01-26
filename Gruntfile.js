@@ -352,6 +352,17 @@ module.exports = function (grunt) {
         },
         // Copies remaining files to places other tasks can use
         copy: {
+            deploy: {
+                files:[
+                    {
+                        expand: true,
+                        cwd: '<%= yeoman.dist %>/',
+                        src: ['**'],
+                        dest: '/var/www/html/ModFlex/'
+                    },
+
+                ]
+            },
             dist: {
                 files: [{
                         expand: true,
@@ -460,5 +471,10 @@ module.exports = function (grunt) {
         'newer:jscs',
         'test',
         'build'
+    ]);
+
+    grunt.registerTask('deploy', [
+        'build',
+        'copy:deploy'
     ]);
 };
