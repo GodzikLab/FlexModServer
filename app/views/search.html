@@ -75,10 +75,10 @@
                                                 <button type="button"  class="btn btn-xs" ng-class="{'btn-success':r.selected}" ng-click="r.selected = !r.selected" aria-label="Select">
                                                     <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
                                                 </button>
-                                                <span ng-show="r.hasLigand" aria-label="Has ligand">
+                                                <span ng-show="hasLigand(r)" aria-label="Has ligand">
                                                     <i class="fa fa-puzzle-piece"></i></span>
                                                 <img ng-src="{{r.img}}" style="margin:auto;" class="img-responsive img-representative-tmb">
-                                                <div class="text-center">{{r.pdbid}}</div>
+                                                <div class="text-center">{{r.pdb}}</div>
                                             </li>
                                         </ul>
                                     </div>
