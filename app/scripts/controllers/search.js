@@ -144,7 +144,7 @@ angular.module('modFlexApp')
 
             $scope.switchLigandFilter = function () {
                 $scope.filtLigand = !$scope.filtLigand;
-            }
+            };
 
             $scope.matchFilters = function () {
                 return function (r) {
