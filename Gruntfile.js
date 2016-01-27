@@ -346,6 +346,9 @@ module.exports = function (grunt) {
         },
         // Replace Google CDN references
         cdnify: {
+            options: {
+                cdn: require('google-cdn-data')
+            },
             dist: {
                 html: ['<%= yeoman.dist %>/*.html']
             }
@@ -353,14 +356,13 @@ module.exports = function (grunt) {
         // Copies remaining files to places other tasks can use
         copy: {
             deploy: {
-                files:[
+                files: [
                     {
                         expand: true,
                         cwd: '<%= yeoman.dist %>/',
                         src: ['**'],
                         dest: '/var/www/html/'
                     },
-
                 ]
             },
             dist: {
