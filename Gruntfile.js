@@ -358,7 +358,7 @@ module.exports = function (grunt) {
                         expand: true,
                         cwd: '<%= yeoman.dist %>/',
                         src: ['**'],
-                        dest: '/var/www/html/ModFlex/'
+                        dest: '/var/www/html/'
                     },
 
                 ]
