@@ -3,8 +3,8 @@
 ///data/www/FSN/data/pdb_seqres.txt
 	// require_once('blastXML.php');
 
-	#$fullSequence 	= $_POST['sequence'];
-	$fullSequence = ">1A50:A|PDBID|CHAIN|SEQUENCE\nMERYENLFAQLNDRREGAFVPFVTLGDPGIEQSLKIIDTLIDAGADALELGVPFSDPLADGPTIQNANLRAFAAGVTPAQCFEMLALIREKHPTIPIGLLMYANLVFNNGIDAFYARCEQVGVDSVLVADVPVEESAPFRQAALRHNIAPIFICPPNADDDLLRQVASYGRGYTYLLSRSGVTGAENRGALPLHHLIEKLKEYHAAPALQGFGISSPEQVSAAVRAGAAGAISGSAIVKIIEKNLASPKQMLAELRSFVSAMKAASRA";
+	$fullSequence 	= $_POST['sequence'];
+	// $fullSequence = ">1A50:A|PDBID|CHAIN|SEQUENCE\nMERYENLFAQLNDRREGAFVPFVTLGDPGIEQSLKIIDTLIDAGADALELGVPFSDPLADGPTIQNANLRAFAAGVTPAQCFEMLALIREKHPTIPIGLLMYANLVFNNGIDAFYARCEQVGVDSVLVADVPVEESAPFRQAALRHNIAPIFICPPNADDDLLRQVASYGRGYTYLLSRSGVTGAENRGALPLHHLIEKLKEYHAAPALQGFGISSPEQVSAAVRAGAAGAISGSAIVKIIEKNLASPKQMLAELRSFVSAMKAASRA";
 
 	$url = 'http://pdbflex.org/fsn/php/sequenceToPDB.php';
 	$data = array('sequence' => $fullSequence);
@@ -21,7 +21,13 @@
 
 	$masterIDsJSONString = file_get_contents($url, false, $context);
 	
-	if ($result === FALSE) { /* Handle error */ }
+	if ($result === FALSE) { 
+		$errorMessage = array();
+		$errorMessage['script'] = 'mastersBySequence.php';
+		$errorMessage['title'] = 'Blast fail';
+		$errorMessage['message'] = 'An error occured while comparing your sequence to our database. Please make sure your sequence is correct.';
+		echo(json_encode($errorMessage));
+	}
 	else{
 		header('Content-Type: application/json');
 		$hitIDs = json_decode($masterIDsJSONString,TRUE);
@@ -51,6 +57,15 @@
 
 			$context  = stream_context_create($options);
 			$clusterInfoJSONString = file_get_contents($url, false, $context);
+			if(strcmp($clusterInfoJSONString, '{"sender":"pdbChainGetCluster.php",message":"No cluster found."}')==0){
+				$errorMessage = array();
+				$errorMessage['script'] = 'pdbChainGetCluster.php';
+				$errorMessage['title'] = 'No cluster found';
+				$errorMessage['message'] = 'No matching cluster was detected for your input sequence.';
+				echo(json_encode($errorMessage));
+				exit();
+			}
+
 			// echo($clusterInfoJSONString);
 			// {"pdbID":"1ujp","chainID":"A","clusterID":"13292","masterID":"45197","queryPDB":"1wxj","queryChain":"A"}
 			$clusterDetails = json_decode($clusterInfoJSONString,TRUE);
@@ -118,9 +133,7 @@
 			array_push($allMasters, $masterInfo);
 			// break;
 		}
-		
 		echo(json_encode($allMasters));
-		
 	}
 	
 	#"http://pdbflex.org/fsn-data/rmsdClusters/fullPlots/".$clusterName."result.json";
