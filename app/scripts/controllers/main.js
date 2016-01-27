@@ -8,16 +8,12 @@
  * Controller of the modFlexApp
  */
 angular.module('modFlexApp')
-    .controller('MainCtrl'
-//, ['$scope', function ($scope) {
-//
-//        }]
-        )
+    .controller('MainCtrl', ['$scope', function ($scope) {
 
-    .controller('ContactsCtrl'
-//, ['$scope', function ($scope) {
-//        }]
-    )
+        }])
+    .controller('ContactsCtrl', ['$scope', function ($scope) {
+            
+        }])
 
     .controller('HeaderCtrl', ['$scope', '$location', function ($scope, $location) {
             $scope.isActive = function (viewLocation) {
