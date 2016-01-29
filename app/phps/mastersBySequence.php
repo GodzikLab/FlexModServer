@@ -5,7 +5,14 @@
 
 	$fullSequence 	= $_POST['sequence'];
 	// $fullSequence = ">1A50:A|PDBID|CHAIN|SEQUENCE\nMERYENLFAQLNDRREGAFVPFVTLGDPGIEQSLKIIDTLIDAGADALELGVPFSDPLADGPTIQNANLRAFAAGVTPAQCFEMLALIREKHPTIPIGLLMYANLVFNNGIDAFYARCEQVGVDSVLVADVPVEESAPFRQAALRHNIAPIFICPPNADDDLLRQVASYGRGYTYLLSRSGVTGAENRGALPLHHLIEKLKEYHAAPALQGFGISSPEQVSAAVRAGAAGAISGSAIVKIIEKNLASPKQMLAELRSFVSAMKAASRA";
-
+	if(strlen($fullSequence) == 0){
+		$errorMessage = array();
+		$errorMessage['script'] = 'mastersBySequence.php';
+		$errorMessage['title'] = 'No sequence';
+		$errorMessage['message'] = 'The script did not recieve a sequence.';
+		echo(json_encode($errorMessage));
+		exit();
+	}
 	$url = 'http://pdbflex.org/fsn/php/sequenceToPDB.php';
 	$data = array('sequence' => $fullSequence);
 
