@@ -27,7 +27,7 @@ angular.module('modFlexApp')
             $http(req).then(function successCallback(response) {
                 // this callback will be called asynchronously
                 // when the response is available
-                console.log(response);
+              //  console.log(response);
                 $scope.r.hits = response.data;
             }, function errorCallback(response) {
                 // called asynchronously if an error occurs
