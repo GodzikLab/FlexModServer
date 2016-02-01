@@ -3,7 +3,10 @@
 ///data/www/FSN/data/pdb_seqres.txt
 	// require_once('blastXML.php');
 	header("Access-Control-Allow-Origin: *");
-	
+	header("Access-Control-Allow-Credentials: true ");
+        header("Access-Control-Allow-Methods: OPTIONS, GET, POST");
+        header("Access-Control-Allow-Headers: Content-Type, Depth, User-Agent, X-File-Size,     X-Requested-With, If-Modified-Since, X-File-Name, Cache-Control");
+
 	$fullSequence 	= $_POST['sequence'];
 	// $fullSequence = ">1A50:A|PDBID|CHAIN|SEQUENCE\nMERYENLFAQLNDRREGAFVPFVTLGDPGIEQSLKIIDTLIDAGADALELGVPFSDPLADGPTIQNANLRAFAAGVTPAQCFEMLALIREKHPTIPIGLLMYANLVFNNGIDAFYARCEQVGVDSVLVADVPVEESAPFRQAALRHNIAPIFICPPNADDDLLRQVASYGRGYTYLLSRSGVTGAENRGALPLHHLIEKLKEYHAAPALQGFGISSPEQVSAAVRAGAAGAISGSAIVKIIEKNLASPKQMLAELRSFVSAMKAASRA";
 	if(strlen($fullSequence) == 0){
