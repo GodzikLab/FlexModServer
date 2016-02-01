@@ -1,12 +1,13 @@
 <?php
 	header("Access-Control-Allow-Origin: *");
-	$fullSequence 	= $_POST['sequence'];
+	// $fullSequence 	= $_POST['sequence'];
 
-	// $fullSequence = ">1A50:A|PDBID|CHAIN|SEQUENCE\nMERYENLFAQLNDRREGAFVPFVTLGDPGIEQSLKIIDTLIDAGADALELGVPFSDPLADGPTIQNANLRAFAAGVTPAQCFEMLALIREKHPTIPIGLLMYANLVFNNGIDAFYARCEQVGVDSVLVADVPVEESAPFRQAALRHNIAPIFICPPNADDDLLRQVASYGRGYTYLLSRSGVTGAENRGALPLHHLIEKLKEYHAAPALQGFGISSPEQVSAAVRAGAAGAISGSAIVKIIEKNLASPKQMLAELRSFVSAMKAASRA";
+	$fullSequence = ">1A50:A|PDBID|CHAIN|SEQUENCE\nMERYENLFAQLNDRREGAFVPFVTLGDPGIEQSLKIIDTLIDAGADALELGVPFSDPLADGPTIQNANLRAFAAGVTPAQCFEMLALIREKHPTIPIGLLMYANLVFNNGIDAFYARCEQVGVDSVLVADVPVEESAPFRQAALRHNIAPIFICPPNADDDLLRQVASYGRGYTYLLSRSGVTGAENRGALPLHHLIEKLKEYHAAPALQGFGISSPEQVSAAVRAGAAGAISGSAIVKIIEKNLASPKQMLAELRSFVSAMKAASRA";
 
 	$url = 'http://pdbflex.org/fsn/php/alignSequences.php';
-	$data = array('sequence' => $fullSequence);
-
+	// $url = 'http://localhost/FSN/public_html/php/alignSequences.php';
+	$data = array('sequence' => $fullSequence,'pdbID' => '1a50','chainID' => 'A');
+	// print_r($data);
 	// use key 'http' even if you send the request to https://...
 	$options = array(
 	    'http' => array(
@@ -16,10 +17,10 @@
 	    ),
 	);
 	$context  = stream_context_create($options);
-
+	
 	$masterIDsJSONString = file_get_contents($url, false, $context);
 
-
+	echo($masterIDsJSONString);
 
 ?>
 
