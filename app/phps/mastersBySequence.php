@@ -37,7 +37,7 @@ $context = stream_context_create($options);
 
 $masterIDsJSONString = file_get_contents($url, false, $context);
 
-if ($result === FALSE) {
+if ($masterIDsJSONString === FALSE) {
     $errorMessage = array();
     $errorMessage['script'] = 'mastersBySequence.php';
     $errorMessage['title'] = 'Blast fail';
