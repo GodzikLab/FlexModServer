@@ -1,7 +1,13 @@
 <?php
 	header("Access-Control-Allow-Origin: *");
-	// $fullSequence 	= $_POST['sequence'];
+	header("Access-Control-Allow-Credentials: true ");
+	header("Access-Control-Allow-Methods: OPTIONS, GET, POST");
+	header("Access-Control-Allow-Headers: Content-Type, Depth, User-Agent, X-File-Size,     X-Requested-With, If-Modified-Since, X-File-Name, Cache-Control");
 
+	
+	// $fullSequence 	= $_POST['sequence'];
+	// $modelPDBID = $_POST['pdbID'];
+	// $modelChain = $_POST['chainID'];
 	$fullSequence = ">1A50:A|PDBID|CHAIN|SEQUENCE\nMERYENLFAQLNDRREGAFVPFVTLGDPGIEQSLKIIDTLIDAGADALELGVPFSDPLADGPTIQNANLRAFAAGVTPAQCFEMLALIREKHPTIPIGLLMYANLVFNNGIDAFYARCEQVGVDSVLVADVPVEESAPFRQAALRHNIAPIFICPPNADDDLLRQVASYGRGYTYLLSRSGVTGAENRGALPLHHLIEKLKEYHAAPALQGFGISSPEQVSAAVRAGAAGAISGSAIVKIIEKNLASPKQMLAELRSFVSAMKAASRA";
 
 	$url = 'http://pdbflex.org/fsn/php/alignSequences.php';
@@ -18,9 +24,49 @@
 	);
 	$context  = stream_context_create($options);
 	
-	$masterIDsJSONString = file_get_contents($url, false, $context);
+	$blastAlignmentJSON = file_get_contents($url, false, $context);
 
-	echo($masterIDsJSONString);
+	if ($blastAlignmentJSON === FALSE) {
+	    $errorMessage = array();
+	    $errorMessage['script'] = 'alignSequences.php';
+	    $errorMessage['title'] = 'Pairwise alignment failed';
+	    $errorMessage['message'] = 'Pairwise alignment failed!';
+	    echo(json_encode($errorMessage));
+	}
+
+	// echo($blastAlignmentJSON);
+
+	// [{
+	// 	"queryKey": "1A50:A|PDBID|CHAIN|SEQUENCE",
+	// 	"templateKey": "Frame:0",
+	// 	"score": "0.000e+00",
+	// 	"identity": 100.00,
+	// 	"similarity": 100.00,
+	// 	"identAA": 268,
+	// 	"simAA": 268,
+	// 	"aliLen": 268,
+	// 	"queryStart": 1,
+	// 	"queryEnd": 268,
+	// 	"queryAA": "MERYENLFAQLNDRREGAFVPFVTLGDPGIEQSLKIIDTLIDAGADALELGVPFSDPLADGPTIQNANLRAFAAGVTPAQCFEMLALIREKHPTIPIGLLMYANLVFNNGIDAFYARCEQVGVDSVLVADVPVEESAPFRQAALRHNIAPIFICPPNADDDLLRQVASYGRGYTYLLSRSGVTGAENRGALPLHHLIEKLKEYHAAPALQGFGISSPEQVSAAVRAGAAGAISGSAIVKIIEKNLASPKQMLAELRSFVSAMKAASRA",
+	// 	"templateStart": 1,
+	// 	"templateEnd": 268,
+	// 	"templateAA": "MERYENLFAQLNDRREGAFVPFVTLGDPGIEQSLKIIDTLIDAGADALELGVPFSDPLADGPTIQNANLRAFAAGVTPAQCFEMLALIREKHPTIPIGLLMYANLVFNNGIDAFYARCEQVGVDSVLVADVPVEESAPFRQAALRHNIAPIFICPPNADDDLLRQVASYGRGYTYLLSRSGVTGAENRGALPLHHLIEKLKEYHAAPALQGFGISSPEQVSAAVRAGAAGAISGSAIVKIIEKNLASPKQMLAELRSFVSAMKAASRA",
+	// 	"templateCutAA": "MERYENLFAQLNDRREGAFVPFVTLGDPGIEQSLKIIDTLIDAGADALELGVPFSDPLADGPTIQNANLRAFAAGVTPAQCFEMLALIREKHPTIPIGLLMYANLVFNNGIDAFYARCEQVGVDSVLVADVPVEESAPFRQAALRHNIAPIFICPPNADDDLLRQVASYGRGYTYLLSRSGVTGAENRGALPLHHLIEKLKEYHAAPALQGFGISSPEQVSAAVRAGAAGAISGSAIVKIIEKNLASPKQMLAELRSFVSAMKAASRA"
+	// }]
+
+	$blastAlignment = json_decode($blastAlignmentJSON, TRUE);
+
+	//http://ffas.burnham.org/protmod-cgi/qryByAliForm.pl?pdbId=&chain=&targetStart=&templateStart=qs&ali=qs%20ts 
+
+	// $url = "http://ffas.burnham.org/protmod-cgi/qryByAliForm.pl";
+
+	// $data = array('ali' => $blastAlignment['templateAA'],'pdbId' => modelPDBID,'chain' => modelChain);
+
+	$returnArray = array();
+	$returnArray['scipt'] = 'startModel.php';
+	$returnArray['modelURL'] = '/developmentData/1a50.pdb';
+
+	echo(json_encode($returnArray));
 
 ?>
 
