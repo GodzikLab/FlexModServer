@@ -12,7 +12,7 @@ angular
     .module('modFlexApp', [
         'ngCookies',
         'ngResource',
-        'ngRoute',
+        'ngRoute', 
         'ngAnimate',
         'ui.bootstrap'
     ])

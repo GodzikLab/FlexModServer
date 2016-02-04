@@ -12,93 +12,109 @@
         </div>
         </div>
     </script>
+
+
+    <div id='errors' ng-show='hasErrors' class="row">
+        <div class="col-sm-12 col-md-12 alert alert-danger" role="alert">{{errorMessage}}
+        </div>
+    </div>
+
     <uib-accordion close-others="true">
         <uib-accordion-group heading="Help" is-open="false" is-disabled="false">
             Add some help here
         </uib-accordion-group>
     </uib-accordion>
-
-    <div class="row" >
-        <div class="col-sm-12 col-md-6">
-            <h1>Search results</h1><h2>{{r.hits.length || 0}} matches</h2></div>
-        <div class="col-sm-12 col-md-6">
-            <uib-accordion close-others="true">
-                <uib-accordion-group is-open="false" is-disabled="false">
-                    <uib-accordion-heading>
-                        <i class="pull-letf glyphicon glyphicon glyphicon-filter"></i> Filter results
-                    </uib-accordion-heading>
-                    <button type="button" class="btn btn-default" ng-model="filtLigand" uib-btn-checkbox
-                            ng-click="switchLigandFilter()">
-                        Has ligands
-                    </button>
-                </uib-accordion-group>
-            </uib-accordion>
+    
+    
+    <div ng-show="!finished && !hasErrors"><i class="fa fa-4x fa-spinner fa-spin"></i></div>
+    <div ng-show="finished && !hasErrors">
+        <div class="row">
+            <div class="col-sm-12 col-md-6">
+                <h1>Search results</h1><h2>{{r.hits.length|| 0}} matches</h2>
+                <uib-accordion close-others="true">
+                    <uib-accordion-group heading="Query sequence" is-open="false" is-disabled="false">
+                        <textarea ng-model="querySequence" editable="false" style="min-width: 100%; min-height: 90%"></textarea>
+                    </uib-accordion-group>
+                </uib-accordion>
+            </div>
+            <div class="col-sm-12 col-md-6">
+                <uib-accordion close-others="true">
+                    <uib-accordion-group is-open="false" is-disabled="false">
+                        <uib-accordion-heading>
+                            <i class="pull-letf glyphicon glyphicon glyphicon-filter"></i> Filter results
+                        </uib-accordion-heading>
+                        <button type="button" class="btn btn-default" ng-model="filtLigand" uib-btn-checkbox
+                                ng-click="switchLigandFilter()">
+                            Has ligands
+                        </button>
+                    </uib-accordion-group>
+                </uib-accordion>
+            </div>
         </div>
-    </div>
 
-    <div class="row" >
-        <div class="col-xs-12 col-sm-11 col-sm-offset-1"> 
-            <div role="group" aria-label="...">
-                <a type="button" class="btn btn-default">SSE</a>
-                <a type="button" class="btn btn-default">FFAS</a>
+        <div class="row">
+            <div class="col-xs-12 col-sm-11 col-sm-offset-1"> 
+                <div role="group" aria-label="...">
+                    <a type="button" class="btn btn-default">SSE</a>
+                    <a type="button" class="btn btn-default">FFAS</a>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="table-responsive">
+                <table class="table table-bordered table-striped">
+                    <thead>
+                        <tr>
+                            <th>MasterID</th>
+                            <th>Score</th>
+                            <th>Identity</th>
+                            <th>Flexibility</th>
+                            <th>RMSD</th>
+                            <th>ClusterSize</th>
+                            <th> Representatives</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="hit in r.hits">
+                            <td><a ng-href="http://pdbflex.org/cluster.html#!/{{hit.masterID}}/{{hit.masterDbID}}/{{hit.masterID}}"><b>{{hit.masterID}}</b></td>
+                            <td>{{hit.score}}</td>
+                            <td>{{hit.ident}}</td>
+                            <td>{{hit.flex}}</td>
+                            <td>{{hit.rmsd}}</td>
+                            <td>{{hit.size}}</td>
+                            <td>
+                                <div class="container-fluid">
+                                    <div class="row-fluid">
+                                        <div class="col-md-12">
+                                            <ul class="horizontal-slide">
+                                                <li class="col-xs-3 col-md-2 img-thumbnail" ng-repeat="r in hit.representatives| filter: matchFilters()">
+                                                    <button type="button"  class="btn btn-xs" ng-class="{'btn-success':r.selected}" ng-click="r.selected = !r.selected" aria-label="Select">
+                                                        <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+                                                    </button>
+                                                    <span ng-show="hasLigand(r)" aria-label="Has ligand">
+                                                        <i class="fa fa-puzzle-piece"></i></span>
+                                                    <img ng-src="{{r.img}}" style="margin:auto;" class="img-responsive img-representative-tmb">
+                                                    <div class="text-center">{{r.pdb}}</div>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>
-    <div class="row">
-        <div class="table-responsive">
-            <table class="table table-bordered table-striped">
-                <thead>
-                    <tr>
-                        <th>MasterID</th>
-                        <th>Score</th>
-                        <th>Identity</th>
-                        <th>Flexibility</th>
-                        <th>RMSD</th>
-                        <th>ClusterSize</th>
-                        <th> Representatives</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr ng-repeat="hit in r.hits">
-                        <td><a ng-href="http://pdbflex.org/cluster.html#!/{{hit.masterID}}/{{hit.masterDbID}}/{{hit.masterID}}"><b>{{hit.masterID}}</b></td>
-                        <td>{{hit.score}}</td>
-                        <td>{{hit.ident}}</td>
-                        <td>{{hit.flex}}</td>
-                        <td>{{hit.rmsd}}</td>
-                        <td>{{hit.size}}</td>
-                        <td>
-                            <div class="container-fluid">
-                                <div class="row-fluid">
-                                    <div class="col-md-12">
-                                        <ul class="horizontal-slide">
-                                            <li class="col-xs-3 col-md-2 img-thumbnail" ng-repeat="r in hit.representatives| filter: matchFilters()">
-                                                <button type="button"  class="btn btn-xs" ng-class="{'btn-success':r.selected}" ng-click="r.selected = !r.selected" aria-label="Select">
-                                                    <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
-                                                </button>
-                                                <span ng-show="hasLigand(r)" aria-label="Has ligand">
-                                                    <i class="fa fa-puzzle-piece"></i></span>
-                                                <img ng-src="{{r.img}}" style="margin:auto;" class="img-responsive img-representative-tmb">
-                                                <div class="text-center">{{r.pdb}}</div>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-    </div>
-</div>
-<!--
- pdb images 
-<script type="text/javascript" >
-            $(document).ready(function () {
-                rcsbPdbImageLib.useShadowBox = false;
-                rcsbPdbImageLib.addOnloadEvent(function () {
-                    rcsbPdbImageLib.initLib();
-                })
-            });
-</script>
- end pdb images -->
+    <!--
+     pdb images 
+    <script type="text/javascript" >
+                $(document).ready(function () {
+                    rcsbPdbImageLib.useShadowBox = false;
+                    rcsbPdbImageLib.addOnloadEvent(function () {
+                        rcsbPdbImageLib.initLib();
+                    })
+                });
+    </script>
+     end pdb images -->
