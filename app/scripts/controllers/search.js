@@ -11,6 +11,9 @@ angular.module('modFlexApp')
     .controller('SearchCtrl', ['$scope', '$location', '$http', '$templateCache',
         function ($scope, $location, $http, $templateCache) {
             $scope.isActive = ($location.url() === "/search");
+            $scope.sortType = 'score'; // default sort type
+            $scope.sortReverse = false;  // default sort order
+
             $scope.filtLigand = false;
             $scope.hasErrors = false;
             $scope.finished = false;
@@ -72,7 +75,7 @@ angular.module('modFlexApp')
                     }
                 }, function errorCallback(response) {
                     $scope.hasErrors = true;
-                        $scope.errorMessage = "Error occured";
+                    $scope.errorMessage = "Error occured";
                 });
 
             };

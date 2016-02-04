@@ -24,8 +24,8 @@
             Add some help here
         </uib-accordion-group>
     </uib-accordion>
-    
-    
+
+
     <div ng-show="!finished && !hasErrors"><i class="fa fa-4x fa-spinner fa-spin"></i></div>
     <div ng-show="finished && !hasErrors">
         <div class="row">
@@ -65,17 +65,44 @@
                 <table class="table table-bordered table-striped">
                     <thead>
                         <tr>
-                            <th>MasterID</th>
-                            <th>Score</th>
-                            <th>Identity</th>
-                            <th>Flexibility</th>
-                            <th>RMSD</th>
-                            <th>ClusterSize</th>
+                            <th><a ng-click="sortType = 'masterID'; sortReverse = !sortReverse">
+                                    MastedID
+                                    <span ng-show="sortType == 'masterID' && !sortReverse" class="fa fa-caret-down"></span>
+                                    <span ng-show="sortType == 'masterID' && sortReverse" class="fa fa-caret-up"></span>
+                                </a>
+                            </th>
+                            <th><a ng-click="sortType = 'score'; sortReverse = !sortReverse">
+                                    Score
+                                    <span ng-show="sortType == 'score' && !sortReverse" class="fa fa-caret-down"></span>
+                                    <span ng-show="sortType == 'score' && sortReverse" class="fa fa-caret-up"></span>
+                                </a>
+                            </th>
+                            <th><a ng-click="sortType = 'ident'; sortReverse = !sortReverse">
+                                    Identity
+                                    <span ng-show="sortType == 'ident' && !sortReverse" class="fa fa-caret-down"></span>
+                                    <span ng-show="sortType == 'ident' && sortReverse" class="fa fa-caret-up"></span>
+                                </a>
+                            </th>
+                            <th><a ng-click="sortType = 'flex'; sortReverse = !sortReverse">
+                                    Flexibility
+                                    <span ng-show="sortType == 'flex' && !sortReverse" class="fa fa-caret-down"></span>
+                                    <span ng-show="sortType == 'flex' && sortReverse" class="fa fa-caret-up"></span>
+                                </a></th>
+                            <th><a ng-click="sortType = 'rmsd'; sortReverse = !sortReverse">
+                                    RMSD
+                                    <span ng-show="sortType == 'rmsd' && !sortReverse" class="fa fa-caret-down"></span>
+                                    <span ng-show="sortType == 'rmsd' && sortReverse" class="fa fa-caret-up"></span>
+                                </a></th>
+                            <th><a  ng-click="sortType = 'size'; sortReverse = !sortReverse">
+                                    ClusterSize
+                                    <span ng-show="sortType == 'size' && !sortReverse" class="fa fa-caret-down"></span>
+                                    <span ng-show="sortType == 'size' && sortReverse" class="fa fa-caret-up"></span>
+                                </a></th>
                             <th> Representatives</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr ng-repeat="hit in r.hits">
+                        <tr ng-repeat="hit in r.hits| orderBy:sortType:sortReverse">
                             <td><a ng-href="http://pdbflex.org/cluster.html#!/{{hit.masterID}}/{{hit.masterDbID}}/{{hit.masterID}}"><b>{{hit.masterID}}</b></td>
                             <td>{{hit.score}}</td>
                             <td>{{hit.ident}}</td>
