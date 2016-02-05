@@ -23,7 +23,19 @@
         <!--[if lte IE 8]>
           <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
         <![endif]-->
-
+        <script type="text/ng-template" id="group-template.html">
+            <div class="panel {{panelClass || 'panel-default'}}">
+            <div class="panel-heading">
+            <h4 class="panel-title" style="color:#fa39c3">
+            <a href tabindex="0" class="accordion-toggle" ng-click="toggleOpen()" uib-accordion-transclude="heading"><span
+            ng-class="{'text-muted': isDisabled}">{{heading}}</span></a>
+            </h4>
+            </div>
+            <div class="panel-collapse collapse" uib-collapse="!isOpen">
+            <div class="panel-body" style="text-align: right" ng-transclude></div>
+            </div>
+            </div>
+        </script>
         <div class="header" ng-controller="HeaderCtrl">
             <div class="navbar navbar-default" role="navigation">
                 <div class="container">
@@ -69,17 +81,17 @@
             </div>
         </div>
         <!-- Google Analytics: change UA-XXXXX-X to be your site's ID -->
-<!--        <script>
-            !function (A, n, g, u, l, a, r) {
-                A.GoogleAnalyticsObject = l, A[l] = A[l] || function () {
-                    (A[l].q = A[l].q || []).push(arguments)
-                }, A[l].l = +new Date, a = n.createElement(g),
-                    r = n.getElementsByTagName(g)[0], a.src = u, r.parentNode.insertBefore(a, r)
-            }(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
-
-            ga('create', 'UA-XXXXX-X');
-            ga('send', 'pageview');
-        </script>-->
+        <!--        <script>
+                    !function (A, n, g, u, l, a, r) {
+                        A.GoogleAnalyticsObject = l, A[l] = A[l] || function () {
+                            (A[l].q = A[l].q || []).push(arguments)
+                        }, A[l].l = +new Date, a = n.createElement(g),
+                            r = n.getElementsByTagName(g)[0], a.src = u, r.parentNode.insertBefore(a, r)
+                    }(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
+        
+                    ga('create', 'UA-XXXXX-X');
+                    ga('send', 'pageview');
+                </script>-->
 
 
         <!--<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.9/angular.min.js"></script>-->
