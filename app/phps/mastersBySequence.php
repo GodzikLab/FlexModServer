@@ -8,12 +8,13 @@ header("Access-Control-Allow-Methods: OPTIONS, GET, POST");
 header("Access-Control-Allow-Headers: Content-Type, Depth, User-Agent, X-File-Size,     X-Requested-With, If-Modified-Since, X-File-Name, Cache-Control");
 
 //need this to be able to get POST data sent by AngularJS
-$postdata = file_get_contents("php://input");
-$request = json_decode($postdata);
-$fullSequence = $request->sequence;
+// $postdata = file_get_contents("php://input");
+// $request = json_decode($postdata);
+// $fullSequence = $request->sequence;
 
 //	$fullSequence 	= $_POST['sequence'];
-// $fullSequence = ">1A50:A|PDBID|CHAIN|SEQUENCE\nMERYENLFAQLNDRREGAFVPFVTLGDPGIEQSLKIIDTLIDAGADALELGVPFSDPLADGPTIQNANLRAFAAGVTPAQCFEMLALIREKHPTIPIGLLMYANLVFNNGIDAFYARCEQVGVDSVLVADVPVEESAPFRQAALRHNIAPIFICPPNADDDLLRQVASYGRGYTYLLSRSGVTGAENRGALPLHHLIEKLKEYHAAPALQGFGISSPEQVSAAVRAGAAGAISGSAIVKIIEKNLASPKQMLAELRSFVSAMKAASRA";
+$fullSequence = ">1A50:A|PDBID|CHAIN|SEQUENCE\nMERYENLFAQLNDRREGAFVPFVTLGDPGIEQSLKIIDTLIDAGADALELGVPFSDPLADGPTIQNANLRAFAAGVTPAQCFEMLALIREKHPTIPIGLLMYANLVFNNGIDAFYARCEQVGVDSVLVADVPVEESAPFRQAALRHNIAPIFICPPNADDDLLRQVASYGRGYTYLLSRSGVTGAENRGALPLHHLIEKLKEYHAAPALQGFGISSPEQVSAAVRAGAAGAISGSAIVKIIEKNLASPKQMLAELRSFVSAMKAASRA";
+// echo($fullSequence);
 if (strlen($fullSequence) == 0) {
     $errorMessage = array();
     $errorMessage['script'] = 'mastersBySequence.php';
@@ -49,6 +50,7 @@ else {
     $hitIDs = json_decode($masterIDsJSONString, TRUE);
     $allMasters = array();
     #{"queryKey":"1A50:A|PDBID|CHAIN|SEQUENCE","templateKey":"1wxj_A","score":"4.000e-26","identity":32.02,"similarity":52.71,"identAA":65,"simAA":107,"aliLen":203}
+    $foundMasterIDs = array();
     foreach ($hitIDs as $hitObject) {
         $matchID = $hitObject["templateKey"];
         $matchScore = $hitObject['score'];
@@ -91,6 +93,11 @@ else {
         $masterClusterID = $clusterDetails["clusterID"];
 
         $clusterName = $masterPDBID . $masterChainID;
+
+        if(in_array($clusterName,$foundMasterIDs)){
+            continue;
+        }
+
         $url = "http://pdbflex.org/fsn-data/rmsdClusters/representatives/" . $clusterName . "centers.json";
 
         $options = array(
@@ -106,6 +113,7 @@ else {
         // echo($subClustersJSONString);
         $subClusters = json_decode($subClustersJSONString, TRUE);
 
+        // print_r($subClusters);
 
         $subClusterArray = array();
         foreach ($subClusters as $subCluster) {
@@ -134,6 +142,8 @@ else {
             array_push($subClusterArray, $pdbInfo);
         }
 
+        // print_r($subClusterArray);
+
         $masterInfo = array();
         $masterInfo['PDB'] = $masterPDBID;
         $masterInfo['chain'] = $masterChainID;
@@ -147,6 +157,7 @@ else {
         $masterInfo['representatives'] = $subClusterArray;
         // echo($masterInfo);
         array_push($allMasters, $masterInfo);
+        array_push($foundMasterIDs, $clusterName);
         // break;
     }
     echo(json_encode($allMasters));
