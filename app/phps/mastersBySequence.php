@@ -139,7 +139,8 @@ else {
             $ligands = $pdbInfo["ligands"];
 
             // echo($subClusterID);
-            array_push($subClusterArray, $pdbInfo);
+            if(!in_array($pdbInfo, $subClusterArray))
+                array_push($subClusterArray, $pdbInfo);
         }
 
         // print_r($subClusterArray);
