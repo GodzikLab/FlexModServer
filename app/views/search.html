@@ -66,7 +66,7 @@
                     <thead>
                         <tr>
                             <th><a ng-click="sortType = 'masterID'; sortReverse = !sortReverse">
-                                    MastedID
+                                    MasterID
                                     <span ng-show="sortType == 'masterID' && !sortReverse" class="fa fa-caret-down"></span>
                                     <span ng-show="sortType == 'masterID' && sortReverse" class="fa fa-caret-up"></span>
                                 </a>
@@ -120,7 +120,7 @@
                                                     </button>
                                                     <span ng-show="hasLigand(r)" aria-label="Has ligand">
                                                         <i class="fa fa-puzzle-piece"></i></span>
-                                                    <img ng-src="{{r.img}}" style="margin:auto;" class="img-responsive img-representative-tmb">
+                                                    <img ng-src="http://www.rcsb.org/pdb/images/{{r.pdb}}_bio_r_80.jpg" style="margin:auto;" class="img-responsive img-representative-tmb">
                                                     <div class="text-center">{{r.pdb}}</div>
                                                 </li>
                                             </ul>
@@ -136,12 +136,13 @@
     </div>
     <!--
      pdb images 
-    <script type="text/javascript" >
-                $(document).ready(function () {
-                    rcsbPdbImageLib.useShadowBox = false;
-                    rcsbPdbImageLib.addOnloadEvent(function () {
-                        rcsbPdbImageLib.initLib();
-                    })
-                });
-    </script>
-     end pdb images -->
+-->      
+<!--<script type="text/javascript" >
+        $(document).ready(function () {
+        rcsbPdbImageLib.useShadowBox = false;
+            rcsbPdbImageLib.addOnloadEvent(function () {
+            rcsbPdbImageLib.initLib();
+            })
+        });
+    </script>-->
+    <!--end pdb images--> 
