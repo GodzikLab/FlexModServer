@@ -33,7 +33,7 @@ angular.module('modFlexApp')
 
             $scope.useTestFasta = function () {
                 $scope.querySequence = $scope.testFasta;
-            }
+            };
         }])
     ;
 
