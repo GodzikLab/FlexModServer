@@ -11,90 +11,15 @@ angular.module('modFlexApp')
     .controller('SearchCtrl', ['$scope', '$location', '$http', '$templateCache',
         function ($scope, $location, $http, $templateCache) {
             $scope.isActive = ($location.url() === "/search");
+            $scope.sortType = 'score'; // default sort type
+            $scope.sortReverse = false;  // default sort order
+
             $scope.filtLigand = false;
+            $scope.hasErrors = false;
+            $scope.finished = false;
             $scope.r = {};
-            var testSeq = ">1A50:A|PDBID|CHAIN|SEQUENCE\nMERYENLFAQLNDRREGAFVPFVTLGDPGIEQSLKIIDTLIDAGADALELGVPFSDPLADGPTIQNANLRAFAAGVTPAQCFEMLALIREKHPTIPIGLLMYANLVFNNGIDAFYARCEQVGVDSVLVADVPVEESAPFRQAALRHNIAPIFICPPNADDDLLRQVASYGRGYTYLLSRSGVTGAENRGALPLHHLIEKLKEYHAAPALQGFGISSPEQVSAAVRAGAAGAISGSAIVKIIEKNLASPKQMLAELRSFVSAMKAASRA";
-
-
-            var req = {
-                method: 'POST',
-                url: 'http://modflex/phps/mastersBySequence.php',
-                data : {sequence:testSeq},
-                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-                cache: $templateCache
-            };
-
-            $http(req).then(function successCallback(response) {
-                // this callback will be called asynchronously
-                // when the response is available
-              //  console.log(response);
-                $scope.r.hits = response.data;
-            }, function errorCallback(response) {
-                // called asynchronously if an error occurs
-                // or server returns response with an error status.
-            });
-//            // replace this json with server script call later
-//            var result = {
-//                id: 12345,
-//                hits: [{
-//                        "PDB": "1ujp",
-//                        "chain": "A",
-//                        "masterID": "1ujpA",
-//                        "masterDbID": "13292",
-//                        "score": "4.000e-26",
-//                        "ident": 32.02,
-//                        "flex": 5,
-//                        "rmsd": 2.467,
-//                        "size": 2,
-//                        "representatives": [{
-//                                "pdb": "1wxj",
-//                                "chain": "A",
-//                                "length": "271",
-//                                "description": ">1wxj_A mol:protein length:271  tryptophan synthase alpha chain",
-//                                "seqres": "MTTLEAFAKARSEGRAALIPYLTAGFPSREGFLQAVEEVLPYADLLEIGLPYSDPLGDGPVIQRASELALRKGMSVQGALELVREVRALTEKPLFLMTYLNPVLAWGPERFFGLFKQAGATGVILPDLPPDEDPGLVRLAQEIGLETVFLLAPTSTDARIATVVRHATGFVYAVSVTGVTGMRERLPEEVKDLVRRIKARTALPVAVGFGVSGKATAAQAAVADGVVVGSALVRALEEGRSLAPLLQEIRQGLQRLEANPGLKESSKKPLP",
-////                                "ligands": ["3-(INDOL-3-YL)PROPYL PHOSPHATE"],
-//                                img: "http://www.rcsb.org/pdb/images/1ksr_asr_r_250.jpg"
-//                            }, {
-//                                "pdb": "1wxj",
-//                                "chain": "A",
-//                                "length": "271",
-//                                "description": ">1wxj_A mol:protein length:271  tryptophan synthase alpha chain",
-//                                "seqres": "MTTLEAFAKARSEGRAALIPYLTAGFPSREGFLQAVEEVLPYADLLEIGLPYSDPLGDGPVIQRASELALRKGMSVQGALELVREVRALTEKPLFLMTYLNPVLAWGPERFFGLFKQAGATGVILPDLPPDEDPGLVRLAQEIGLETVFLLAPTSTDARIATVVRHATGFVYAVSVTGVTGMRERLPEEVKDLVRRIKARTALPVAVGFGVSGKATAAQAAVADGVVVGSALVRALEEGRSLAPLLQEIRQGLQRLEANPGLKESSKKPLP",
-//                                "ligands": ["3-(INDOL-3-YL)PROPYL PHOSPHATE"],
-//                                img: "http://www.rcsb.org/pdb/images/1ksr_asr_r_250.jpg"
-//                            }]
-//                    }, {
-//                        "PDB": "1ujp",
-//                        "chain": "A",
-//                        "masterID": "1ujpA",
-//                        "masterDbID": "13292",
-//                        "score": "4.000e-26",
-//                        "ident": 32.02,
-//                        "flex": 5,
-//                        "rmsd": 2.467,
-//                        "size": 2,
-//                        "representatives": [{
-//                                "pdb": "1wxj",
-//                                "chain": "A",
-//                                "length": "271",
-//                                "description": ">1wxj_A mol:protein length:271  tryptophan synthase alpha chain",
-//                                "seqres": "MTTLEAFAKARSEGRAALIPYLTAGFPSREGFLQAVEEVLPYADLLEIGLPYSDPLGDGPVIQRASELALRKGMSVQGALELVREVRALTEKPLFLMTYLNPVLAWGPERFFGLFKQAGATGVILPDLPPDEDPGLVRLAQEIGLETVFLLAPTSTDARIATVVRHATGFVYAVSVTGVTGMRERLPEEVKDLVRRIKARTALPVAVGFGVSGKATAAQAAVADGVVVGSALVRALEEGRSLAPLLQEIRQGLQRLEANPGLKESSKKPLP",
-//                                "ligands": ["3-(INDOL-3-YL)PROPYL PHOSPHATE"],
-//                                img: "http://www.rcsb.org/pdb/images/1ksr_asr_r_250.jpg"
-//                            }, {
-//                                "pdb": "1wxj",
-//                                "chain": "A",
-//                                "length": "271",
-//                                "description": ">1wxj_A mol:protein length:271  tryptophan synthase alpha chain",
-//                                "seqres": "MTTLEAFAKARSEGRAALIPYLTAGFPSREGFLQAVEEVLPYADLLEIGLPYSDPLGDGPVIQRASELALRKGMSVQGALELVREVRALTEKPLFLMTYLNPVLAWGPERFFGLFKQAGATGVILPDLPPDEDPGLVRLAQEIGLETVFLLAPTSTDARIATVVRHATGFVYAVSVTGVTGMRERLPEEVKDLVRRIKARTALPVAVGFGVSGKATAAQAAVADGVVVGSALVRALEEGRSLAPLLQEIRQGLQRLEANPGLKESSKKPLP",
-//                                "ligands": ["3-(INDOL-3-YL)PROPYL PHOSPHATE"],
-//                                img: "http://www.rcsb.org/pdb/images/1ksr_asr_r_250.jpg"
-//                            }]
-//                    }]
-//            };
-//
-//            $scope.r = result;
-
+            console.log('seq:' + $scope.querySequence);
+            var testSeq = $scope.querySequence;
 
             $scope.getSelected = function () {
                 var list = [];
@@ -106,7 +31,6 @@ angular.module('modFlexApp')
                 }
                 return list;
             };
-
 
             $scope.switchLigandFilter = function () {
                 $scope.filtLigand = !$scope.filtLigand;
@@ -125,8 +49,43 @@ angular.module('modFlexApp')
             $scope.hasLigand = function (item) {
 
                 return (item.ligands && item.ligands.length > 0);
+            };
+
+
+            $scope.searchRequest = function () {
+                var req = {
+                    method: 'POST',
+                    url: 'http://modflex/phps/mastersBySequence.php',
+                    data: {sequence: testSeq},
+                    headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+                    cache: $templateCache
+                };
+
+                $http(req).then(function successCallback(response) {
+                    // this callback will be called asynchronously
+                    // when the response is available
+                    console.log(response);
+
+                    if (response.data.message) {
+                        $scope.hasErrors = true;
+                        $scope.errorMessage = response.data.message;
+                    } else {
+                        $scope.r.hits = response.data;
+                        $scope.finished = true;
+                    }
+                }, function errorCallback(response) {
+                    $scope.hasErrors = true;
+                    $scope.errorMessage = "Error occured";
+                });
 
             };
+
+
+            $scope.searchRequest()
+
         }]
-        )
-    ;
+        );
+//        .controller(SearchStartCtrl){
+//
+//        }
+//    ;
