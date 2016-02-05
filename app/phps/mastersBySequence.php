@@ -1,7 +1,7 @@
 <?php
 
 ///data/www/FSN/data/pdb_seqres.txt
-// require_once('blastXML.php');
+require_once('functions.php');
 header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Credentials: true ");
 header("Access-Control-Allow-Methods: OPTIONS, GET, POST");
@@ -12,7 +12,6 @@ $postdata = file_get_contents("php://input");
 $request = json_decode($postdata);
 $fullSequence = $request->sequence;
 
-//	$fullSequence 	= $_POST['sequence'];
 // $fullSequence = ">1A50:A|PDBID|CHAIN|SEQUENCE\nMERYENLFAQLNDRREGAFVPFVTLGDPGIEQSLKIIDTLIDAGADALELGVPFSDPLADGPTIQNANLRAFAAGVTPAQCFEMLALIREKHPTIPIGLLMYANLVFNNGIDAFYARCEQVGVDSVLVADVPVEESAPFRQAALRHNIAPIFICPPNADDDLLRQVASYGRGYTYLLSRSGVTGAENRGALPLHHLIEKLKEYHAAPALQGFGISSPEQVSAAVRAGAAGAISGSAIVKIIEKNLASPKQMLAELRSFVSAMKAASRA";
 // echo($fullSequence);
 if (strlen($fullSequence) == 0) {
@@ -119,11 +118,16 @@ else {
         foreach ($subClusters as $subCluster) {
             // echo($subCluster);
             $subClusterID = $subCluster['name'];
-            $subClusterPDB = substr($subClusterID, 0, 4);
-            $subClusterChain = substr($subClusterID, 4, 1);
+            // $subClusterPDB = substr($subClusterID, 0, 4);
+            // $subClusterChain = substr($subClusterID, 4, 1);
+
+            $parts = pdbChainFromPDBID($subClusterID);
+            // print_r($parts);
+            $subClusterPDB = $parts['pdbID'];
+            $subClusterChain = $parts['chain'];
 
             $url = "http://pdbflex.org/fsn/php/getPDBInfo.php?pdb=" . $subClusterPDB . "&chain=" . $subClusterChain;
-
+            // print_r($url);
             $options = array(
               'http' => array(
                 // 'header'  => "Content-type: application/x-www-form-urlencoded\r\n",
@@ -134,7 +138,7 @@ else {
 
             $context = stream_context_create($options);
             $pdbInfoJSONString = file_get_contents($url, false, $context);
-
+            
             $pdbInfo = json_decode($pdbInfoJSONString, TRUE);
             $ligands = $pdbInfo["ligands"];
 
