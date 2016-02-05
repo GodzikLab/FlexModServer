@@ -10,6 +10,10 @@
 angular.module('modFlexApp')
     .controller('SearchCtrl', ['$scope', '$location', '$http', '$templateCache',
         function ($scope, $location, $http, $templateCache) {
+
+            // uncomment when developing UI
+           // $scope.useTestFasta();
+
             $scope.isActive = ($location.url() === "/search");
             $scope.sortType = 'score'; // default sort type
             $scope.sortReverse = false;  // default sort order
@@ -18,18 +22,32 @@ angular.module('modFlexApp')
             $scope.hasErrors = false;
             $scope.finished = false;
             $scope.r = {};
-            console.log('seq:' + $scope.querySequence);
+            $scope.selectedList = [];
+
+            $scope.hasSelection = false;
+            // console.log('seq:' + $scope.querySequence);
             var testSeq = $scope.querySequence;
 
-            $scope.getSelected = function () {
-                var list = [];
-                for (var i in $scope.r) {
-                    if (i.selected) {
-                        var j = i;
-                        list.push(j);
-                    }
+            $scope.select = function (r) {
+                r.selected = !r.selected;
+                if (r.selected) {
+                    $scope.selectedList.push(r);
+                    $scope.modellingRequest(r);
+                } else {
+                    var ix = $scope.selectedList.indexOf(r);
+                    if (ix > -1)
+                        $scope.selectedList.splice(ix, 1);
                 }
-                return list;
+
+                $scope.hasSelection = $scope.selectedList.length > 0;
+            };
+
+            $scope.clearSelection = function () {
+                $scope.selectedList = [];
+            };
+
+            $scope.getSelected = function () {
+                return $scope.selectedList();
             };
 
             $scope.switchLigandFilter = function () {
@@ -47,10 +65,39 @@ angular.module('modFlexApp')
             };
 
             $scope.hasLigand = function (item) {
-
                 return (item.ligands && item.ligands.length > 0);
             };
 
+            $scope.modellingRequest = function (r) {
+                if (r.modelUrl) {
+                    return;
+                }
+
+                r.modellingDone = false;
+                var req = {
+                    method: 'POST',
+                    url: 'http://modflex/phps/startModel.php',
+                    data: {sequence: testSeq,
+                        pdbID: r.pdbid,
+                        chainID: r.chain},
+                    headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+                };
+
+
+                $http(req).then(function successCallback(response) {
+                    r.modellingDone = true;
+                    if (response.data.message) {
+                        r.errorMessage = response.data.message;
+
+                    } else {
+                        r.modelUrl = response.data.modelURL;
+                    }
+                }, function errorCallback(response) {
+                    r.errorMessage = "Error occured";
+                    r.modellingDone = true;
+                });
+
+            };
 
             $scope.searchRequest = function () {
                 var req = {
@@ -62,9 +109,7 @@ angular.module('modFlexApp')
                 };
 
                 $http(req).then(function successCallback(response) {
-                    // this callback will be called asynchronously
-                    // when the response is available
-                    console.log(response);
+                    //console.log(response);
 
                     if (response.data.message) {
                         $scope.hasErrors = true;
@@ -81,11 +126,13 @@ angular.module('modFlexApp')
             };
 
 
-            $scope.searchRequest()
+            $scope.searchRequest();
 
         }]
-        );
-//        .controller(SearchStartCtrl){
+        )
+//    .controller('ModellingCtrl', ['$scope', '$http',
+//        function ($scope, $http) {
 //
 //        }
-//    ;
+//    ]);
+    ;
