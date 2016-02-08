@@ -8,6 +8,8 @@
 	// $fullSequence 	= $_POST['sequence'];
 	// $modelPDBID = $_POST['pdbID'];
 	// $modelChain = $_POST['chainID'];
+	$modelPDBID = '1a50';
+	$modelChain = 'A';
 	$fullSequence = ">1A50:A|PDBID|CHAIN|SEQUENCE\nMERYENLFAQLNDRREGAFVPFVTLGDPGIEQSLKIIDTLIDAGADALELGVPFSDPLADGPTIQNANLRAFAAGVTPAQCFEMLALIREKHPTIPIGLLMYANLVFNNGIDAFYARCEQVGVDSVLVADVPVEESAPFRQAALRHNIAPIFICPPNADDDLLRQVASYGRGYTYLLSRSGVTGAENRGALPLHHLIEKLKEYHAAPALQGFGISSPEQVSAAVRAGAAGAISGSAIVKIIEKNLASPKQMLAELRSFVSAMKAASRA";
 
 	$url = 'http://pdbflex.org/fsn/php/alignSequences.php';
@@ -58,15 +60,31 @@
 
 	//http://ffas.burnham.org/protmod-cgi/qryByAliForm.pl?pdbId=&chain=&targetStart=&templateStart=qs&ali=qs%20ts 
 
-	// $url = "http://ffas.burnham.org/protmod-cgi/qryByAliForm.pl";
+	$url = "http://ffas.godziklab.org/protmod2-cgi/protmod2.pl";
 
-	// $data = array('ali' => $blastAlignment['templateAA'],'pdbId' => modelPDBID,'chain' => modelChain);
+	$data = array();
 
-	$returnArray = array();
-	$returnArray['scipt'] = 'startModel.php';
-	$returnArray['modelURL'] = '/developmentData/1a50.pdb';
+	$data["queryStart"]=$blastAlignment["queryStart"];
+	$data["templateStart"]=$blastAlignment["templateStart"];
+	$data["pdbId"]=$modelPDBID;
+	$data["chainId"]=$modelChain;
+	$data["ali"]=$blastAlignment["templateAA"];
 
-	echo(json_encode($returnArray));
+
+	$options = array(
+	    'http' => array(
+	        'header'  => "Content-type: application/x-www-form-urlencoded\r\n",
+	        'method'  => 'POST',
+	        'content' => http_build_query($data),
+	    ),
+	);
+
+	$context  = stream_context_create($options);
+		
+	// {"JobId": "Test10.436552852.24574", "Status": "submitted" }
+	$returnArray = file_get_contents($url, false, $context);
+	
+	echo($returnArray);
 
 ?>
 
