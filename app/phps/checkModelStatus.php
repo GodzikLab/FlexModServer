@@ -8,7 +8,7 @@
 
 	$modelJobID = $_GET['modelID'];
 	$sessionID = $_GET['sessionID'];
-	
+
 	$url = "http://ffas.godziklab.org/protmod2-cgi/check_protmod2.pl";
 
 	$data = array('jobId' => $modelJobID);
@@ -29,7 +29,7 @@
 
 	if(strcmp($resultObject["Status"] , "Done") == 0){
 		$url = $resultObject["url"];
-		file_put_contents("../jobs/model.pdb", file_get_contents($url));
+		file_put_contents("../jobs/".$sessionID."/".$modelJobID.".pdb", file_get_contents($url));
 
 		$resultObject["url"] = "/jobs/model.pdb";
 		echo(json_encode($resultObject));
