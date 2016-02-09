@@ -7,6 +7,7 @@
 	header('Content-Type: application/json');
 
 	$modelJobID = $_GET['modelID'];
+	$sessionID = $_GET['sessionID'];
 	
 	$url = "http://ffas.godziklab.org/protmod2-cgi/check_protmod2.pl";
 
