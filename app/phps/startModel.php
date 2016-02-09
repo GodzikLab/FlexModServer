@@ -56,7 +56,7 @@
 	// 	"templateCutAA": "MERYENLFAQLNDRREGAFVPFVTLGDPGIEQSLKIIDTLIDAGADALELGVPFSDPLADGPTIQNANLRAFAAGVTPAQCFEMLALIREKHPTIPIGLLMYANLVFNNGIDAFYARCEQVGVDSVLVADVPVEESAPFRQAALRHNIAPIFICPPNADDDLLRQVASYGRGYTYLLSRSGVTGAENRGALPLHHLIEKLKEYHAAPALQGFGISSPEQVSAAVRAGAAGAISGSAIVKIIEKNLASPKQMLAELRSFVSAMKAASRA"
 	// }]
 
-	$blastAlignment = json_decode($blastAlignmentJSON, TRUE);
+	$blastAlignment = json_decode($blastAlignmentJSON, TRUE)[0];
 
 	//http://ffas.burnham.org/protmod-cgi/qryByAliForm.pl?pdbId=&chain=&targetStart=&templateStart=qs&ali=qs%20ts 
 
@@ -64,12 +64,18 @@
 
 	$data = array();
 
+	// print_r($blastAlignment);
+
 	$data["queryStart"]=$blastAlignment["queryStart"];
 	$data["templateStart"]=$blastAlignment["templateStart"];
 	$data["pdbId"]=$modelPDBID;
 	$data["chainId"]=$modelChain;
-	$data["ali"]=$blastAlignment["templateAA"];
+	$data["qs"]=$blastAlignment["queryAA"];
+	$data["ts"]=$blastAlignment["templateAA"];
+	$data["modMethod"]="Modeller";
+	$data["service"]="Restful";
 
+	// print_r($data);
 
 	$options = array(
 	    'http' => array(
