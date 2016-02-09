@@ -11,6 +11,7 @@ header('Content-Type: application/json');
 //need this to be able to get POST data sent by AngularJS
 $postdata = file_get_contents("php://input");
 $request = json_decode($postdata);
+$sessionID = $request->sessionID;
 $fullSequence = $request->sequence;
 
 // $fullSequence = ">1A50:A|PDBID|CHAIN|SEQUENCE\nMERYENLFAQLNDRREGAFVPFVTLGDPGIEQSLKIIDTLIDAGADALELGVPFSDPLADGPTIQNANLRAFAAGVTPAQCFEMLALIREKHPTIPIGLLMYANLVFNNGIDAFYARCEQVGVDSVLVADVPVEESAPFRQAALRHNIAPIFICPPNADDDLLRQVASYGRGYTYLLSRSGVTGAENRGALPLHHLIEKLKEYHAAPALQGFGISSPEQVSAAVRAGAAGAISGSAIVKIIEKNLASPKQMLAELRSFVSAMKAASRA";
@@ -167,6 +168,12 @@ else {
         // break;
     }
     echo(json_encode($allMasters));
+
+    if(count($allMasters) > 0){
+        $jobFolder = "../jobs/".$sessionID;
+        mkdir($jobFolder);
+    }
+
 }
 
 #"http://pdbflex.org/fsn-data/rmsdClusters/fullPlots/".$clusterName."result.json";
