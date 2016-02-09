@@ -12,7 +12,7 @@ angular.module('modFlexApp')
         function ($scope, $location, $http, $templateCache) {
 
             // uncomment when developing UI
-           // $scope.useTestFasta();
+            // $scope.useTestFasta();
 
             $scope.isActive = ($location.url() === "/search");
             $scope.sortType = 'score'; // default sort type
@@ -22,6 +22,7 @@ angular.module('modFlexApp')
             $scope.hasErrors = false;
             $scope.finished = false;
             $scope.r = {};
+          //  $scope.r = {sequence:$scope.querySequence, title:$scope.querySequence.substring(0, 15)+'...'};
             $scope.selectedList = [];
 
             $scope.hasSelection = false;
@@ -117,6 +118,9 @@ angular.module('modFlexApp')
                     } else {
                         $scope.r.hits = response.data;
                         $scope.finished = true;
+
+                       // $scope.jobs.push($scope.r);
+                      //  localStorage.setItem('jobs', JSON.stringify($scope.jobs));
                     }
                 }, function errorCallback(response) {
                     $scope.hasErrors = true;

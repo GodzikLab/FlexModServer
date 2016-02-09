@@ -12,10 +12,14 @@ angular
     .module('modFlexApp', [
         'ngCookies',
         'ngResource',
-        'ngRoute', 
+        'ngRoute',
         'ngAnimate',
-        'ui.bootstrap'
+        'ui.bootstrap',
+        'LocalStorageModule'
     ])
+    .config(['localStorageServiceProvider', function (localStorageServiceProvider) {
+            localStorageServiceProvider.setPrefix('ls');
+        }])
     .config(function ($routeProvider) {
         $routeProvider
             .when('/', {
