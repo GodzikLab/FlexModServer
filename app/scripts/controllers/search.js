@@ -12,7 +12,7 @@ angular.module('modFlexApp')
         function ($scope, $location, $http, $templateCache) {
 
             // uncomment when developing UI
-             $scope.useTestFasta();
+            // $scope.useTestFasta();
 
             $scope.isActive = ($location.url() === "/search");
             $scope.sortType = 'score'; // default sort type
