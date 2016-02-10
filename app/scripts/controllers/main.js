@@ -26,6 +26,7 @@ angular.module('modFlexApp')
             // include getting list of jobs from local storage/db later
             $scope.querySequence = '';
             $scope.testFasta = ">1A50:A|PDBID|CHAIN|SEQUENCE\nMERYENLFAQLNDRREGAFVPFVTLGDPGIEQSLKIIDTLIDAGADALELGVPFSDPLADGPTIQNANLRAFAAGVTPAQCFEMLALIREKHPTIPIGLLMYANLVFNNGIDAFYARCEQVGVDSVLVADVPVEESAPFRQAALRHNIAPIFICPPNADDDLLRQVASYGRGYTYLLSRSGVTGAENRGALPLHHLIEKLKEYHAAPALQGFGISSPEQVSAAVRAGAAGAISGSAIVKIIEKNLASPKQMLAELRSFVSAMKAASRA";
+            $scope.sessionObject;
 
             var queriesSaved = localStorageService.get('queries');
 
@@ -36,8 +37,17 @@ angular.module('modFlexApp')
             }, true);
 
             $scope.search = function () {
-                $scope.queries.push({title: $scope.titleFromSeq($scope.querySequence),
-                    sequence: $scope.querySequence});
+                var sessionId = $scope.generateSessionId();
+
+                $scope.sessionObject = {
+                    title: $scope.titleFromSeq($scope.querySequence),
+                    sequence: $scope.querySequence,
+                    sessionId: sessionId
+                };
+
+                //// add check for duplicates!
+                $scope.queries.push($scope.sessionObject);
+
                 $location.path('search');
             };
 
@@ -47,20 +57,19 @@ angular.module('modFlexApp')
 
             $scope.titleFromSeq = function (seq) {
                 var idx = seq.indexOf('\n');
-                var title;
+
                 if (idx >= 1) {
-                    title = seq.substr(0, idx);
+                   return seq.substr(0, idx);
                 } else {
-                    title = seq.substr(0, 17) + '...';
+                   return seq.substr(0, 17) + '...';
                 }
-                return title;
-            }
+            };
 
             $scope.useTestFasta = function () {
                 $scope.querySequence = $scope.testFasta;
             };
 
-            $scope.useQuery = function(index){
+            $scope.useQuery = function (index) {
                 var userObject = $scope.queries[index];
                 $scope.querySequence = userObject.sequence;
                 $location.path('search');
@@ -70,8 +79,13 @@ angular.module('modFlexApp')
             $scope.removeQuery = function (index) {
                 $scope.queries.splice(index, 1);
             };
+
             $scope.clearRecentQueries = function () {
                 $scope.queries = [];
+            };
+
+            $scope.generateSessionId = function () {
+                return "" + Math.floor(Date.now() / 1000) + "_" + Math.floor((Math.random() * 100) + 1);
             };
         }])
     ;

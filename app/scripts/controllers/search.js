@@ -27,7 +27,8 @@ angular.module('modFlexApp')
 
             $scope.hasSelection = false;
             // console.log('seq:' + $scope.querySequence);
-            var testSeq = $scope.querySequence;
+            var testSeq = $scope.querySequence,
+                session = $scope.sessionObject.sessionId;
 
             $scope.select = function (r) {
                 r.selected = !r.selected;
@@ -101,10 +102,12 @@ angular.module('modFlexApp')
             };
 
             $scope.searchRequest = function () {
+                console.log(session);
+                console.log($scope.sessionObject);
                 var req = {
                     method: 'POST',
                     url: 'http://modflex/phps/mastersBySequence.php',
-                    data: {sequence: testSeq},
+                    data: {sequence: testSeq, sessionId:session},
                     headers: {'Content-Type': 'application/x-www-form-urlencoded'},
                     cache: $templateCache
                 };

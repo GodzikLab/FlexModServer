@@ -79,7 +79,7 @@
                                 </a>
                             </th>
                             <th><a ng-click="sortType = 'score'; sortReverse = !sortReverse">
-                                    Score
+                                    e-value
                                     <span ng-show="sortType == 'score' && !sortReverse" class="fa fa-caret-down"></span>
                                     <span ng-show="sortType == 'score' && sortReverse" class="fa fa-caret-up"></span>
                                 </a>
@@ -90,18 +90,18 @@
                                     <span ng-show="sortType == 'ident' && sortReverse" class="fa fa-caret-up"></span>
                                 </a>
                             </th>
-                            <th><a ng-click="sortType = 'flex'; sortReverse = !sortReverse">
+<!--                            <th><a ng-click="sortType = 'flex'; sortReverse = !sortReverse">
                                     Flexibility
                                     <span ng-show="sortType == 'flex' && !sortReverse" class="fa fa-caret-down"></span>
                                     <span ng-show="sortType == 'flex' && sortReverse" class="fa fa-caret-up"></span>
-                                </a></th>
+                                </a></th>-->
                             <th><a ng-click="sortType = 'rmsd'; sortReverse = !sortReverse">
                                     RMSD
                                     <span ng-show="sortType == 'rmsd' && !sortReverse" class="fa fa-caret-down"></span>
                                     <span ng-show="sortType == 'rmsd' && sortReverse" class="fa fa-caret-up"></span>
                                 </a></th>
                             <th><a  ng-click="sortType = 'size'; sortReverse = !sortReverse">
-                                    ClusterSize
+                                    # of subclusters
                                     <span ng-show="sortType == 'size' && !sortReverse" class="fa fa-caret-down"></span>
                                     <span ng-show="sortType == 'size' && sortReverse" class="fa fa-caret-up"></span>
                                 </a></th>
@@ -113,7 +113,7 @@
                             <td><a ng-href="http://pdbflex.org/cluster.html#!/{{hit.masterID}}/{{hit.masterDbID}}/{{hit.masterID}}"><b>{{hit.masterID}}</b></td>
                             <td>{{hit.score}}</td>
                             <td>{{hit.ident}}</td>
-                            <td>{{hit.flex}}</td>
+                            <!--<td>{{hit.flex}}</td>-->
                             <td>{{hit.rmsd}}</td>
                             <td>{{hit.size}}</td>
                             <td>
@@ -141,15 +141,3 @@
             </div>
         </div>
     </div>
-    <!--
-     pdb images 
-    -->      
-    <!--<script type="text/javascript" >
-            $(document).ready(function () {
-            rcsbPdbImageLib.useShadowBox = false;
-                rcsbPdbImageLib.addOnloadEvent(function () {
-                rcsbPdbImageLib.initLib();
-                })
-            });
-        </script>-->
-    <!--end pdb images--> 
