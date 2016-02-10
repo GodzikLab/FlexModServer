@@ -12,7 +12,7 @@ angular.module('modFlexApp')
         function ($scope, $location, $http, $templateCache) {
 
             // uncomment when developing UI
-            // $scope.useTestFasta();
+             $scope.useTestFasta();
 
             $scope.isActive = ($location.url() === "/search");
             $scope.sortType = 'score'; // default sort type
@@ -69,6 +69,14 @@ angular.module('modFlexApp')
             $scope.hasLigand = function (item) {
                 return (item.ligands && item.ligands.length > 0);
             };
+
+            $scope.isComplex = function (item) {
+                return (item.ligands && item.ligands.length > 0);
+            };
+
+            $scope.itemDescription = function(r){
+                return "<b>PDBID</b>: "+r.pdb;
+            }
 
             $scope.modellingRequest = function (r) {
                 if (r.modelUrl) {

@@ -67,6 +67,11 @@ angular.module('modFlexApp')
 
             $scope.useTestFasta = function () {
                 $scope.querySequence = $scope.testFasta;
+                $scope.sessionObject = {
+                    title: $scope.titleFromSeq($scope.querySequence),
+                    sequence: $scope.querySequence,
+                    sessionId: 'testFastaSessionId'
+                };
             };
 
             $scope.useQuery = function (index) {
