@@ -10,9 +10,9 @@
 angular.module('modFlexApp')
     .controller('SearchCtrl', ['$scope', '$location', '$http', '$templateCache',
         function ($scope, $location, $http, $templateCache) {
-
+            var baseUrl = 'http://modflex/phps/';
             // uncomment when developing UI
-            // $scope.useTestFasta();
+            $scope.useTestFasta();
 
             $scope.isActive = ($location.url() === "/search");
             $scope.sortType = 'score'; // default sort type
@@ -22,7 +22,7 @@ angular.module('modFlexApp')
             $scope.hasErrors = false;
             $scope.finished = false;
             $scope.r = {};
-          //  $scope.r = {sequence:$scope.querySequence, title:$scope.querySequence.substring(0, 15)+'...'};
+            //  $scope.r = {sequence:$scope.querySequence, title:$scope.querySequence.substring(0, 15)+'...'};
             $scope.selectedList = [];
 
             $scope.hasSelection = false;
@@ -34,7 +34,7 @@ angular.module('modFlexApp')
                 r.selected = !r.selected;
                 if (r.selected) {
                     $scope.selectedList.push(r);
-                    $scope.modellingRequest(r);
+                    // $scope.modellingRequest(r);
                 } else {
                     var ix = $scope.selectedList.indexOf(r);
                     if (ix > -1)
@@ -74,48 +74,93 @@ angular.module('modFlexApp')
                 return (item.ligands && item.ligands.length > 0);
             };
 
-            $scope.itemDescription = function(r){
-                return "<b>PDBID</b>: "+r.pdb;
-            }
+            $scope.itemDescription = function (r) {
+                return "<b>PDBID</b>: " + r.pdb;
+            };
 
             $scope.modellingRequest = function (r) {
                 if (r.modelUrl) {
                     return;
                 }
+                r.modellingStatus = 'started';
+                r.modellingMsg = 'Modelling running...';
 
-                r.modellingDone = false;
                 var req = {
                     method: 'POST',
-                    url: 'http://modflex/phps/startModel.php',
-                    data: {sequence: testSeq,
+                    url: baseUrl +'startModel.php',
+                    data: {
+                        sequence: testSeq,
                         pdbID: r.pdbid,
-                        chainID: r.chain},
+                        chainID: r.chain,
+                        sessionId: session
+                    },
                     headers: {'Content-Type': 'application/x-www-form-urlencoded'}
                 };
 
 
                 $http(req).then(function successCallback(response) {
-                    r.modellingDone = true;
+                    console.log(response.data);
                     if (response.data.message) {
-                        r.errorMessage = response.data.message;
-
+                        // r.errorMessage = response.data.message;
+                        r.modellingStatus = 'error';
+                        r.modellingMsg = 'Error occured: ' + response.data.message;
                     } else {
-                        r.modelUrl = response.data.modelURL;
+                        r.jobId = response.data.JobId
+                        $scope.trackModelStatus(r);
                     }
                 }, function errorCallback(response) {
-                    r.errorMessage = "Error occured";
-                    r.modellingDone = true;
+                    r.modellingStatus = 'error';
+                    r.modellingMsg = 'Error occured. ';
                 });
 
             };
 
+            $scope.trackModelStatus = function (r) {
+                var req = {
+                    method: 'GET',
+                    url: baseUrl +'checkModelStatus.php',
+                    data: {
+                        modelID: r.jobid,
+                        sessionID: session
+                    },
+                    headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+                };
+
+                var wait = function () {
+                    $http(req).then(
+                        function successCallback(response) {
+                            console.log(response.data);
+                            //Done, In process, failed,  Not exist.
+                            if (response.data.Status === "Progress") {
+                                setTimeout(wait, 1000);
+                            } else if (response.data.Status === "Failed") {
+                                r.modellingStatus = 'error';
+                                r.modellingMsg = 'Modelling error occured. Click to retry. '
+                            } else if (response.data.Status === "Done") {
+
+                                r.modelUrl = response.data.modelURL;
+
+                                r.modellingStatus = 'done';
+                                r.modellingMsg = 'Model ready. Click to download.';
+                            }
+                        }, function errorCallback(response) {
+                        console.log(response);
+                        r.modellingStatus = 'error';
+                        r.modellingMsg = 'Error occured. ';
+                    });
+                };
+                wait();
+
+            };
+
+
             $scope.searchRequest = function () {
-                console.log(session);
-                console.log($scope.sessionObject);
+//                console.log(session);
+//                console.log($scope.sessionObject);
                 var req = {
                     method: 'POST',
-                    url: 'http://modflex/phps/mastersBySequence.php',
-                    data: {sequence: testSeq, sessionId:session},
+                    url: baseUrl +'mastersBySequence.php',
+                    data: {sequence: testSeq, sessionId: session},
                     headers: {'Content-Type': 'application/x-www-form-urlencoded'},
                     cache: $templateCache
                 };
@@ -130,8 +175,6 @@ angular.module('modFlexApp')
                         $scope.r.hits = response.data;
                         $scope.finished = true;
 
-                       // $scope.jobs.push($scope.r);
-                      //  localStorage.setItem('jobs', JSON.stringify($scope.jobs));
                     }
                 }, function errorCallback(response) {
                     $scope.hasErrors = true;
@@ -140,14 +183,8 @@ angular.module('modFlexApp')
 
             };
 
-
             $scope.searchRequest();
 
         }]
         )
-//    .controller('ModellingCtrl', ['$scope', '$http',
-//        function ($scope, $http) {
-//
-//        }
-//    ]);
     ;

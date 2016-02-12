@@ -1,4 +1,22 @@
 <div ng-controller="SearchCtrl">
+
+    <script type="text/ng-template" id="itemPopoverTpl.html">
+        <div>
+        <dl class="dl-horizontal">
+        <dt>PDB ID</dt>
+        <dd>{{item.pdb}}</dd>
+        <dt>Name</dt>
+        <dd>{{item.name || 'Unknown'}}</dd>
+        <dt>Description</dt>
+        <dd>{{item.description || 'No description'}}</dd>
+        <dt>Has ligand</dt>
+        <dd>{{(item.ligands && item.ligands.length > 0)? 'yes': 'no'}}</dd>
+        <dt>Part of the complex</dt>
+        <dd>{{item.pdb}}</dd>
+        </dl>
+        </div>
+    </script> 
+
     <div id='errors' ng-show='hasErrors' class="row">
         <div class="col-sm-12 col-md-12 alert alert-danger" role="alert">{{errorMessage}}
         </div>
@@ -12,14 +30,6 @@
             Add some help here
         </uib-accordion-group>
     </uib-accordion>
-
- <script type="text/ng-template" id="itemPopoverTemplate.html">
-                    <div><dl class='dl-horizontal'>
-                        <dt>PDBID</dt>
-                        <dd>...</dd>
-                    </dl>
-                    </div>
-                </script> 
     <div ng-show="!finished && !hasErrors"><i class="fa fa-4x fa-spinner fa-spin"></i></div>
     <div ng-show="finished && !hasErrors">
         <div class="row">
@@ -48,15 +58,15 @@
                         <uib-accordion-heading>
                             <i class="pull-left fa fa-tasks"></i> Models
                         </uib-accordion-heading>
-                        <div class="col-xs-12" ng-show="!hasSelection">
-                            Select cluster representatives to get models.
-                        </div> 
-                        <div class="col-xs-12" ng-repeat="m in selectedList| orderBy:'pdb'">
-                            <i class="fa fa-spinner fa-spin" ng-show="! m.modellingDone"></i>
-                            <a ng-href="{{m.modelUrl}}" ng-show="m.modellingDone && m.modelUrl.length > 0"><i class="fa fa-floppy-o"></i></a>
-                            {{m.pdb}}_{{m.chain}} 
-                            <span class="text-danger">{{m.errorMessage}}</span>
-                        </div>
+                        <!--                        <div class="col-xs-12" ng-show="!hasSelection">
+                                                    Select cluster representatives to get models.
+                                                </div> 
+                                                <div class="col-xs-12" ng-repeat="m in selectedList| orderBy:'pdb'">
+                                                    <i class="fa fa-spinner fa-spin" ng-show="!m.modellingDone"></i>
+                                                    <a ng-href="{{m.modelUrl}}" ng-show="m.modellingDone && m.modelUrl.length > 0"><i class="fa fa-floppy-o"></i></a>
+                                                    {{m.pdb}}_{{m.chain}} 
+                                                    <span class="text-danger">{{m.errorMessage}}</span>
+                                                </div>-->
                     </uib-accordion-group>
                 </uib-accordion>
             </div>
@@ -72,8 +82,6 @@
         </div>
         <div class="row">
             <div class="table-responsive">
-            
-
                 <table class="table table-bordered table-striped">
                     <thead>
                         <tr>
@@ -95,11 +103,6 @@
                                     <span ng-show="sortType == 'ident' && sortReverse" class="fa fa-caret-up"></span>
                                 </a>
                             </th>
-                            <!--                            <th><a ng-click="sortType = 'flex'; sortReverse = !sortReverse">
-                                                                Flexibility
-                                                                <span ng-show="sortType == 'flex' && !sortReverse" class="fa fa-caret-down"></span>
-                                                                <span ng-show="sortType == 'flex' && sortReverse" class="fa fa-caret-up"></span>
-                                                            </a></th>-->
                             <th><a ng-click="sortType = 'rmsd'; sortReverse = !sortReverse">
                                     RMSD
                                     <span ng-show="sortType == 'rmsd' && !sortReverse" class="fa fa-caret-down"></span>
@@ -115,10 +118,9 @@
                     </thead>
                     <tbody>
                         <tr ng-repeat="hit in r.hits| orderBy:sortType:sortReverse">
-                            <td><a ng-href="http://pdbflex.org/cluster.html#!/{{hit.masterID}}/{{hit.masterDbID}}/{{hit.masterID}}"><b>{{hit.masterID}}</b></td>
+                            <td><a ng-href="http://pdbflex.org/cluster.html#!/{{hit.masterID}}/{{hit.masterDbID}}/{{hit.masterID}}"><b>{{hit.masterID}}</b></a></td>
                             <td>{{hit.score}}</td>
                             <td>{{hit.ident}}</td>
-                            <!--<td>{{hit.flex}}</td>-->
                             <td>{{hit.rmsd}}</td>
                             <td>{{hit.size}}</td>
                             <td>
@@ -127,16 +129,26 @@
                                         <div class="col-md-12">
                                             <ul class="horizontal-slide">
                                                 <li class="col-xs-3 col-md-2 img-thumbnail" ng-repeat="r in hit.representatives| filter: matchFilters()">
-                                                    <button type="button"class="btn btn-xs" ng-class="{'btn-success':r.selected}" ng-click="select(r)" aria-label="Select"  uib-popover="Click to add structure to analysis basket." popover-trigger="mouseenter"  popover-append-to-body="true">
+                                                    <button type="button" class="btn btn-xs" ng-class="{'btn-success':r.selected}" ng-click="select(r)" aria-label="Select"  uib-popover="Click to add structure to analysis basket." popover-trigger="mouseenter"  popover-append-to-body="true">
                                                         <span class="glyphicon " ng-class="{'glyphicon-check':r.selected, 'glyphicon-unchecked': !r.selected}"  aria-hidden="true"></span>
                                                     </button>
+                                                    <span aria-label="Modelling" uib-popover="{{r.modellingMsg|| 'Click to run modelling'}}" ng-click="modellingRequest(r)" popover-trigger="mouseenter" popover-append-to-body="true">
+                                                        <span 
+                                                            ng-switch on="r.modellingStatus">
+                                                            <span ng-switch-when="started"><i class="fa fa-spinner fa-spin"></i></span>
+                                                            <span ng-switch-when="done"><span class="text-success"><a ng-href="{{r.modelUrl}}" ><i class="fa fa-floppy-o"></i></a></span></span>
+                                                            <span ng-switch-when="error"><span class="text-danger" ng-click="modellingRequest(r)"><i class="fa fa-exclamation-circle"></i></span></span>
+                                                            <span ng-switch-default><i class="fa fa-cloud-download"></i></span>
+                                                        </span>
+                                                    </span>
                                                     <span ng-show="hasLigand(r)" aria-label="Has ligand" uib-popover="Has ligand" popover-trigger="mouseenter" popover-append-to-body="true">
                                                         <i class="fa fa-puzzle-piece"></i></span>
                                                     <span ng-show="isComplex(r)" aria-label="Part of a complex" uib-popover="Part of a complex" popover-trigger="mouseenter" popover-append-to-body="true">
                                                         <i class="fa fa-cubes"></i></span>
+
                                                     <br />    
                                                     <img ng-src="http://www.rcsb.org/pdb/images/{{r.pdb}}_bio_r_80.jpg" style="margin:auto;" class="img-responsive img-representative-tmb"
-                                                         uib-popover-template="itemPopoverTemplate.html" popover-trigger="mouseenter" popover-append-to-body="true">
+                                                         uib-popover-template="'itemPopoverTpl.html'" popover-trigger="click" ng-init="item = r" popover-append-to-body="true">
                                                     <div class="text-center">{{r.pdb}}_{{r.chain}}</div>
                                                 </li>
                                             </ul>
