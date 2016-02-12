@@ -34,7 +34,7 @@
 
                 <div ng-repeat="j in queries">
                     <a href ng-click="useQuery($index)">{{j.title}}</a>
-                    <button class="btn btn-danger btn-xs" ng-click="removeQuery($index)" aria-label="Remove"><i class="fa fa-trash-o"></i></button>
+                    <span class="text-danger" ng-click="removeQuery($index)" aria-label="Remove"><i class="fa fa-trash-o"></i></span>
                 </div>
             </uib-accordion-group>
         </uib-accordion>
