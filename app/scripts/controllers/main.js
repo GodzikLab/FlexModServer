@@ -14,7 +14,6 @@ angular.module('modFlexApp')
     .controller('ContactsCtrl', ['$scope', function ($scope) {
 
         }])
-
     .controller('HeaderCtrl', ['$scope', '$location', function ($scope, $location) {
             $scope.isActive = function (viewLocation) {
                 return viewLocation === $location.path();
@@ -75,8 +74,8 @@ angular.module('modFlexApp')
             };
 
             $scope.useQuery = function (index) {
-                var userObject = $scope.queries[index];
-                $scope.querySequence = userObject.sequence;
+                $scope.sessionObject = $scope.queries[index];
+                $scope.querySequence = $scope.sessionObject.sequence;
                 $location.path('search');
 
             };
