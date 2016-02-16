@@ -2,6 +2,10 @@
 
 Source code for ModFlex server
 
+## To install dependencies
+
+Run 'npm install; bower install'.
+
 ## Build & development
 
 Run `grunt` for building and `grunt serve` for preview.
