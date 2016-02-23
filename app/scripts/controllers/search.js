@@ -12,7 +12,7 @@ angular.module('modFlexApp')
         function ($scope, $location, $http, $templateCache) {
             var baseUrl = 'http://modflex/phps/';
             // uncomment when developing UI
-            $scope.useTestFasta();
+           // $scope.useTestFasta();
 
             $scope.isActive = ($location.url() === "/search");
             $scope.sortType = 'score'; // default sort type
@@ -23,33 +23,33 @@ angular.module('modFlexApp')
             $scope.finished = false;
             $scope.r = {};
             //  $scope.r = {sequence:$scope.querySequence, title:$scope.querySequence.substring(0, 15)+'...'};
-            $scope.selectedList = [];
+            $scope.analysisCart = [];
 
             $scope.hasSelection = false;
             // console.log('seq:' + $scope.querySequence);
             var testSeq = $scope.querySequence,
                 session = $scope.sessionObject.sessionId;
 
-            $scope.select = function (r) {
+            $scope.addtocart = function (r) {
                 r.selected = !r.selected;
                 if (r.selected) {
-                    $scope.selectedList.push(r);
+                    $scope.analysisCart.push(r);
                     // $scope.modellingRequest(r);
                 } else {
-                    var ix = $scope.selectedList.indexOf(r);
+                    var ix = $scope.analysisCart.indexOf(r);
                     if (ix > -1)
-                        $scope.selectedList.splice(ix, 1);
+                        $scope.analysisCart.splice(ix, 1);
                 }
 
-                $scope.hasSelection = $scope.selectedList.length > 0;
+                $scope.hasSelection = $scope.analysisCart.length > 0;
             };
 
             $scope.clearSelection = function () {
-                $scope.selectedList = [];
+                $scope.analysisCart = [];
             };
 
             $scope.getSelected = function () {
-                return $scope.selectedList();
+                return $scope.analysisCart();
             };
 
             $scope.switchLigandFilter = function () {
