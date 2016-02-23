@@ -56,17 +56,14 @@
                 <uib-accordion close-others="true">
                     <uib-accordion-group is-open="false" is-disabled="false">
                         <uib-accordion-heading>
-                            <i class="pull-left fa fa-tasks"></i> Models
+                            <i class="pull-left fa fa-calculator"></i> Analysis
                         </uib-accordion-heading>
-                        <!--                        <div class="col-xs-12" ng-show="!hasSelection">
-                                                    Select cluster representatives to get models.
-                                                </div> 
-                                                <div class="col-xs-12" ng-repeat="m in selectedList| orderBy:'pdb'">
-                                                    <i class="fa fa-spinner fa-spin" ng-show="!m.modellingDone"></i>
-                                                    <a ng-href="{{m.modelUrl}}" ng-show="m.modellingDone && m.modelUrl.length > 0"><i class="fa fa-floppy-o"></i></a>
-                                                    {{m.pdb}}_{{m.chain}} 
-                                                    <span class="text-danger">{{m.errorMessage}}</span>
-                                                </div>-->
+                        <div class="col-xs-12" ng-show="!hasSelection">
+                            Select cluster representatives to get models.
+                        </div> 
+                        <div class="col-xs-12" ng-repeat="m in analysisCart| orderBy:'pdb'">
+                            {{m.pdb}}_{{m.chain}} 
+                        </div>
                     </uib-accordion-group>
                 </uib-accordion>
             </div>
@@ -129,9 +126,10 @@
                                         <div class="col-md-12">
                                             <ul class="horizontal-slide">
                                                 <li class="col-xs-3 col-md-2 img-thumbnail" ng-repeat="r in hit.representatives| filter: matchFilters()">
-                                                    <button type="button" class="btn btn-xs" ng-class="{'btn-success':r.selected}" ng-click="select(r)" aria-label="Select"  uib-popover="Click to add structure to analysis basket." popover-trigger="mouseenter"  popover-append-to-body="true">
-                                                        <span class="glyphicon " ng-class="{'glyphicon-check':r.selected, 'glyphicon-unchecked': !r.selected}"  aria-hidden="true"></span>
-                                                    </button>
+                                                    <span class="glyphicon " ng-class="{'glyphicon-check':r.selected,'text-success':r.selected, 'glyphicon-unchecked': !r.selected}" 
+                                                          ng-click="addtocart(r)" uib-popover="Click to add structure to analysis basket." popover-trigger="mouseenter"  
+                                                          popover-append-to-body="true" aria-hidden="true"></span>
+
                                                     <span aria-label="Modelling" uib-popover="{{r.modellingMsg|| 'Click to run modelling'}}" ng-click="modellingRequest(r)" popover-trigger="mouseenter" popover-append-to-body="true">
                                                         <span 
                                                             ng-switch on="r.modellingStatus">
@@ -141,7 +139,7 @@
                                                             <span ng-switch-default><i class="fa fa-cloud-download"></i></span>
                                                         </span>
                                                     </span>
-                                                    <span ng-show="hasLigand(r)" aria-label="Has ligand" uib-popover="Has ligand" popover-trigger="mouseenter" popover-append-to-body="true">
+                                                    <span ng-show="hasLigand(r)" aria-label="Has ligand" uib-popover="Has ligand(s)" popover-trigger="mouseenter" popover-append-to-body="true">
                                                         <i class="fa fa-puzzle-piece"></i></span>
                                                     <span ng-show="isComplex(r)" aria-label="Part of a complex" uib-popover="Part of a complex" popover-trigger="mouseenter" popover-append-to-body="true">
                                                         <i class="fa fa-cubes"></i></span>
