@@ -165,7 +165,7 @@ angular.module('modFlexApp')
                 var req = {
                     method: 'POST',
                     url: baseUrl + 'mastersBySequence.php',
-                    data: {sequence: testSeq, sessionId: session},
+                    data: {sequence: testSeq, sessionID: session},
                     headers: {'Content-Type': 'application/x-www-form-urlencoded'},
                     cache: $templateCache
                 };
