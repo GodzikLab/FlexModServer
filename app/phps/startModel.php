@@ -5,10 +5,14 @@
 	header("Access-Control-Allow-Headers: Content-Type, Depth, User-Agent, X-File-Size,     X-Requested-With, If-Modified-Since, X-File-Name, Cache-Control");
 	header('Content-Type: application/json');
 	
-	$fullSequence 	= $_POST['sequence'];
-	$modelPDBID = $_POST['pdbID'];
-	$modelChain = $_POST['chainID'];
-	$sessionID = $_POST['sessionID'];
+	//need this to be able to get POST data sent by AngularJS
+	$postdata = file_get_contents("php://input");
+	$request = json_decode($postdata);
+
+	$fullSequence 	= $request->sequence;
+	$modelPDBID 	= $request->pdbID;
+	$modelChain 	= $request->chainID;
+	$sessionID 		= $request->sessionID;
 	// $modelPDBID = '1a50';
 	// $modelChain = 'A';
 	// $fullSequence = ">1A50:A|PDBID|CHAIN|SEQUENCE\nMERYENLFAQLNDRREGAFVPFVTLGDPGIEQSLKIIDTLIDAGADALELGVPFSDPLADGPTIQNANLRAFAAGVTPAQCFEMLALIREKHPTIPIGLLMYANLVFNNGIDAFYARCEQVGVDSVLVADVPVEESAPFRQAALRHNIAPIFICPPNADDDLLRQVASYGRGYTYLLSRSGVTGAENRGALPLHHLIEKLKEYHAAPALQGFGISSPEQVSAAVRAGAAGAISGSAIVKIIEKNLASPKQMLAELRSFVSAMKAASRA";
