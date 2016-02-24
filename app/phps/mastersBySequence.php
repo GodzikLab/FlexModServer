@@ -170,8 +170,9 @@ else {
     echo(json_encode($allMasters));
 
     if(count($allMasters) > 0){
-        $jobFolder = "../jobs/".$sessionID;
-        mkdir($jobFolder);
+        $sessionFolder = "../jobs/".$sessionID;
+        if(!is_dir($sessionFolder))
+            mkdir($sessionFolder);
     }
 
 }
