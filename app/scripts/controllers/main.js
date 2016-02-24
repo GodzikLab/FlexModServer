@@ -93,7 +93,7 @@ angular.module('modFlexApp')
             };
 
             $scope.generateSessionId = function () {
-                return "" + Math.floor(Date.now() / 1000) + "_" + Math.floor((Math.random() * 100) + 1);
+                return "" + Math.floor(Date.now() / 1000) + Math.floor((Math.random() * 100) + 1);
             };
 
             var checkDuplicates = function (seq, data) {
