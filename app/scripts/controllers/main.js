@@ -36,16 +36,21 @@ angular.module('modFlexApp')
             }, true);
 
             $scope.search = function () {
-                var sessionId = $scope.generateSessionId();
+                var duplicate = checkDuplicates($scope.querySequence, $scope.queries);
+                if (!duplicate) {
+                    var sessionId = $scope.generateSessionId();
 
-                $scope.sessionObject = {
-                    title: $scope.titleFromSeq($scope.querySequence),
-                    sequence: $scope.querySequence,
-                    sessionId: sessionId
-                };
+                    $scope.sessionObject = {
+                        title: $scope.titleFromSeq($scope.querySequence),
+                        sequence: $scope.querySequence,
+                        sessionId: sessionId
+                    };
+                    $scope.queries.push($scope.sessionObject);
 
-                //// add check for duplicates!
-                $scope.queries.push($scope.sessionObject);
+                } else {
+                    $scope.sessionObject = duplicate;
+                }
+
 
                 $location.path('search');
             };
@@ -58,9 +63,9 @@ angular.module('modFlexApp')
                 var idx = seq.indexOf('\n');
 
                 if (idx >= 1) {
-                   return seq.substr(0, idx);
+                    return seq.substr(0, idx);
                 } else {
-                   return seq.substr(0, 17) + '...';
+                    return seq.substr(0, 17) + '...';
                 }
             };
 
@@ -77,7 +82,6 @@ angular.module('modFlexApp')
                 $scope.sessionObject = $scope.queries[index];
                 $scope.querySequence = $scope.sessionObject.sequence;
                 $location.path('search');
-
             };
 
             $scope.removeQuery = function (index) {
@@ -90,6 +94,17 @@ angular.module('modFlexApp')
 
             $scope.generateSessionId = function () {
                 return "" + Math.floor(Date.now() / 1000) + "_" + Math.floor((Math.random() * 100) + 1);
+            };
+
+            var checkDuplicates = function (seq, data) {
+                for (var i in data) {
+                    var so = data[i];
+                    if (so.sequence === seq) {
+                        console.log("Sequnces already used, returning it.");
+                        return so;
+                    }
+                }
+                return null;
             };
         }])
     ;
