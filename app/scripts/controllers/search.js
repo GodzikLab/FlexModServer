@@ -12,7 +12,7 @@ angular.module('modFlexApp')
         function ($scope, $location, $http, $templateCache) {
             var baseUrl = 'http://modflex/phps/';
             // uncomment when developing UI
-           // $scope.useTestFasta();
+            // $scope.useTestFasta();
 
             $scope.isActive = ($location.url() === "/search");
             $scope.sortType = 'score'; // default sort type
@@ -87,16 +87,17 @@ angular.module('modFlexApp')
 
                 var req = {
                     method: 'POST',
-                    url: baseUrl +'startModel.php',
+                    url: baseUrl + 'startModel.php',
                     data: {
                         sequence: testSeq,
-                        pdbID: r.pdbid,
+                        pdbID: r.pdb,
                         chainID: r.chain,
                         sessionId: session
                     },
                     headers: {'Content-Type': 'application/x-www-form-urlencoded'}
                 };
 
+                console.log(req);
 
                 $http(req).then(function successCallback(response) {
                     console.log(response.data);
@@ -118,14 +119,15 @@ angular.module('modFlexApp')
             $scope.trackModelStatus = function (r) {
                 var req = {
                     method: 'GET',
-                    url: baseUrl +'checkModelStatus.php',
+                    url: baseUrl + 'checkModelStatus.php',
                     data: {
-                        modelID: r.jobid,
+                        modelID: r.jobId,
                         sessionID: session
                     },
                     headers: {'Content-Type': 'application/x-www-form-urlencoded'}
                 };
 
+                console.log(req);
                 var wait = function () {
                     $http(req).then(
                         function successCallback(response) {
@@ -159,7 +161,7 @@ angular.module('modFlexApp')
 //                console.log($scope.sessionObject);
                 var req = {
                     method: 'POST',
-                    url: baseUrl +'mastersBySequence.php',
+                    url: baseUrl + 'mastersBySequence.php',
                     data: {sequence: testSeq, sessionId: session},
                     headers: {'Content-Type': 'application/x-www-form-urlencoded'},
                     cache: $templateCache
