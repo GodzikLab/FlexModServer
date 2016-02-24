@@ -27,7 +27,16 @@
             <uib-accordion-heading>
                 <i class="pull-letf fa fa-question-circle"></i> Help
             </uib-accordion-heading>
-            Add some help here
+            <div>
+                <h2>Legend</h2>
+                <ul class="list-unstyled">
+                    <li><span><i class="fa fa-cloud-download"></i></span> &dash; Click to submit modelling job using this representative.</li>
+                    <li><span class="text-success"><i class="fa fa-floppy-o"></i></span> &dash; Modelling job finished and model ready for download.</li>
+                    <li><span class="text-danger"><i class="fa fa-exclamation-circle"></i></span> &dash; Modelling job failed.</li>
+                    <li><span><i class="fa fa-puzzle-piece"></i></span> &dash; Cluster representative has ligand</li>
+                    <li><span><i class="fa fa-cubes"></i></span> &dash; Cluster representative is part of the complex</li>
+                </ul>
+            </div>
         </uib-accordion-group>
     </uib-accordion>
     <div ng-show="!finished && !hasErrors"><i class="fa fa-4x fa-spinner fa-spin"></i></div>
@@ -133,7 +142,7 @@
                                                     <span aria-label="Modelling" uib-popover="{{r.modellingMsg|| 'Click to run modelling'}}" popover-trigger="mouseenter" popover-append-to-body="true">
                                                         <span                                                             ng-switch on="r.modellingStatus">
                                                             <span ng-switch-when="started"><i class="fa fa-spinner fa-spin"></i></span>
-                                                            <span ng-switch-when="done"><span class="text-success"><a ng-href="{{r.modelUrl}}" ><i class="fa fa-floppy-o"></i></a></span></span>
+                                                            <span ng-switch-when="done"><span class="text-success"><a ng-href="{{r.modelUrl}}" target="_blank"><i class="fa fa-floppy-o"></i></a></span></span>
                                                             <span ng-switch-when="error"><span class="text-danger" ng-click="modellingRequest(r)"><i class="fa fa-exclamation-circle"></i></span></span>
                                                             <span ng-switch-default><i class="fa fa-cloud-download" ng-click="modellingRequest(r)" ></i></span>
                                                         </span>
