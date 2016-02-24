@@ -9,6 +9,15 @@
 	$modelJobID = $_GET['modelID'];
 	$sessionID = $_GET['sessionID'];
 
+	if(is_null($modelJobID) || is_null($sessionID)){
+		$errorMessage = array();
+	    $errorMessage['script'] = 'checkModelStatus.php';
+	    $errorMessage['title'] = 'Parameter error';
+	    $errorMessage['message'] = 'Parameters modelID and sessionID were not set properly!';
+	    echo(json_encode($errorMessage));
+	    exit();
+	}
+
 	$url = "http://ffas.godziklab.org/protmod2-cgi/check_protmod2.pl";
 
 	$data = array('jobId' => $modelJobID);
@@ -22,8 +31,8 @@
 	    ),
 	);
 
-	$context  = stream_context_create($options);
-	$result = file_get_contents($url, false, $context);
+	$context = stream_context_create($options);
+	$result  = file_get_contents($url, false, $context);
 
 	$resultObject = json_decode($result, TRUE);
 

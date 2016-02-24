@@ -5,13 +5,22 @@
 	header("Access-Control-Allow-Headers: Content-Type, Depth, User-Agent, X-File-Size,     X-Requested-With, If-Modified-Since, X-File-Name, Cache-Control");
 	header('Content-Type: application/json');
 	
-	// $fullSequence 	= $_POST['sequence'];
-	// $modelPDBID = $_POST['pdbID'];
-	// $modelChain = $_POST['chainID'];
+	$fullSequence 	= $_POST['sequence'];
+	$modelPDBID = $_POST['pdbID'];
+	$modelChain = $_POST['chainID'];
 	$sessionID = $_POST['sessionID'];
-	$modelPDBID = '1a50';
-	$modelChain = 'A';
-	$fullSequence = ">1A50:A|PDBID|CHAIN|SEQUENCE\nMERYENLFAQLNDRREGAFVPFVTLGDPGIEQSLKIIDTLIDAGADALELGVPFSDPLADGPTIQNANLRAFAAGVTPAQCFEMLALIREKHPTIPIGLLMYANLVFNNGIDAFYARCEQVGVDSVLVADVPVEESAPFRQAALRHNIAPIFICPPNADDDLLRQVASYGRGYTYLLSRSGVTGAENRGALPLHHLIEKLKEYHAAPALQGFGISSPEQVSAAVRAGAAGAISGSAIVKIIEKNLASPKQMLAELRSFVSAMKAASRA";
+	// $modelPDBID = '1a50';
+	// $modelChain = 'A';
+	// $fullSequence = ">1A50:A|PDBID|CHAIN|SEQUENCE\nMERYENLFAQLNDRREGAFVPFVTLGDPGIEQSLKIIDTLIDAGADALELGVPFSDPLADGPTIQNANLRAFAAGVTPAQCFEMLALIREKHPTIPIGLLMYANLVFNNGIDAFYARCEQVGVDSVLVADVPVEESAPFRQAALRHNIAPIFICPPNADDDLLRQVASYGRGYTYLLSRSGVTGAENRGALPLHHLIEKLKEYHAAPALQGFGISSPEQVSAAVRAGAAGAISGSAIVKIIEKNLASPKQMLAELRSFVSAMKAASRA";
+
+	if(is_null($fullSequence) || is_null($modelPDBID) || is_null($modelChain) || is_null($sessionID)){
+		$errorMessage = array();
+	    $errorMessage['script'] = 'checkModelStatus.php';
+	    $errorMessage['title'] = 'Parameter error';
+	    $errorMessage['message'] = 'POST parameters sequence,pdbID,chainID or sessionID were not set properly!';
+	    echo(json_encode($errorMessage));
+	    exit();
+	}
 
 	$url = 'http://pdbflex.org/fsn/php/alignSequences.php';
 	// $url = 'http://localhost/FSN/public_html/php/alignSequences.php';
@@ -35,6 +44,7 @@
 	    $errorMessage['title'] = 'Pairwise alignment failed';
 	    $errorMessage['message'] = 'Pairwise alignment failed!';
 	    echo(json_encode($errorMessage));
+	    exit();
 	}
 
 	// echo($blastAlignmentJSON);
