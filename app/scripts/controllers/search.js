@@ -12,7 +12,7 @@ angular.module('modFlexApp')
         function ($scope, $location, $http, $templateCache) {
             var baseUrl = 'http://modflex/phps/';
             // uncomment when developing UI
-            // $scope.useTestFasta();
+//             $scope.useTestFasta();
 
             $scope.isActive = ($location.url() === "/search");
             $scope.sortType = 'score'; // default sort type
@@ -22,7 +22,6 @@ angular.module('modFlexApp')
             $scope.hasErrors = false;
             $scope.finished = false;
             $scope.r = {};
-            //  $scope.r = {sequence:$scope.querySequence, title:$scope.querySequence.substring(0, 15)+'...'};
             $scope.analysisCart = [];
 
             $scope.hasSelection = false;
@@ -92,7 +91,7 @@ angular.module('modFlexApp')
                         sequence: testSeq,
                         pdbID: r.pdb,
                         chainID: r.chain,
-                        sessionId: session
+                        sessionID: session
                     },
                     headers: {'Content-Type': 'application/x-www-form-urlencoded'}
                 };
@@ -106,7 +105,7 @@ angular.module('modFlexApp')
                         r.modellingStatus = 'error';
                         r.modellingMsg = 'Error occured: ' + response.data.message;
                     } else {
-                        r.jobId = response.data.JobId
+                        r.jobId = response.data.JobId;
                         $scope.trackModelStatus(r);
                     }
                 }, function errorCallback(response) {
@@ -168,7 +167,7 @@ angular.module('modFlexApp')
                 };
 
                 $http(req).then(function successCallback(response) {
-                    //console.log(response);
+                    console.log(response.data);
 
                     if (response.data.message) {
                         $scope.hasErrors = true;
