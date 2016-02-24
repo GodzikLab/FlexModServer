@@ -17,7 +17,7 @@
 		$errorMessage = array();
 	    $errorMessage['script'] = 'checkModelStatus.php';
 	    $errorMessage['title'] = 'Parameter error';
-	    $errorMessage['message'] = 'POST parameters sequence,pdbID,chainID or sessionID were not set properly!';
+	    $errorMessage['message'] = 'POST parameters sequence : '.$fullSequence.', pdbID : '.$modelPDBID.' ,chainID : '.$modelChain.' or sessionID : '.$sessionID.' were not set properly!';
 	    echo(json_encode($errorMessage));
 	    exit();
 	}

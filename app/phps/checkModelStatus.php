@@ -13,7 +13,7 @@
 		$errorMessage = array();
 	    $errorMessage['script'] = 'checkModelStatus.php';
 	    $errorMessage['title'] = 'Parameter error';
-	    $errorMessage['message'] = 'GET parameters modelID and sessionID were not set properly!';
+	    $errorMessage['message'] = 'GET parameters modelID : '.$modelJobID.' and sessionID : '.$sessionID.' were not set properly!';
 	    echo(json_encode($errorMessage));
 	    exit();
 	}
