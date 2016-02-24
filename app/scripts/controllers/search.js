@@ -14,15 +14,17 @@ angular.module('modFlexApp')
             // store the interval promise in this variable
             var promise;
             // uncomment when developing UI
-           // $scope.useTestFasta();
+            // $scope.useTestFasta();
 
             $scope.isActive = ($location.url() === "/search");
             $scope.sortType = 'score'; // default sort type
             $scope.sortReverse = false;  // default sort order
 
             $scope.filtLigand = false;
+
             $scope.hasErrors = false;
             $scope.finished = false;
+
             $scope.r = {};
             $scope.analysisCart = [];
 
@@ -125,7 +127,7 @@ angular.module('modFlexApp')
                     method: 'GET',
                     url: baseUrl + 'checkModelStatus.php?modelID=' + r.jobId
                         + '&sessionID=' + session,
-                  //  cache: $templateCache,
+                    //  cache: $templateCache,
                     headers: {'Content-Type': 'application/x-www-form-urlencoded'}
                 };
 
@@ -162,30 +164,38 @@ angular.module('modFlexApp')
             $scope.searchRequest = function () {
 //                console.log(session);
 //                console.log($scope.sessionObject);
-                var req = {
-                    method: 'POST',
-                    url: baseUrl + 'mastersBySequence.php',
-                    data: {sequence: testSeq, sessionID: session},
-                    headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-                    cache: $templateCache
-                };
 
-                $http(req).then(function successCallback(response) {
+                if ($scope.sessionObject.needSearch) {
+                    var req = {
+                        method: 'POST',
+                        url: baseUrl + 'mastersBySequence.php',
+                        data: {sequence: testSeq, sessionID: session},
+                        headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+                        cache: $templateCache
+                    };
+
+                    $http(req).then(function successCallback(response) {
 //                    console.log(response.data);
 
-                    if (response.data.message) {
+                        if (response.data.message) {
+                            $scope.hasErrors = true;
+                            $scope.errorMessage = response.data.message;
+                        } else {
+                            $scope.sessionObject.hits = response.data;
+                            $scope.r.hits = $scope.sessionObject.hits;
+                            $scope.finished = true;
+
+                        }
+                    }, function errorCallback(response) {
                         $scope.hasErrors = true;
-                        $scope.errorMessage = response.data.message;
-                    } else {
-                        $scope.r.hits = response.data;
-                        $scope.finished = true;
-
-                    }
-                }, function errorCallback(response) {
-                    $scope.hasErrors = true;
-                    $scope.errorMessage = "Error occured";
-                });
-
+                        $scope.errorMessage = "Error occured";
+                    });
+                } else {
+                    //this is pre-processed object, dont reset anything and dont run new search
+                    console.log("wont search again");
+                    $scope.r.hits = $scope.sessionObject.hits;
+                    $scope.finished = true;
+                }
             };
 
             $scope.searchRequest();
