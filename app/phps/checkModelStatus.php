@@ -43,7 +43,7 @@
 		if(!is_dir($sessionFolder))
 			mkdir($sessionFolder);
 
-		file_put_contents($sessionFolder."/".$modelJobID.".pdb", file_get_contents($url));
+		file_put_contents($sessionFolder."/".$modelJobID."model.pdb", file_get_contents($url));
 
 		$resultObject["url"] = "/jobs/".$sessionID."/".$modelJobID."model.pdb";
 		echo(json_encode($resultObject));
