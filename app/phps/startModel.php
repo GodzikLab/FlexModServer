@@ -19,7 +19,7 @@
 
 	if(is_null($fullSequence) || is_null($modelPDBID) || is_null($modelChain) || is_null($sessionID)){
 		$errorMessage = array();
-	    $errorMessage['script'] = 'checkModelStatus.php';
+	    $errorMessage['script'] = 'startModel.php';
 	    $errorMessage['title'] = 'Parameter error';
 	    $errorMessage['message'] = 'POST parameters sequence : '.$fullSequence.', pdbID : '.$modelPDBID.' ,chainID : '.$modelChain.' or sessionID : '.$sessionID.' were not set properly!';
 	    echo(json_encode($errorMessage));
