@@ -99,10 +99,10 @@ angular.module('modFlexApp')
                     headers: {'Content-Type': 'application/x-www-form-urlencoded'}
                 };
 
-                console.log(req);
+//                console.log(req);
 
                 $http(req).then(function successCallback(response) {
-                    console.log(response.data);
+//                    console.log(response.data);
                     if (response.data.message) {
                         // r.errorMessage = response.data.message;
                         r.modellingStatus = 'error';
@@ -129,11 +129,11 @@ angular.module('modFlexApp')
                     headers: {'Content-Type': 'application/x-www-form-urlencoded'}
                 };
 
-                console.log(req);
+//                console.log(req);
                 var wait = function () {
                     $http(req).then(
                         function successCallback(response) {
-                            console.log(response.data);
+//                            console.log(response.data);
                             //Done, In process, failed,  Not exist.
                             if (response.data.Status === "Progress" || response.data.Status === "In process") {
 //                                $interval(wait, 1000);
@@ -150,7 +150,6 @@ angular.module('modFlexApp')
                             }
                         }, function errorCallback(response) {
                         $scope.stop();
-                        console.log(response);
                         r.modellingStatus = 'error';
                         r.modellingMsg = 'Error occured. ';
                     });
@@ -172,7 +171,7 @@ angular.module('modFlexApp')
                 };
 
                 $http(req).then(function successCallback(response) {
-                    console.log(response.data);
+//                    console.log(response.data);
 
                     if (response.data.message) {
                         $scope.hasErrors = true;
