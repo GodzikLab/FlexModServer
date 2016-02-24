@@ -194,6 +194,15 @@ angular.module('modFlexApp')
                     //this is pre-processed object, dont reset anything and dont run new search
                     console.log("wont search again");
                     $scope.r.hits = $scope.sessionObject.hits;
+                    for (var i in $scope.r.hits) {
+                        var rhits = $scope.r.hits[i].representatives;
+                        for (var j in rhits) {
+                            if (rhits[j].selected) {
+                                $scope.analysisCart.push(rhits[j]);
+                            }
+                        }
+                    }
+                    $scope.hasSelection = $scope.analysisCart.length > 0;
                     $scope.finished = true;
                 }
             };
