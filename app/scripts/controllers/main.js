@@ -25,7 +25,7 @@ angular.module('modFlexApp')
             // include getting list of jobs from local storage/db later
             $scope.querySequence = '';
             $scope.testFasta = ">1A50:A|PDBID|CHAIN|SEQUENCE\nMERYENLFAQLNDRREGAFVPFVTLGDPGIEQSLKIIDTLIDAGADALELGVPFSDPLADGPTIQNANLRAFAAGVTPAQCFEMLALIREKHPTIPIGLLMYANLVFNNGIDAFYARCEQVGVDSVLVADVPVEESAPFRQAALRHNIAPIFICPPNADDDLLRQVASYGRGYTYLLSRSGVTGAENRGALPLHHLIEKLKEYHAAPALQGFGISSPEQVSAAVRAGAAGAISGSAIVKIIEKNLASPKQMLAELRSFVSAMKAASRA";
-            $scope.sessionObject;
+            $scope.sessionObject = {};
 
             var queriesSaved = localStorageService.get('queries');
 
