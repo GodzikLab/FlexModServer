@@ -43,7 +43,8 @@ angular.module('modFlexApp')
                     $scope.sessionObject = {
                         title: $scope.titleFromSeq($scope.querySequence),
                         sequence: $scope.querySequence,
-                        sessionId: sessionId
+                        sessionId: sessionId,
+                        needSearch:true
                     };
                     $scope.queries.push($scope.sessionObject);
 
@@ -74,12 +75,14 @@ angular.module('modFlexApp')
                 $scope.sessionObject = {
                     title: $scope.titleFromSeq($scope.querySequence),
                     sequence: $scope.querySequence,
-                    sessionId: 'testFastaSessionId'
+                    sessionId: 'testFastaSessionId',
+                    needSearch:true
                 };
             };
 
             $scope.useQuery = function (index) {
                 $scope.sessionObject = $scope.queries[index];
+                $scope.sessionObject.needSearch = false;
                 $scope.querySequence = $scope.sessionObject.sequence;
                 $location.path('search');
             };
