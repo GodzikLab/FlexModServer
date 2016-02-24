@@ -8,11 +8,13 @@
  * Controller of the modFlexApp
  */
 angular.module('modFlexApp')
-    .controller('SearchCtrl', ['$scope', '$location', '$http', '$templateCache',
-        function ($scope, $location, $http, $templateCache) {
+    .controller('SearchCtrl', ['$scope', '$location', '$http', '$templateCache', '$interval',
+        function ($scope, $location, $http, $templateCache, $interval) {
             var baseUrl = 'http://modflex/phps/';
+            // store the interval promise in this variable
+            var promise;
             // uncomment when developing UI
-//             $scope.useTestFasta();
+           // $scope.useTestFasta();
 
             $scope.isActive = ($location.url() === "/search");
             $scope.sortType = 'score'; // default sort type
@@ -93,6 +95,7 @@ angular.module('modFlexApp')
                         chainID: r.chain,
                         sessionID: session
                     },
+//                    cache: $templateCache,
                     headers: {'Content-Type': 'application/x-www-form-urlencoded'}
                 };
 
@@ -106,7 +109,9 @@ angular.module('modFlexApp')
                         r.modellingMsg = 'Error occured: ' + response.data.message;
                     } else {
                         r.jobId = response.data.JobId;
-                        $scope.trackModelStatus(r);
+                        promise = $interval(function () {
+                            $scope.trackModelStatus(r);
+                        }, 1000);
                     }
                 }, function errorCallback(response) {
                     r.modellingStatus = 'error';
@@ -118,11 +123,9 @@ angular.module('modFlexApp')
             $scope.trackModelStatus = function (r) {
                 var req = {
                     method: 'GET',
-                    url: baseUrl + 'checkModelStatus.php',
-                    data: {
-                        modelID: r.jobId,
-                        sessionID: session
-                    },
+                    url: baseUrl + 'checkModelStatus.php?modelID=' + r.jobId
+                        + '&sessionID=' + session,
+                  //  cache: $templateCache,
                     headers: {'Content-Type': 'application/x-www-form-urlencoded'}
                 };
 
@@ -132,26 +135,28 @@ angular.module('modFlexApp')
                         function successCallback(response) {
                             console.log(response.data);
                             //Done, In process, failed,  Not exist.
-                            if (response.data.Status === "Progress") {
-                                setTimeout(wait, 1000);
+                            if (response.data.Status === "Progress" || response.data.Status === "In process") {
+//                                $interval(wait, 1000);
                             } else if (response.data.Status === "Failed") {
+                                $scope.stop();
                                 r.modellingStatus = 'error';
                                 r.modellingMsg = 'Modelling error occured. Click to retry. '
                             } else if (response.data.Status === "Done") {
-
-                                r.modelUrl = response.data.modelURL;
+                                $scope.stop();
+                                r.modelUrl = response.data.url;
 
                                 r.modellingStatus = 'done';
                                 r.modellingMsg = 'Model ready. Click to download.';
                             }
                         }, function errorCallback(response) {
+                        $scope.stop();
                         console.log(response);
                         r.modellingStatus = 'error';
                         r.modellingMsg = 'Error occured. ';
                     });
                 };
-                wait();
 
+                wait();
             };
 
 
@@ -186,6 +191,12 @@ angular.module('modFlexApp')
 
             $scope.searchRequest();
 
+            $scope.stop = function () {
+                $interval.cancel(promise);
+            };
+            $scope.$on('$destroy', function () {
+                $scope.stop();
+            });
         }]
         )
     ;

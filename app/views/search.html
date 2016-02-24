@@ -130,13 +130,12 @@
                                                           ng-click="addtocart(r)" uib-popover="Click to add structure to analysis basket." popover-trigger="mouseenter"  
                                                           popover-append-to-body="true" aria-hidden="true"></span>
 
-                                                    <span aria-label="Modelling" uib-popover="{{r.modellingMsg|| 'Click to run modelling'}}" ng-click="modellingRequest(r)" popover-trigger="mouseenter" popover-append-to-body="true">
-                                                        <span 
-                                                            ng-switch on="r.modellingStatus">
+                                                    <span aria-label="Modelling" uib-popover="{{r.modellingMsg|| 'Click to run modelling'}}" popover-trigger="mouseenter" popover-append-to-body="true">
+                                                        <span                                                             ng-switch on="r.modellingStatus">
                                                             <span ng-switch-when="started"><i class="fa fa-spinner fa-spin"></i></span>
                                                             <span ng-switch-when="done"><span class="text-success"><a ng-href="{{r.modelUrl}}" ><i class="fa fa-floppy-o"></i></a></span></span>
                                                             <span ng-switch-when="error"><span class="text-danger" ng-click="modellingRequest(r)"><i class="fa fa-exclamation-circle"></i></span></span>
-                                                            <span ng-switch-default><i class="fa fa-cloud-download"></i></span>
+                                                            <span ng-switch-default><i class="fa fa-cloud-download" ng-click="modellingRequest(r)" ></i></span>
                                                         </span>
                                                     </span>
                                                     <span ng-show="hasLigand(r)" aria-label="Has ligand" uib-popover="Has ligand(s)" popover-trigger="mouseenter" popover-append-to-body="true">
@@ -146,8 +145,8 @@
 
                                                     <br />    
                                                     <img ng-src="http://www.rcsb.org/pdb/images/{{r.pdb}}_bio_r_80.jpg" style="margin:auto;" class="img-responsive img-representative-tmb"
-                                                         uib-popover-template="'itemPopoverTpl.html'" popover-trigger="click" ng-init="item = r" popover-append-to-body="true">
-                                                    <div class="text-center">{{r.pdb}}_{{r.chain}}</div>
+                                                         >
+                                                    <div class="text-center"><span uib-popover-template="'itemPopoverTpl.html'" popover-trigger="mouseenter" ng-init="item = r" popover-append-to-body="true">{{r.pdb}}_{{r.chain}}</span></div>
                                                 </li>
                                             </ul>
                                         </div>
