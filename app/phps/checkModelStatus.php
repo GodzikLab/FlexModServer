@@ -6,12 +6,8 @@
 	header("Access-Control-Allow-Headers: Content-Type, Depth, User-Agent, X-File-Size, X-Requested-With, If-Modified-Since, X-File-Name, Cache-Control");
 	header('Content-Type: application/json');
 
-
-	$getdata = file_get_contents("php://input");
-	$request = json_decode($getdata);
-
-	$modelJobID = $request->modelID;
-	$sessionID 	= $request->sessionID;
+	$modelJobID = $_GET['modelID'];
+	$sessionID = $_GET['sessionID'];
 
 	if(is_null($modelJobID) || is_null($sessionID)){
 		$errorMessage = array();
