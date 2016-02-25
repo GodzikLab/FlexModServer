@@ -1,5 +1,26 @@
 <?php
 
+function getClusterStatistics($clusterID){
+
+    $url = 'http://pdbflex.org/fsn-data/covrms_ana/' . $clusterID;
+
+    $options = array(
+          'http' => array(
+            // 'header'  => "Content-type: application/x-www-form-urlencoded\r\n",
+            'method' => 'GET'
+          // 'content' => http_build_query($data),
+          ),
+    );
+
+    $context = stream_context_create($options);
+    $clusterStats = file_get_contents($url, false, $context);
+
+    $lines = explode('\n',$clusterStats);
+    $averageRMSD = str_replace(' ','',explode(':',$lines[0])[1]);
+
+    return $averageRMSD;
+}
+
 ///data/www/FSN/data/pdb_seqres.txt
 require_once('functions.php');
 header("Access-Control-Allow-Origin: *");
@@ -159,7 +180,7 @@ else {
         $masterInfo['score'] = $matchScore;
         $masterInfo['ident'] = $matchIdentity;
         $masterInfo['flex'] = 5;
-        $masterInfo['rmsd'] = 2.467;
+        $masterInfo['rmsd'] = getClusterStatistics($masterInfo['masterID']);
         $masterInfo['size'] = count($subClusterArray);
         $masterInfo['representatives'] = $subClusterArray;
         // echo($masterInfo);
