@@ -28,9 +28,9 @@
             <div>
                 <h2>Legend</h2>
                 <ul class="list-unstyled">
-                    <li><span><i class="fa fa-cloud-download"></i></span> &dash; Click to submit modelling job using this representative.</li>
-                    <li><span class="text-success"><i class="fa fa-floppy-o"></i></span> &dash; Modelling job finished and model ready for download.</li>
-                    <li><span class="text-danger"><i class="fa fa-exclamation-circle"></i></span> &dash; Modelling job failed.</li>
+                    <li><span><i class="fa fa-cloud-download"></i></span> &dash; Click to submit modeling job using this representative.</li>
+                    <li><span class="text-success"><i class="fa fa-floppy-o"></i></span> &dash; Modeling job finished and model is ready for download.</li>
+                    <li><span class="text-danger"><i class="fa fa-exclamation-circle"></i></span> &dash; Modeling job failed.</li>
                     <li><span><i class="fa fa-puzzle-piece"></i></span> &dash; Cluster representative has ligand</li>
                     <li><span><i class="fa fa-cubes"></i></span> &dash; Cluster representative is part of the complex</li>
                 </ul>
@@ -76,14 +76,14 @@
             </div>
         </div>
 
-<!--        <div class="row">
-            <div class="col-xs-12 col-sm-11 col-sm-offset-1"> 
-                <div role="group" aria-label="...">
-                    <a type="button" class="btn btn-default">SSE</a>
-                    <a type="button" class="btn btn-default">FFAS</a>
-                </div>
-            </div>
-        </div>-->
+        <!--        <div class="row">
+                    <div class="col-xs-12 col-sm-11 col-sm-offset-1"> 
+                        <div role="group" aria-label="...">
+                            <a type="button" class="btn btn-default">SSE</a>
+                            <a type="button" class="btn btn-default">FFAS</a>
+                        </div>
+                    </div>
+                </div>-->
         <div class="row">
             <div class="table-responsive">
                 <table class="table table-bordered table-striped">
@@ -122,7 +122,7 @@
                     </thead>
                     <tbody>
                         <tr ng-repeat="hit in r.hits| orderBy:sortType:sortReverse">
-                            <td><a ng-href="http://pdbflex.org/cluster.html#!/{{hit.masterID}}/{{hit.masterDbID}}/{{hit.masterID}}"><b>{{hit.masterID}}</b></a></td>
+                            <td><a ng-href="http://pdbflex.org/cluster.html#!/{{hit.masterID}}/{{hit.masterDbID}}/{{hit.masterID}}" target="_blank"><b>{{hit.masterID}}</b></a></td>
                             <td>{{hit.score}}</td>
                             <td>{{hit.ident}}</td>
                             <td>{{hit.rmsd}}</td>
@@ -137,12 +137,12 @@
                                                           ng-click="addtocart(r)" uib-popover="Click to add structure to analysis basket." popover-trigger="mouseenter"  
                                                           popover-append-to-body="true" aria-hidden="true"></span>
 
-                                                    <span aria-label="Modelling" uib-popover="{{r.modellingMsg|| 'Click to run modelling'}}" popover-trigger="mouseenter" popover-append-to-body="true">
-                                                        <span                                                             ng-switch on="r.modellingStatus">
+                                                    <span aria-label="modeling" uib-popover="{{r.modelingMsg|| 'Click to run modeling'}}" popover-trigger="mouseenter" popover-append-to-body="true">
+                                                        <span                                                             ng-switch on="r.modelingStatus">
                                                             <span ng-switch-when="started"><i class="fa fa-spinner fa-spin"></i></span>
                                                             <span ng-switch-when="done"><span class="text-success"><a ng-href="{{r.modelUrl}}" target="_blank"><i class="fa fa-floppy-o"></i></a></span></span>
-                                                            <span ng-switch-when="error"><span class="text-danger" ng-click="modellingRequest(r)"><i class="fa fa-exclamation-circle"></i></span></span>
-                                                            <span ng-switch-default><i class="fa fa-cloud-download" ng-click="modellingRequest(r)" ></i></span>
+                                                            <span ng-switch-when="error"><span class="text-danger" ng-click="modelingRequest(r)"><i class="fa fa-exclamation-circle"></i></span></span>
+                                                            <span ng-switch-default><i class="fa fa-cloud-download" ng-click="modelingRequest(r)" ></i></span>
                                                         </span>
                                                     </span>
                                                     <span ng-show="hasLigand(r)" aria-label="Has ligand" uib-popover="Has ligand(s)" popover-trigger="mouseenter" popover-append-to-body="true">

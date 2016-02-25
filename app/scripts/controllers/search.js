@@ -37,7 +37,6 @@ angular.module('modFlexApp')
                 r.selected = !r.selected;
                 if (r.selected) {
                     $scope.analysisCart.push(r);
-                    // $scope.modellingRequest(r);
                 } else {
                     var ix = $scope.analysisCart.indexOf(r);
                     if (ix > -1)
@@ -81,12 +80,12 @@ angular.module('modFlexApp')
                 return "<b>PDBID</b>: " + r.pdb;
             };
 
-            $scope.modellingRequest = function (r) {
+            $scope.modelingRequest = function (r) {
                 if (r.modelUrl) {
                     return;
                 }
-                r.modellingStatus = 'started';
-                r.modellingMsg = 'Modelling running...';
+                r.modelingStatus = 'started';
+                r.modelingMsg = 'Modeling running...';
 
                 var req = {
                     method: 'POST',
@@ -107,8 +106,8 @@ angular.module('modFlexApp')
 //                    console.log(response.data);
                     if (response.data.message) {
                         // r.errorMessage = response.data.message;
-                        r.modellingStatus = 'error';
-                        r.modellingMsg = 'Error occured: ' + response.data.message;
+                        r.modelingStatus = 'error';
+                        r.modelingMsg = 'Error occured: ' + response.data.message;
                     } else {
                         r.jobId = response.data.JobId;
                         promise = $interval(function () {
@@ -116,8 +115,8 @@ angular.module('modFlexApp')
                         }, 1000);
                     }
                 }, function errorCallback(response) {
-                    r.modellingStatus = 'error';
-                    r.modellingMsg = 'Error occured. ';
+                    r.modelingStatus = 'error';
+                    r.modelingMsg = 'Error occured. ';
                 });
 
             };
@@ -141,19 +140,19 @@ angular.module('modFlexApp')
 //                                $interval(wait, 1000);
                             } else if (response.data.Status === "Failed") {
                                 $scope.stop();
-                                r.modellingStatus = 'error';
-                                r.modellingMsg = 'Modelling error occured. Click to retry. '
+                                r.modelingStatus = 'error';
+                                r.modelingMsg = 'modeling error occured. Click to retry. '
                             } else if (response.data.Status === "Done") {
                                 $scope.stop();
                                 r.modelUrl = response.data.url;
 
-                                r.modellingStatus = 'done';
-                                r.modellingMsg = 'Model ready. Click to download.';
+                                r.modelingStatus = 'done';
+                                r.modelingMsg = 'Model ready. Click to download.';
                             }
                         }, function errorCallback(response) {
                         $scope.stop();
-                        r.modellingStatus = 'error';
-                        r.modellingMsg = 'Error occured. ';
+                        r.modelingStatus = 'error';
+                        r.modelingMsg = 'Error occured. ';
                     });
                 };
 
