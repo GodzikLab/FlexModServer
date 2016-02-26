@@ -35,6 +35,7 @@ $request = json_decode($postdata);
 $sessionID = $request->sessionID;
 $fullSequence = $request->sequence;
 
+// $sessionID = '1234';
 // $fullSequence = ">1A50:A|PDBID|CHAIN|SEQUENCE\nMERYENLFAQLNDRREGAFVPFVTLGDPGIEQSLKIIDTLIDAGADALELGVPFSDPLADGPTIQNANLRAFAAGVTPAQCFEMLALIREKHPTIPIGLLMYANLVFNNGIDAFYARCEQVGVDSVLVADVPVEESAPFRQAALRHNIAPIFICPPNADDDLLRQVASYGRGYTYLLSRSGVTGAENRGALPLHHLIEKLKEYHAAPALQGFGISSPEQVSAAVRAGAAGAISGSAIVKIIEKNLASPKQMLAELRSFVSAMKAASRA";
 // echo($fullSequence);
 if (strlen($fullSequence) == 0) {
@@ -137,6 +138,23 @@ else {
 
         // print_r($subClusters);
 
+        $url = "http://pdbflex.org/fsn-data/completeClusters/" . $clusterName . "NNCluster.json";
+        // print_r($url);
+        $options = array(
+          'http' => array(
+            // 'header'  => "Content-type: application/x-www-form-urlencoded\r\n",
+            'method' => 'GET',
+          // 'content' => http_build_query($data),
+          ),
+        );
+
+        $context = stream_context_create($options);
+        $completeSubclustersJSONString = file_get_contents($url, false, $context);
+        // echo($subClustersJSONString);
+        $completeSubClusters = json_decode($completeSubclustersJSONString, TRUE);
+
+        //print_r($completeSubClusters);
+
         $subClusterArray = array();
         foreach ($subClusters as $subCluster) {
             // echo($subCluster);
@@ -162,7 +180,15 @@ else {
             $context = stream_context_create($options);
             $pdbInfoJSONString = file_get_contents($url, false, $context);
             
+            $subclusterMembers = array();
+            try{
+                $subclusterMembers = $completeSubClusters[$subClusterPDB . $subClusterChain];
+            }catch(Exception $e){
+
+            }
+
             $pdbInfo = json_decode($pdbInfoJSONString, TRUE);
+            $pdbInfo['subclusterMembers'] = $subclusterMembers;
             $ligands = $pdbInfo["ligands"];
 
             // echo($subClusterID);
