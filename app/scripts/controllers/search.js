@@ -36,9 +36,11 @@ angular.module('modFlexApp')
 
             var parseNamesFromDesc = function (hit, index, array) {
                 hit.representatives.forEach(function (rep) {
-                    var chunks = rep.description.split(" ");
-                    if (chunks.length > 3) {
-                        rep.name = chunks.splice(3).join(" ").trim();
+                    if (!rep.names || rep.names === "") {
+                        var chunks = rep.description.split(" ");
+                        if (chunks.length > 3) {
+                            rep.names = chunks.splice(3).join(" ").trim();
+                        }
                     }
                 });
             };
