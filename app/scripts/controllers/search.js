@@ -11,10 +11,12 @@ angular.module('modFlexApp')
     .controller('SearchCtrl', ['$scope', '$location', '$http', '$templateCache', '$interval',
         function ($scope, $location, $http, $templateCache, $interval) {
             var baseUrl = 'http://modflex/phps/';
-            // store the interval promise in this variable
+            // store the interval promise for status starck
             var promise;
+            // store the interval promise for status starck
+            var promiseAnimation;
             // uncomment when developing UI
-            // $scope.useTestFasta();
+            $scope.useTestFasta();
 
             $scope.isActive = ($location.url() === "/search");
             $scope.sortType = 'score'; // default sort type
@@ -159,7 +161,6 @@ angular.module('modFlexApp')
                 wait();
             };
 
-
             $scope.searchRequest = function () {
 //                console.log(session);
 //                console.log($scope.sessionObject);
@@ -181,9 +182,9 @@ angular.module('modFlexApp')
                             $scope.errorMessage = response.data.message;
                         } else {
                             $scope.sessionObject.hits = response.data;
+                            assignImageStack($scope.sessionObject.hits);
                             $scope.r.hits = $scope.sessionObject.hits;
                             $scope.finished = true;
-
                         }
                     }, function errorCallback(response) {
                         $scope.hasErrors = true;
@@ -201,6 +202,8 @@ angular.module('modFlexApp')
                             }
                         }
                     }
+
+                    assignImageStack($scope.sessionObject.hits);
                     $scope.hasSelection = $scope.analysisCart.length > 0;
                     $scope.finished = true;
                 }
@@ -208,11 +211,46 @@ angular.module('modFlexApp')
 
             $scope.searchRequest();
 
+            // temp function go generate array of images for spinning
+            var assignImageStack = function (hits) {
+                for (var i in hits) {
+                    var rhits = hits[i].representatives;
+                    var imgs = [];
+                    //{{r.pdb}}{{r.chain}}.{{hit.masterID}}.pdb.jpg
+                    for (var r in rhits) {
+                        imgs.push(rhits[r].pdb + rhits[r].chain + "." + hits[i].masterID + ".pdb.jpg");
+                    }
+                    Array.prototype.push.apply(imgs, imgs);
+                    for (var r = 0; r < rhits.length; r++) {
+                        rhits[r].imgs = imgs.slice(r, r + rhits.length);
+                    }
+                }
+            };
+
+
+            $scope.startAnimation = function (r) {
+                var i = r.imgs.length >1 ? 1:0;
+                r.slide = r.imgs[i];
+
+                promiseAnimation = $interval(function () {
+                    r.slide = r.imgs[i++];
+                    if (i >= r.imgs.length) {
+                        i = 0;
+                    }
+                }, 700, 0);
+            };
+
+            $scope.stopAnimation = function (r) {
+                $interval.cancel(promiseAnimation);
+                r.slide = r.imgs[0];
+            };
             $scope.stop = function () {
                 $interval.cancel(promise);
             };
+
             $scope.$on('$destroy', function () {
                 $scope.stop();
+                $scope.stopAnimation();
             });
         }]
         )

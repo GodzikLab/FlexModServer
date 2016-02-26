@@ -1,7 +1,7 @@
 <div ng-controller="SearchCtrl">
 
     <script type="text/ng-template" id="itemPopoverTpl.html">
-    <table class="table table-condensed"><tbody>
+        <table class="table table-condensed"><tbody>
         <tr><th>PDB ID</th>
         <td>{{item.pdb}}</td></tr><tr>
         <th>Name</th>
@@ -12,8 +12,9 @@
         <td>{{(item.ligands && item.ligands.length > 0)? 'yes': 'no'}}</td></tr><tr>
         <th>Part of the complex</th>
         <td></td></tr>
-    </tbody></table>
+        </tbody></table>
     </script> 
+    
 
     <div id='errors' ng-show='hasErrors' class="row">
         <div class="col-sm-12 col-md-12 alert alert-danger" role="alert">{{errorMessage}}
@@ -138,7 +139,7 @@
                                                           popover-append-to-body="true" aria-hidden="true"></span>
 
                                                     <span aria-label="modeling" uib-popover="{{r.modelingMsg|| 'Click to run modeling'}}" popover-trigger="mouseenter" popover-append-to-body="true">
-                                                        <span                                                             ng-switch on="r.modelingStatus">
+                                                        <span ng-switch on="r.modelingStatus">
                                                             <span ng-switch-when="started"><i class="fa fa-spinner fa-spin"></i></span>
                                                             <span ng-switch-when="done"><span class="text-success"><a ng-href="{{r.modelUrl}}" target="_blank"><i class="fa fa-floppy-o"></i></a></span></span>
                                                             <span ng-switch-when="error"><span class="text-danger" ng-click="modelingRequest(r)"><i class="fa fa-exclamation-circle"></i></span></span>
@@ -151,9 +152,27 @@
                                                         <i class="fa fa-cubes"></i></span>
 
                                                     <br />    
+                                                    <span ng-switch on="r.imgs.length">
+                                                        <span ng-switch-when="0">
+                                                            <img ng-src="http://www.rcsb.org/pdb/images/{{r.pdb}}_bio_r_80.jpg" style="margin:auto;" class="img-responsive img-representative-tmb">
+                                                        </span>
+                                                        <span ng-switch-when="1">
+                                                            <img ng-src="http://modflex.org/thumbnails/{{r.imgs[0]}}" style="margin:auto;" class="img-responsive img-representative-tmb">
+                                                        </span>
+                                                        <span ng-switch-default>
+                                                            <img ng-src="http://modflex.org/thumbnails/{{r.slide}}" ng-init=" r.slide=r.imgs[0]"style="margin:auto;" ng-mouseenter="startAnimation(r)" ng-mouseleave="stopAnimation(r)" class="img-responsive img-representative-tmb">
+                                                        </span>
+                                                        <!--                                                                                                                <uib-carousel interval="myInterval" no-wrap="false">
+                                                                                                                   
+                                                                                                                                                                                <uib-slide ng-repeat="slide in r.imgs" active="$index === 0" index="$index">
+                                                                                                                                                                                    <img ng-src="http://modflex.org/thumbnails/{{slide}}" style="margin:auto;">
+                                                                                                                    
+                                                                                                                                                                                </uib-slide>
+                                                                                                                </uib-carousel>-->
+                                                    </span>
                                                     <!--<img ng-src="http://www.rcsb.org/pdb/images/{{r.pdb}}_bio_r_80.jpg" style="margin:auto;" class="img-responsive img-representative-tmb">-->
-                                                    
-                                                    <img ng-src="http://modflex.org/thumbnails/{{r.pdb}}{{r.chain}}.{{hit.masterID}}.pdb.jpg" style="margin:auto;" class="img-responsive img-representative-tmb">
+
+                                                    <!--<img ng-src="http://modflex.org/thumbnails/{{r.pdb}}{{r.chain}}.{{hit.masterID}}.pdb.jpg" style="margin:auto;" class="img-responsive img-representative-tmb">-->
                                                     <div class="text-center"><span uib-popover-template="'itemPopoverTpl.html'" popover-trigger="mouseenter" ng-init="item = r" popover-append-to-body="true">{{r.pdb}}{{r.chain}} <i class="fa fa-info-circle"></i></span></div>
                                                 </li>
                                             </ul>
