@@ -229,7 +229,7 @@ angular.module('modFlexApp')
 
 
             $scope.startAnimation = function (r) {
-                var i = r.imgs.length >1 ? 1:0;
+                var i = 0;
                 r.slide = r.imgs[i];
 
                 promiseAnimation = $interval(function () {
