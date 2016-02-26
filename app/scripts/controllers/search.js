@@ -16,7 +16,32 @@ angular.module('modFlexApp')
             // store the interval promise for status starck
             var promiseAnimation;
             // uncomment when developing UI
-         //   $scope.useTestFasta();
+            //   $scope.useTestFasta();
+
+            // temp function go generate array of images for spinning
+            var assignImageStack = function (hits) {
+                for (var i in hits) {
+                    var rhits = hits[i].representatives;
+                    var imgs = [];
+                    //{{r.pdb}}{{r.chain}}.{{hit.masterID}}.pdb.jpg
+                    for (var r in rhits) {
+                        imgs.push(rhits[r].pdb + rhits[r].chain + "." + hits[i].masterID + ".pdb.jpg");
+                    }
+                    Array.prototype.push.apply(imgs, imgs);
+                    for (var r = 0; r < rhits.length; r++) {
+                        rhits[r].imgs = imgs.slice(r, r + rhits.length);
+                    }
+                }
+            };
+
+            var parseNamesFromDesc = function (hit, index, array) {
+                hit.representatives.forEach(function (rep) {
+                    var chunks = rep.description.split(" ");
+                    if (chunks.length > 3) {
+                        rep.name = chunks.splice(3).join(" ").trim();
+                    }
+                });
+            };
 
             $scope.isActive = ($location.url() === "/search");
             $scope.sortType = 'score'; // default sort type
@@ -74,9 +99,9 @@ angular.module('modFlexApp')
                 return (item.ligands && item.ligands.length > 0);
             };
 
-            $scope.isComplex = function (item) {
-                return (item.ligands && item.ligands.length > 0);
-            };
+//            $scope.isComplex = function (item) {
+//                return (item.ligands && item.ligands.length > 0);
+//            };
 
             $scope.itemDescription = function (r) {
                 return "<b>PDBID</b>: " + r.pdb;
@@ -183,6 +208,7 @@ angular.module('modFlexApp')
                         } else {
                             $scope.sessionObject.hits = response.data;
                             assignImageStack($scope.sessionObject.hits);
+                            $scope.sessionObject.hits.forEach(parseNamesFromDesc);
                             $scope.r.hits = $scope.sessionObject.hits;
                             $scope.finished = true;
                         }
@@ -211,21 +237,6 @@ angular.module('modFlexApp')
 
             $scope.searchRequest();
 
-            // temp function go generate array of images for spinning
-            var assignImageStack = function (hits) {
-                for (var i in hits) {
-                    var rhits = hits[i].representatives;
-                    var imgs = [];
-                    //{{r.pdb}}{{r.chain}}.{{hit.masterID}}.pdb.jpg
-                    for (var r in rhits) {
-                        imgs.push(rhits[r].pdb + rhits[r].chain + "." + hits[i].masterID + ".pdb.jpg");
-                    }
-                    Array.prototype.push.apply(imgs, imgs);
-                    for (var r = 0; r < rhits.length; r++) {
-                        rhits[r].imgs = imgs.slice(r, r + rhits.length);
-                    }
-                }
-            };
 
 
             $scope.startAnimation = function (r) {
