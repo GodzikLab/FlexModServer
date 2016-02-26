@@ -16,7 +16,7 @@ function getClusterStatistics($clusterID){
     $clusterStats = file_get_contents($url, false, $context);
 
     $lines = explode('\n',$clusterStats);
-    $averageRMSD = str_replace(' ','',explode(':',$lines[0])[1]);
+    $averageRMSD = str_replace('\nMaximumC-alphaRMSD','',str_replace(' ','',explode(':',$lines[0])[1]));
 
     return $averageRMSD;
 }
