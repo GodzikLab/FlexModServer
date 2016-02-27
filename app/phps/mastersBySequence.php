@@ -16,7 +16,7 @@ function getClusterStatistics($clusterID){
     $clusterStats = file_get_contents($url, false, $context);
 
     $lines = explode('\n',$clusterStats);
-    $averageRMSD = str_replace('\nMaximumC-alphaRMSD','',str_replace(' ','',explode(':',$lines[0])[1]));
+    $averageRMSD = explode('\n',str_replace('MaximumC-alphaRMSD','',str_replace(' ','',explode(':',$lines[0])[1])))[0];
 
     return $averageRMSD;
 }
@@ -30,13 +30,13 @@ header("Access-Control-Allow-Headers: Content-Type, Depth, User-Agent, X-File-Si
 header('Content-Type: application/json');
 
 //need this to be able to get POST data sent by AngularJS
-$postdata = file_get_contents("php://input");
-$request = json_decode($postdata);
-$sessionID = $request->sessionID;
-$fullSequence = $request->sequence;
+// $postdata = file_get_contents("php://input");
+// $request = json_decode($postdata);
+// $sessionID = $request->sessionID;
+// $fullSequence = $request->sequence;
 
-// $sessionID = '1234';
-// $fullSequence = ">1A50:A|PDBID|CHAIN|SEQUENCE\nMERYENLFAQLNDRREGAFVPFVTLGDPGIEQSLKIIDTLIDAGADALELGVPFSDPLADGPTIQNANLRAFAAGVTPAQCFEMLALIREKHPTIPIGLLMYANLVFNNGIDAFYARCEQVGVDSVLVADVPVEESAPFRQAALRHNIAPIFICPPNADDDLLRQVASYGRGYTYLLSRSGVTGAENRGALPLHHLIEKLKEYHAAPALQGFGISSPEQVSAAVRAGAAGAISGSAIVKIIEKNLASPKQMLAELRSFVSAMKAASRA";
+$sessionID = '1234';
+$fullSequence = ">1A50:A|PDBID|CHAIN|SEQUENCE\nMERYENLFAQLNDRREGAFVPFVTLGDPGIEQSLKIIDTLIDAGADALELGVPFSDPLADGPTIQNANLRAFAAGVTPAQCFEMLALIREKHPTIPIGLLMYANLVFNNGIDAFYARCEQVGVDSVLVADVPVEESAPFRQAALRHNIAPIFICPPNADDDLLRQVASYGRGYTYLLSRSGVTGAENRGALPLHHLIEKLKEYHAAPALQGFGISSPEQVSAAVRAGAAGAISGSAIVKIIEKNLASPKQMLAELRSFVSAMKAASRA";
 // echo($fullSequence);
 if (strlen($fullSequence) == 0) {
     $errorMessage = array();
