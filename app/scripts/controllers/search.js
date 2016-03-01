@@ -32,13 +32,16 @@ angular.module('modFlexApp')
                     }
                 }
             };
-            var parseNamesFromDesc = function (hit, index, array) {
+            var parseNamesFromDesc = function (hit) {
                 hit.representatives.forEach(function (rep) {
-                    if (!rep.names || rep.names === "") {
+                    rep.proteinNames = rep.proteinNames.trim();
+                    if (!rep.proteinNames || rep.proteinNames === "") {
                         var chunks = rep.description.split(" ");
                         if (chunks.length > 3) {
                             rep.names = chunks.splice(3).join(" ").trim();
                         }
+                    } else {
+                        rep.names = rep.proteinNames;
                     }
                 });
             };
@@ -61,8 +64,9 @@ angular.module('modFlexApp')
                     $scope.analysisCart.push(r);
                 } else {
                     var ix = $scope.analysisCart.indexOf(r);
-                    if (ix > -1)
+                    if (ix > -1) {
                         $scope.analysisCart.splice(ix, 1);
+                    }
                 }
 
                 $scope.hasSelection = $scope.analysisCart.length > 0;
@@ -135,9 +139,8 @@ angular.module('modFlexApp')
             $scope.trackModelStatus = function (r) {
                 var req = {
                     method: 'GET',
-                    url: baseUrl + 'checkModelStatus.php?modelID=' + r.jobId
-                        + '&sessionID=' + session,
-                    //  cache: $templateCache,
+                    url: baseUrl + 'checkModelStatus.php?modelID=' +
+                        r.jobId + '&sessionID=' + session,
                     headers: {'Content-Type': 'application/x-www-form-urlencoded'}
                 };
 //                console.log(req);
@@ -151,7 +154,7 @@ angular.module('modFlexApp')
                             } else if (response.data.Status === "Failed") {
                                 $scope.stop();
                                 r.modelingStatus = 'error';
-                                r.modelingMsg = 'modeling error occured. Click to retry. '
+                                r.modelingMsg = 'modeling error occured. Click to retry. ';
                             } else if (response.data.Status === "Done") {
                                 $scope.stop();
                                 r.modelUrl = response.data.url;
@@ -216,17 +219,17 @@ angular.module('modFlexApp')
             $scope.searchRequest();
             $scope.openPOSALink = function () {
                 var url = "http://posa.godziklab.org/POSAn-cgi/POSA.pl?",
-                    q="",
+                    q = "",
                     p = "&pdbId[]=",
                     c = "&chainId[]=";
                 $scope.analysisCart.forEach(function (i) {
                     console.log(i);
 
-                        q += p + i.pdb + c+ i.chain;
+                    q += p + i.pdb + c + i.chain;
 
                 });
                 q = q.substring(1);
-                $window.open(url +q, '_blank');
+                $window.open(url + q, '_blank');
             };
             $scope.startAnimation = function (r) {
                 var i = 0;
