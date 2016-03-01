@@ -1,5 +1,5 @@
 <div ng-controller="SearchCtrl">
-
+<!--{{(item.ligands && item.ligands.length > 0)? 'yes': 'no'}}-->
     <script type="text/ng-template" id="itemPopoverTpl.html">
         <table class="table table-condensed"><tbody>
         <tr><th>PDB ID</th>
@@ -10,8 +10,10 @@
         <td>{{item.uniprotId || 'Unknown'}}</td></tr><tr>
         <th>Description</th>
         <td>{{item.description || 'No description'}}</td></tr><tr>
-        <th>Has ligand</th>
-        <td>{{(item.ligands && item.ligands.length > 0)? 'yes': 'no'}}</td></tr><tr>
+        <th>Ligands</th>
+        <td>
+            <span> {{ (item.ligands && item.ligands.length > 0)? item.ligands.join(', '): 'none'}}</span>
+        </td></tr><tr>
         <th>Part of the complex</th>
         <td>{{item.isComplex ? 'yes': 'no'}}</td></tr>
         </tbody></table>
