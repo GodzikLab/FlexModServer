@@ -8,16 +8,15 @@
  * Controller of the modFlexApp
  */
 angular.module('modFlexApp')
-    .controller('SearchCtrl', ['$scope', '$location', '$http', '$templateCache', '$interval',
-        function ($scope, $location, $http, $templateCache, $interval) {
+    .controller('SearchCtrl', ['$scope', '$location', '$http', '$templateCache', '$interval', '$window',
+        function ($scope, $location, $http, $templateCache, $interval, $window) {
             var baseUrl = 'http://modflex/phps/';
             // store the interval promise for status starck
             var promise;
             // store the interval promise for status starck
             var promiseAnimation;
             // uncomment when developing UI
-            //   $scope.useTestFasta();
-
+            $scope.useTestFasta();
             // temp function go generate array of images for spinning
             var assignImageStack = function (hits) {
                 for (var i in hits) {
@@ -33,7 +32,6 @@ angular.module('modFlexApp')
                     }
                 }
             };
-
             var parseNamesFromDesc = function (hit, index, array) {
                 hit.representatives.forEach(function (rep) {
                     if (!rep.names || rep.names === "") {
@@ -44,24 +42,19 @@ angular.module('modFlexApp')
                     }
                 });
             };
-
             $scope.isActive = ($location.url() === "/search");
             $scope.sortType = 'score'; // default sort type
-            $scope.sortReverse = false;  // default sort order
+            $scope.sortReverse = false; // default sort order
 
             $scope.filtLigand = false;
-
             $scope.hasErrors = false;
             $scope.finished = false;
-
             $scope.r = {};
             $scope.analysisCart = [];
-
             $scope.hasSelection = false;
             // console.log('seq:' + $scope.querySequence);
             var testSeq = $scope.querySequence,
                 session = $scope.sessionObject.sessionId;
-
             $scope.addtocart = function (r) {
                 r.selected = !r.selected;
                 if (r.selected) {
@@ -74,19 +67,15 @@ angular.module('modFlexApp')
 
                 $scope.hasSelection = $scope.analysisCart.length > 0;
             };
-
             $scope.clearSelection = function () {
                 $scope.analysisCart = [];
             };
-
             $scope.getSelected = function () {
                 return $scope.analysisCart();
             };
-
             $scope.switchLigandFilter = function () {
                 $scope.filtLigand = !$scope.filtLigand;
             };
-
             $scope.matchFilters = function () {
                 return function (r) {
                     if ($scope.filtLigand) {
@@ -96,11 +85,9 @@ angular.module('modFlexApp')
                     }
                 };
             };
-
             $scope.hasLigand = function (item) {
                 return (item.ligands && item.ligands.length > 0);
             };
-
 //            $scope.isComplex = function (item) {
 //                return (item.ligands && item.ligands.length > 0);
 //            };
@@ -108,14 +95,12 @@ angular.module('modFlexApp')
             $scope.itemDescription = function (r) {
                 return "<b>PDBID</b>: " + r.pdb;
             };
-
             $scope.modelingRequest = function (r) {
                 if (r.modelUrl) {
                     return;
                 }
                 r.modelingStatus = 'started';
                 r.modelingMsg = 'Modeling running...';
-
                 var req = {
                     method: 'POST',
                     url: baseUrl + 'startModel.php',
@@ -128,7 +113,6 @@ angular.module('modFlexApp')
 //                    cache: $templateCache,
                     headers: {'Content-Type': 'application/x-www-form-urlencoded'}
                 };
-
 //                console.log(req);
 
                 $http(req).then(function successCallback(response) {
@@ -147,9 +131,7 @@ angular.module('modFlexApp')
                     r.modelingStatus = 'error';
                     r.modelingMsg = 'Error occured. ';
                 });
-
             };
-
             $scope.trackModelStatus = function (r) {
                 var req = {
                     method: 'GET',
@@ -158,7 +140,6 @@ angular.module('modFlexApp')
                     //  cache: $templateCache,
                     headers: {'Content-Type': 'application/x-www-form-urlencoded'}
                 };
-
 //                console.log(req);
                 var wait = function () {
                     $http(req).then(
@@ -174,7 +155,6 @@ angular.module('modFlexApp')
                             } else if (response.data.Status === "Done") {
                                 $scope.stop();
                                 r.modelUrl = response.data.url;
-
                                 r.modelingStatus = 'done';
                                 r.modelingMsg = 'Model ready. Click to download.';
                             }
@@ -184,10 +164,8 @@ angular.module('modFlexApp')
                         r.modelingMsg = 'Error occured. ';
                     });
                 };
-
                 wait();
             };
-
             $scope.searchRequest = function () {
 //                console.log(session);
 //                console.log($scope.sessionObject);
@@ -200,7 +178,6 @@ angular.module('modFlexApp')
                         headers: {'Content-Type': 'application/x-www-form-urlencoded'},
                         cache: $templateCache
                     };
-
                     $http(req).then(function successCallback(response) {
 //                    console.log(response.data);
 
@@ -236,15 +213,24 @@ angular.module('modFlexApp')
                     $scope.finished = true;
                 }
             };
-
             $scope.searchRequest();
+            $scope.openPOSALink = function () {
+                var url = "http://posa.godziklab.org/POSAn-cgi/POSA.pl?",
+                    q="",
+                    p = "&pdbId[]=",
+                    c = "&chainId[]=";
+                $scope.analysisCart.forEach(function (i) {
+                    console.log(i);
 
+                        q += p + i.pdb + c+ i.chain;
 
-
+                });
+                q = q.substring(1);
+                $window.open(url +q, '_blank');
+            };
             $scope.startAnimation = function (r) {
                 var i = 0;
                 r.slide = r.imgs[i];
-
                 promiseAnimation = $interval(function () {
                     r.slide = r.imgs[i++];
                     if (i >= r.imgs.length) {
@@ -252,7 +238,6 @@ angular.module('modFlexApp')
                     }
                 }, 700, 0);
             };
-
             $scope.stopAnimation = function (r) {
                 $interval.cancel(promiseAnimation);
                 r.slide = r.imgs[0];
@@ -260,7 +245,6 @@ angular.module('modFlexApp')
             $scope.stop = function () {
                 $interval.cancel(promise);
             };
-
             $scope.$on('$destroy', function () {
                 $scope.stop();
                 $scope.stopAnimation();
