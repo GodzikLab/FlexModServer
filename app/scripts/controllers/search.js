@@ -10,7 +10,7 @@
 angular.module('modFlexApp')
     .controller('SearchCtrl', ['$scope', '$location', '$http', '$templateCache', '$interval', '$window',
         function ($scope, $location, $http, $templateCache, $interval, $window) {
-            var baseUrl = 'http://modflex/phps/';
+            var baseUrl = 'http://modflex.org/phps/';
             // store the interval promise for status starck
             var promise;
             // store the interval promise for status starck
