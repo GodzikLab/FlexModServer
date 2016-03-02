@@ -16,7 +16,7 @@ angular.module('modFlexApp')
             // store the interval promise for status starck
             var promiseAnimation;
             // uncomment when developing UI
-            $scope.useTestFasta();
+          //  $scope.useTestFasta();
             // temp function go generate array of images for spinning
             var assignImageStack = function (hits) {
                 for (var i in hits) {
