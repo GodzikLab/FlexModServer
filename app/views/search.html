@@ -1,5 +1,4 @@
 <div ng-controller="SearchCtrl">
-<!--{{(item.ligands && item.ligands.length > 0)? 'yes': 'no'}}-->
     <script type="text/ng-template" id="itemPopoverTpl.html">
         <table class="table table-condensed"><tbody>
         <tr><th>PDB ID</th>
@@ -18,7 +17,6 @@
         <td>{{item.isComplex ? 'yes': 'no'}}</td></tr>
         </tbody></table>
     </script> 
-
 
     <div id='errors' ng-show='hasErrors' class="row">
         <div class="col-sm-12 col-md-12 alert alert-danger" role="alert">{{errorMessage}}
@@ -84,14 +82,6 @@
             </div>
         </div>
 
-        <!--        <div class="row">
-                    <div class="col-xs-12 col-sm-11 col-sm-offset-1"> 
-                        <div role="group" aria-label="...">
-                            <a type="button" class="btn btn-default">SSE</a>
-                            <a type="button" class="btn btn-default">FFAS</a>
-                        </div>
-                    </div>
-                </div>-->
         <div class="row">
             <div class="table-responsive">
                 <table class="table table-bordered table-striped">
