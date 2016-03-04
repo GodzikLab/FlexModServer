@@ -126,6 +126,7 @@ ul.horizontal-slide {
     width: 100%;
     white-space: nowrap;
     overflow-x: auto;
+    overflow-y: hidden;
 }
 
 ul.horizontal-slide li[class*="col"] {
