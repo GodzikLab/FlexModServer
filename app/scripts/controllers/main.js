@@ -27,12 +27,20 @@ angular.module('modFlexApp')
             $scope.testFasta = ">1A50:A|PDBID|CHAIN|SEQUENCE\nMERYENLFAQLNDRREGAFVPFVTLGDPGIEQSLKIIDTLIDAGADALELGVPFSDPLADGPTIQNANLRAFAAGVTPAQCFEMLALIREKHPTIPIGLLMYANLVFNNGIDAFYARCEQVGVDSVLVADVPVEESAPFRQAALRHNIAPIFICPPNADDDLLRQVASYGRGYTYLLSRSGVTGAENRGALPLHHLIEKLKEYHAAPALQGFGISSPEQVSAAVRAGAAGAISGSAIVKIIEKNLASPKQMLAELRSFVSAMKAASRA";
             $scope.sessionObject = {};
 
+            var lastQuery = localStorageService.get('lastQuery') || {};
             var queriesSaved = localStorageService.get('queries');
 
+            $scope.lastQuery = lastQuery || {};
             $scope.queries = queriesSaved || [];
 
             $scope.$watch('queries', function () {
                 localStorageService.set('queries', $scope.queries);
+            }, true);
+
+            $scope.$watch('sessionObject', function () {
+                if (!$scope.sessionObject.sequence) {
+                    localStorageService.set('lastQuery', $scope.sessionObject);
+                }
             }, true);
 
             $scope.search = function () {
@@ -44,15 +52,14 @@ angular.module('modFlexApp')
                         title: $scope.titleFromSeq($scope.querySequence),
                         sequence: $scope.querySequence,
                         sessionId: sessionId,
-                        needSearch:true
+                        needSearch: true
                     };
                     $scope.queries.push($scope.sessionObject);
 
                 } else {
                     $scope.sessionObject = duplicate;
                 }
-
-
+                $scope.lastQuery = $scope.sessionObject;
                 $location.path('search');
             };
 
@@ -76,14 +83,16 @@ angular.module('modFlexApp')
                     title: $scope.titleFromSeq($scope.querySequence),
                     sequence: $scope.querySequence,
                     sessionId: 'testFastaSessionId',
-                    needSearch:true
+                    needSearch: true
                 };
+                $scope.lastQuery = $scope.sessionObject;
             };
 
             $scope.useQuery = function (index) {
                 $scope.sessionObject = $scope.queries[index];
                 $scope.sessionObject.needSearch = false;
                 $scope.querySequence = $scope.sessionObject.sequence;
+                $scope.lastQuery = $scope.sessionObject;
                 $location.path('search');
             };
 
@@ -104,6 +113,7 @@ angular.module('modFlexApp')
                     var so = data[i];
                     if (so.sequence === seq) {
                         console.log("Sequnces already used, returning it.");
+
                         return so;
                     }
                 }

@@ -16,7 +16,7 @@ angular.module('modFlexApp')
             // store the interval promise for status starck
             var promiseAnimation;
             // uncomment when developing UI
-          //  $scope.useTestFasta();
+            //  $scope.useTestFasta();
             // temp function go generate array of images for spinning
             var assignImageStack = function (hits) {
                 for (var i in hits) {
@@ -77,9 +77,9 @@ angular.module('modFlexApp')
             $scope.getSelected = function () {
                 return $scope.analysisCart();
             };
-            $scope.switchLigandFilter = function () {
-                $scope.filtLigand = !$scope.filtLigand;
-            };
+//            $scope.switchLigandFilter = function () {
+//                $scope.filtLigand = !$scope.filtLigand;
+//            };
             $scope.matchFilters = function () {
                 return function (r) {
                     if ($scope.filtLigand) {
@@ -170,8 +170,10 @@ angular.module('modFlexApp')
                 wait();
             };
             $scope.searchRequest = function () {
-//                console.log(session);
-//                console.log($scope.sessionObject);
+                if (!$scope.sessionObject.sequence) {
+                    console.log("Using last query");
+                    $scope.sessionObject = $scope.lastQuery;
+                }
 
                 if ($scope.sessionObject.needSearch) {
                     var req = {

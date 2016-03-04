@@ -11,7 +11,7 @@
         <td>{{item.description || 'No description'}}</td></tr><tr>
         <th>Ligands</th>
         <td>
-            <span> {{ (item.ligands && item.ligands.length > 0)? item.ligands.join(', '): 'none'}}</span>
+        <span> {{ (item.ligands && item.ligands.length > 0)? item.ligands.join(', '): 'none'}}</span>
         </td></tr><tr>
         <th>Part of the complex</th>
         <td>{{item.isComplex ? 'yes': 'no'}}</td></tr>
@@ -44,27 +44,20 @@
     <div ng-show="finished && !hasErrors">
         <div class="row">
             <div class="col-sm-12 col-md-6">
-                <h1>Search results</h1><h2>{{r.hits.length|| 0}} matches</h2>
+                <h1>Search results for</h1><h3>{{sessionObject.title}}...</h3><h3>{{r.hits.length|| 0}} matches</h3>
+            </div>
+            <div class="col-sm-12 col-md-6">
                 <uib-accordion close-others="true">
-                    <uib-accordion-group heading="Query sequence" is-open="false" is-disabled="false">
+                    <uib-accordion-group heading="Query sequence" is-open="true" is-disabled="false">
                         <textarea ng-model="querySequence" editable="false" style="min-width: 100%; min-height: 90%"></textarea>
                     </uib-accordion-group>
                 </uib-accordion>
             </div>
-            <div class="col-sm-12 col-md-6">
+        </div>
+        <div class="row">
+            <div  class="col-sm-12">
                 <uib-accordion close-others="true">
-                    <uib-accordion-group is-open="false" is-disabled="false">
-                        <uib-accordion-heading>
-                            <i class="pull-left glyphicon  glyphicon-filter"></i> Filter results
-                        </uib-accordion-heading>
-                        <button type="button btn-primary" class="btn btn-primary" ng-model="filtLigand" uib-btn-checkbox
-                                ng-click="switchLigandFilter()">
-                            <i class="fa fa-puzzle-piece"></i> Has ligands
-                        </button>
-                    </uib-accordion-group>
-                </uib-accordion>
-                <uib-accordion close-others="true">
-                    <uib-accordion-group is-open="false" is-disabled="false">
+                    <uib-accordion-group is-open="true" is-disabled="false">
                         <uib-accordion-heading>
                             <i class="pull-left fa fa-calculator"></i> Analysis
                         </uib-accordion-heading>
@@ -72,7 +65,7 @@
                             Select cluster representatives to perform analysis.
                         </div> 
                         <div class="col-xs-12 col-sm-8" ng-show="hasSelection"><div ng-repeat="m in analysisCart| orderBy:'pdb'">
-                                {{m.pdb}}_{{m.chain}} </div>
+                                {{m.pdb}}{{m.chain}} </div>
                         </div>
                         <div class="col-xs-12 col-sm-4 " ng-show="hasSelection">
                             <a type="button" class="btn btn-primary" ng-click="openPOSALink()" ng-disabled="analysisCart.length < 2">Open POSA</a>
@@ -81,105 +74,112 @@
                 </uib-accordion>
             </div>
         </div>
-
+        <br/>
         <div class="row">
-            <div class="table-responsive">
-                <table class="table table-bordered table-striped">
-                    <thead>
-                        <tr>
-                            <th><a ng-click="sortType = 'masterID'; sortReverse = !sortReverse">
-                                    MasterID
-                                    <span ng-show="sortType == 'masterID' && !sortReverse" class="fa fa-caret-down"></span>
-                                    <span ng-show="sortType == 'masterID' && sortReverse" class="fa fa-caret-up"></span>
-                                </a>
-                            </th>
-                            <th><a ng-click="sortType = 'score'; sortReverse = !sortReverse">
-                                    e-value
-                                    <span ng-show="sortType == 'score' && !sortReverse" class="fa fa-caret-down"></span>
-                                    <span ng-show="sortType == 'score' && sortReverse" class="fa fa-caret-up"></span>
-                                </a>
-                            </th>
-                            <th><a ng-click="sortType = 'ident'; sortReverse = !sortReverse">
-                                    Identity
-                                    <span ng-show="sortType == 'ident' && !sortReverse" class="fa fa-caret-down"></span>
-                                    <span ng-show="sortType == 'ident' && sortReverse" class="fa fa-caret-up"></span>
-                                </a>
-                            </th>
-                            <th><a ng-click="sortType = 'rmsd'; sortReverse = !sortReverse">
-                                    RMSD
-                                    <span ng-show="sortType == 'rmsd' && !sortReverse" class="fa fa-caret-down"></span>
-                                    <span ng-show="sortType == 'rmsd' && sortReverse" class="fa fa-caret-up"></span>
-                                </a></th>
-                            <th><a  ng-click="sortType = 'size'; sortReverse = !sortReverse">
-                                    # of subclusters
-                                    <span ng-show="sortType == 'size' && !sortReverse" class="fa fa-caret-down"></span>
-                                    <span ng-show="sortType == 'size' && sortReverse" class="fa fa-caret-up"></span>
-                                </a></th>
-                            <th> Representatives</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr ng-repeat="hit in r.hits| orderBy:sortType:sortReverse">
-                            <td><a ng-href="http://pdbflex.org/cluster.html#!/{{hit.masterID}}/{{hit.masterDbID}}/{{hit.masterID}}" target="_blank"><b>{{hit.masterID}}</b></a></td>
-                            <td>{{hit.score}}</td>
-                            <td>{{hit.ident}}</td>
-                            <td>{{hit.rmsd}}</td>
-                            <td>{{hit.size}}</td>
-                            <td>
-                                <div class="container-fluid">
-                                    <div class="row-fluid">
-                                        <div class="col-md-12">
-                                            <ul class="horizontal-slide">
-                                                <li class="col-xs-3 col-md-2 img-thumbnail" ng-repeat="r in hit.representatives| filter: matchFilters()">
-                                                    <span class="glyphicon " ng-class="{'glyphicon-check':r.selected,'text-success':r.selected, 'glyphicon-unchecked': !r.selected}" 
-                                                          ng-click="addtocart(r)" uib-popover="Click to add structure to analysis basket." popover-trigger="mouseenter"  
-                                                          popover-append-to-body="true" aria-hidden="true"></span>
+            <div  class="col-sm-12">
+                <div class="table-responsive">
+                    <table class="table table-bordered table-striped">
+                        <thead>
+                            <tr>
+                                <th><a ng-click="sortType = 'masterID'; sortReverse = !sortReverse">
+                                        MasterID
+                                        <span ng-show="sortType == 'masterID' && !sortReverse" class="fa fa-caret-down"></span>
+                                        <span ng-show="sortType == 'masterID' && sortReverse" class="fa fa-caret-up"></span>
+                                    </a>
+                                </th>
+                                <th><a ng-click="sortType = 'score'; sortReverse = !sortReverse">
+                                        e-value
+                                        <span ng-show="sortType == 'score' && !sortReverse" class="fa fa-caret-down"></span>
+                                        <span ng-show="sortType == 'score' && sortReverse" class="fa fa-caret-up"></span>
+                                    </a>
+                                </th>
+                                <th><a ng-click="sortType = 'ident'; sortReverse = !sortReverse">
+                                        Identity
+                                        <span ng-show="sortType == 'ident' && !sortReverse" class="fa fa-caret-down"></span>
+                                        <span ng-show="sortType == 'ident' && sortReverse" class="fa fa-caret-up"></span>
+                                    </a>
+                                </th>
+                                <th><a ng-click="sortType = 'rmsd'; sortReverse = !sortReverse">
+                                        RMSD
+                                        <span ng-show="sortType == 'rmsd' && !sortReverse" class="fa fa-caret-down"></span>
+                                        <span ng-show="sortType == 'rmsd' && sortReverse" class="fa fa-caret-up"></span>
+                                    </a></th>
+                                <th><a  ng-click="sortType = 'size'; sortReverse = !sortReverse">
+                                        # of subclusters
+                                        <span ng-show="sortType == 'size' && !sortReverse" class="fa fa-caret-down"></span>
+                                        <span ng-show="sortType == 'size' && sortReverse" class="fa fa-caret-up"></span>
+                                    </a></th>
+                                <th> Representatives 
+                                    <span class="pull-right"><button type="button" class="btn btn-xs" ng-class="{'btn-success':filtLigand, 'btn-primary': !filtLigand }" ng-model="filtLigand" uib-btn-checkbox
+                                                                     ng-click="switchLigandFilter()">
+                                            <i class="fa fa-puzzle-piece"></i> Has ligands
+                                        </button></span>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="hit in r.hits| orderBy:sortType:sortReverse">
+                                <td><a ng-href="http://pdbflex.org/cluster.html#!/{{hit.masterID}}/{{hit.masterDbID}}/{{hit.masterID}}" target="_blank"><b>{{hit.masterID}}</b></a></td>
+                                <td>{{hit.score}}</td>
+                                <td>{{hit.ident}}</td>
+                                <td>{{hit.rmsd}}</td>
+                                <td>{{hit.size}}</td>
+                                <td>
+                                    <div class="container-fluid">
+                                        <div class="row-fluid">
+                                            <div class="col-md-12">
+                                                <ul class="horizontal-slide">
+                                                    <li class="col-xs-3 col-md-2 img-thumbnail" ng-repeat="r in hit.representatives| filter: matchFilters()">
+                                                        <span class="glyphicon " ng-class="{'glyphicon-check':r.selected,'text-success':r.selected, 'glyphicon-unchecked': !r.selected}" 
+                                                              ng-click="addtocart(r)" uib-popover="Click to add structure to analysis basket." popover-trigger="mouseenter"  
+                                                              popover-append-to-body="true" aria-hidden="true"></span>
 
-                                                    <span aria-label="modeling" uib-popover="{{r.modelingMsg|| 'Click to run modeling'}}" popover-trigger="mouseenter" popover-append-to-body="true">
-                                                        <span ng-switch on="r.modelingStatus">
-                                                            <span ng-switch-when="started"><i class="fa fa-spinner fa-spin"></i></span>
-                                                            <span ng-switch-when="done"><span class="text-success"><a ng-href="{{r.modelUrl}}" target="_blank"><i class="fa fa-floppy-o"></i></a></span></span>
-                                                            <span ng-switch-when="error"><span class="text-danger" ng-click="modelingRequest(r)"><i class="fa fa-exclamation-circle"></i></span></span>
-                                                            <span ng-switch-default><i class="fa fa-cloud-download" ng-click="modelingRequest(r)" ></i></span>
+                                                        <span aria-label="modeling" uib-popover="{{r.modelingMsg|| 'Click to run modeling'}}" popover-trigger="mouseenter" popover-append-to-body="true">
+                                                            <span ng-switch on="r.modelingStatus">
+                                                                <span ng-switch-when="started"><i class="fa fa-spinner fa-spin"></i></span>
+                                                                <span ng-switch-when="done"><span class="text-success"><a ng-href="{{r.modelUrl}}" target="_blank"><i class="fa fa-floppy-o"></i></a></span></span>
+                                                                <span ng-switch-when="error"><span class="text-danger" ng-click="modelingRequest(r)"><i class="fa fa-exclamation-circle"></i></span></span>
+                                                                <span ng-switch-default><i class="fa fa-cloud-download" ng-click="modelingRequest(r)" ></i></span>
+                                                            </span>
                                                         </span>
-                                                    </span>
-                                                    <span ng-show="hasLigand(r)" aria-label="Has ligand" uib-popover="Has ligand(s)" popover-trigger="mouseenter" popover-append-to-body="true">
-                                                        <i class="fa fa-puzzle-piece"></i></span>
-                                                    <span ng-show="r.isComplex" aria-label="Part of a complex" uib-popover="Part of a complex" popover-trigger="mouseenter focus" popover-append-to-body="true">
-                                                        <i class="fa fa-cubes"></i></span>
+                                                        <span ng-show="hasLigand(r)" aria-label="Has ligand" uib-popover="Has ligand(s)" popover-trigger="mouseenter" popover-append-to-body="true">
+                                                            <i class="fa fa-puzzle-piece"></i></span>
+                                                        <span ng-show="r.isComplex" aria-label="Part of a complex" uib-popover="Part of a complex" popover-trigger="mouseenter focus" popover-append-to-body="true">
+                                                            <i class="fa fa-cubes"></i></span>
 
-                                                    <br />    
-                                                    <span ng-switch on="r.imgs.length">
-                                                        <span ng-switch-when="0">
-                                                            <img ng-src="http://www.rcsb.org/pdb/images/{{r.pdb}}_bio_r_80.jpg" style="margin:auto;" class="img-responsive img-representative-tmb">
+                                                        <br />    
+                                                        <span ng-switch on="r.imgs.length">
+                                                            <span ng-switch-when="0">
+                                                                <img ng-src="http://www.rcsb.org/pdb/images/{{r.pdb}}_bio_r_80.jpg" style="margin:auto;" class="img-responsive img-representative-tmb">
+                                                            </span>
+                                                            <span ng-switch-when="1">
+                                                                <img ng-src="http://modflex.org/thumbnails/{{r.imgs[0]}}" style="margin:auto;" class="img-responsive img-representative-tmb">
+                                                            </span>
+                                                            <span ng-switch-default>
+                                                                <img ng-src="http://modflex.org/thumbnails/{{r.slide}}" ng-init=" r.slide = r.imgs[0]"style="margin:auto;" ng-mouseenter="startAnimation(r)" ng-mouseleave="stopAnimation(r)" class="img-responsive img-representative-tmb">
+                                                            </span>
+                                                            <!--                                                                                                                <uib-carousel interval="myInterval" no-wrap="false">
+                                                                                                                       
+                                                                                                                                                                                    <uib-slide ng-repeat="slide in r.imgs" active="$index === 0" index="$index">
+                                                                                                                                                                                        <img ng-src="http://modflex.org/thumbnails/{{slide}}" style="margin:auto;">
+                                                                                                                        
+                                                                                                                                                                                    </uib-slide>
+                                                                                                                    </uib-carousel>-->
                                                         </span>
-                                                        <span ng-switch-when="1">
-                                                            <img ng-src="http://modflex.org/thumbnails/{{r.imgs[0]}}" style="margin:auto;" class="img-responsive img-representative-tmb">
-                                                        </span>
-                                                        <span ng-switch-default>
-                                                            <img ng-src="http://modflex.org/thumbnails/{{r.slide}}" ng-init=" r.slide = r.imgs[0]"style="margin:auto;" ng-mouseenter="startAnimation(r)" ng-mouseleave="stopAnimation(r)" class="img-responsive img-representative-tmb">
-                                                        </span>
-                                                        <!--                                                                                                                <uib-carousel interval="myInterval" no-wrap="false">
-                                                                                                                   
-                                                                                                                                                                                <uib-slide ng-repeat="slide in r.imgs" active="$index === 0" index="$index">
-                                                                                                                                                                                    <img ng-src="http://modflex.org/thumbnails/{{slide}}" style="margin:auto;">
-                                                                                                                    
-                                                                                                                                                                                </uib-slide>
-                                                                                                                </uib-carousel>-->
-                                                    </span>
-                                                    <!--<img ng-src="http://www.rcsb.org/pdb/images/{{r.pdb}}_bio_r_80.jpg" style="margin:auto;" class="img-responsive img-representative-tmb">-->
+                                                        <!--<img ng-src="http://www.rcsb.org/pdb/images/{{r.pdb}}_bio_r_80.jpg" style="margin:auto;" class="img-responsive img-representative-tmb">-->
 
-                                                    <!--<img ng-src="http://modflex.org/thumbnails/{{r.pdb}}{{r.chain}}.{{hit.masterID}}.pdb.jpg" style="margin:auto;" class="img-responsive img-representative-tmb">-->
-                                                    <div class="text-center"><span uib-popover-template="'itemPopoverTpl.html'" popover-trigger="mouseenter" ng-init="item = r" popover-append-to-body="true">{{r.pdb}}{{r.chain}} <i class="fa fa-info-circle"></i></span></div>
-                                                </li>
-                                            </ul>
+                                                        <!--<img ng-src="http://modflex.org/thumbnails/{{r.pdb}}{{r.chain}}.{{hit.masterID}}.pdb.jpg" style="margin:auto;" class="img-responsive img-representative-tmb">-->
+                                                        <div class="text-center"><span uib-popover-template="'itemPopoverTpl.html'" popover-trigger="mouseenter" ng-init="item = r" popover-append-to-body="true">{{r.pdb}}{{r.chain}} <i class="fa fa-info-circle"></i></span></div>
+                                                    </li>
+                                                </ul>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>
