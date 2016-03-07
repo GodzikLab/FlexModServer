@@ -73,6 +73,9 @@ angular.module('modFlexApp')
             };
 
             $scope.clearSelection = function () {
+                 $scope.analysisCart.forEach(function (i) {
+                    i.selected = false;
+                });
                 $scope.analysisCart = [];
             };
 
