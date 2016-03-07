@@ -111,7 +111,7 @@ body {
 
 /* thmnail slider*/
 td container{
-     width: 100%
+    width: 100%
 }
 td container-fluid{
     margin-right: 0px;
@@ -144,7 +144,8 @@ img-representative-tmb {
 
 /*d3*/
 text.mono {
-        font-size: 9pt;
-        font-family: Consolas, courier;
-        fill: #aaa;
-      }
+    font-size: 9pt;
+    font-family: Consolas, courier;
+    fill: #aaa;
+}
+text.cardvalues{fill:#000}

@@ -36,11 +36,10 @@
 
                                 svg.selectAll("*").remove();
 
-                                var margin = {top: 25, right: 0, bottom: 15, left: 25},
-                                    gridMin = 40, gridMax = 100,
+                                var margin = {top: 25, right: 25, bottom: 15, left: 25},
+                                gridMin = 40, gridMax = 100,
                                     width = 430 - margin.left - margin.right,
-                                    gridSize = Math.min (gridMax, Math.max(gridMin, Math.floor(width / (newdata.labels.length + 2)))),
-
+                                    gridSize = Math.min(gridMax, Math.max(gridMin, Math.floor(width / (newdata.labels.length + 2)))),
                                     height = gridSize * (newdata.labels.length + 1) - margin.top - margin.bottom,
                                     width = height;
 
@@ -50,7 +49,7 @@
                                     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
                                 var gLabels = svgview.append("g");
-                                var yLabels = gLabels.selectAll(".dayLabel")
+                                var yLabels = gLabels.selectAll(".yLabel")
                                     .data(newdata.labels)
                                     .enter().append("text")
                                     .text(function (d) {
@@ -66,7 +65,7 @@
                                         return  "mono axis";
                                     })
                                     ;
-                                var xLabels = gLabels.selectAll(".timeLabel")
+                                var xLabels = gLabels.selectAll(".xLabel")
                                     .data(newdata.labels)
                                     .enter().append("text")
                                     .text(function (d) {
@@ -76,7 +75,7 @@
                                         return i * gridSize;
                                     })
                                     .attr("y", 0)
-                                    .style("text-anchor", "middle")
+                                    .style("text-anchor", "left")
                                     .attr("transform", "translate(" + gridSize / 2 + ", -6)")
                                     .attr("class", function (d, i) {
                                         return  "mono axis";
@@ -116,6 +115,27 @@
                                 cards.select("title").text(function (d) {
                                     return d.value;
                                 });
+
+                                var dLabels = svgview.append("g");
+                                var dataLabels = dLabels.selectAll(".dataLabel")
+                                    .data(newdata.data, function (d) {
+                                         return d.pdb1 + ':' + d.pdb2;
+                                    });
+
+                                dataLabels.enter().append("text")
+                                    .text(function (d) {
+                                        return d.value.toFixed(1);
+                                    })
+                                    .attr("x", function (d) {
+                                        return (d.i2 - .5) * gridSize;
+                                    })
+                                    .attr("y", function (d) {
+                                        return (d.i1 - .5) * gridSize;
+                                    })
+                                    .style("text-anchor", "left")
+                                    .attr("class", function (d, i) {
+                                        return  "mono cardvalues";
+                                    });
 
                                 cards.exit().remove();
                             };
