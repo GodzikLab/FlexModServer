@@ -261,10 +261,12 @@ angular.module('modFlexApp')
     .controller('RMSDCtrl', ['$scope', '$location', '$http', 'd3Service', '$templateCache',
         function ($scope, $location, $http, d3Service, $templateCache) {
             $scope.heatmapData = {};
+            $scope.matrixReady = true;
             var baseUrl = 'http://modflex.org/phps/',
                 session = $scope.sessionObject.sessionId;
 
             $scope.updateRMSD = function () {
+                $scope.matrixReady = false;
                 var pdbs = [];// ['1dfjI', '2z64A', '4fs7A', '4df0A'];
                 $scope.analysisCart.forEach(function (i) {
                     pdbs.push(i.pdb + i.chain);
@@ -319,6 +321,7 @@ angular.module('modFlexApp')
                             });
 
                             console.log($scope.heatmapData);
+                            $scope.matrixReady = true;
 
                         } else {
                             //set some error message
