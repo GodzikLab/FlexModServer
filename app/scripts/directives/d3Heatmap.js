@@ -82,7 +82,7 @@
                                     });
 
                                 var colorScale = d3.scale.linear()
-                                    .domain([0, 0.0001, newdata.maxScore / 3, newdata.maxScore / 1.5, newdata.maxScore])
+                                    .domain([0, 0.0001, newdata.maxScore / 3, newdata.maxScore / 1.5, newdata.maxScore*0.9])
                                     .range(['white', 'green', 'yellow', 'orange', 'red']);
 
                                 var gCards = svgview.append("g");
