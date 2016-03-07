@@ -16,7 +16,7 @@ angular.module('modFlexApp')
             // store the interval promise for status starck
             var promiseAnimation;
             // uncomment when developing UI
-            //  $scope.useTestFasta();
+//            $scope.useTestFasta();
             // temp function go generate array of images for spinning
             var assignImageStack = function (hits) {
                 for (var i in hits) {
@@ -58,6 +58,7 @@ angular.module('modFlexApp')
             // console.log('seq:' + $scope.querySequence);
             var testSeq = $scope.querySequence,
                 session = $scope.sessionObject.sessionId;
+
             $scope.addtocart = function (r) {
                 r.selected = !r.selected;
                 if (r.selected) {
@@ -68,18 +69,17 @@ angular.module('modFlexApp')
                         $scope.analysisCart.splice(ix, 1);
                     }
                 }
-
                 $scope.hasSelection = $scope.analysisCart.length > 0;
             };
+
             $scope.clearSelection = function () {
                 $scope.analysisCart = [];
             };
+
             $scope.getSelected = function () {
                 return $scope.analysisCart();
             };
-//            $scope.switchLigandFilter = function () {
-//                $scope.filtLigand = !$scope.filtLigand;
-//            };
+
             $scope.matchFilters = function () {
                 return function (r) {
                     if ($scope.filtLigand) {
@@ -92,13 +92,11 @@ angular.module('modFlexApp')
             $scope.hasLigand = function (item) {
                 return (item.ligands && item.ligands.length > 0);
             };
-//            $scope.isComplex = function (item) {
-//                return (item.ligands && item.ligands.length > 0);
-//            };
 
             $scope.itemDescription = function (r) {
                 return "<b>PDBID</b>: " + r.pdb;
             };
+
             $scope.modelingRequest = function (r) {
                 if (r.modelUrl) {
                     return;
@@ -114,7 +112,6 @@ angular.module('modFlexApp')
                         chainID: r.chain,
                         sessionID: session
                     },
-//                    cache: $templateCache,
                     headers: {'Content-Type': 'application/x-www-form-urlencoded'}
                 };
 //                console.log(req);
@@ -122,7 +119,6 @@ angular.module('modFlexApp')
                 $http(req).then(function successCallback(response) {
 //                    console.log(response.data);
                     if (response.data.message) {
-                        // r.errorMessage = response.data.message;
                         r.modelingStatus = 'error';
                         r.modelingMsg = 'Error occured: ' + response.data.message;
                     } else {
@@ -170,10 +166,10 @@ angular.module('modFlexApp')
                 wait();
             };
             $scope.searchRequest = function () {
-                if (!$scope.sessionObject.sequence) {
-                    console.log("Using last query");
-                    $scope.sessionObject = $scope.lastQuery;
-                }
+//                if (!$scope.sessionObject.sequence) {
+//                    console.log("Using last query");
+//                    $scope.sessionObject = $scope.lastQuery;
+//                }
 
                 if ($scope.sessionObject.needSearch) {
                     var req = {
@@ -218,14 +214,16 @@ angular.module('modFlexApp')
                     $scope.finished = true;
                 }
             };
+
             $scope.searchRequest();
+
             $scope.openPOSALink = function () {
                 var url = "http://posa.godziklab.org/POSAn-cgi/POSA.pl?",
                     q = "",
                     p = "&pdbId[]=",
                     c = "&chainId[]=";
                 $scope.analysisCart.forEach(function (i) {
-                    console.log(i);
+//                    console.log(i);
 
                     q += p + i.pdb + c + i.chain;
 
@@ -233,6 +231,7 @@ angular.module('modFlexApp')
                 q = q.substring(1);
                 $window.open(url + q, '_blank');
             };
+
             $scope.startAnimation = function (r) {
                 var i = 0;
                 r.slide = r.imgs[i];
@@ -243,17 +242,97 @@ angular.module('modFlexApp')
                     }
                 }, 700, 0);
             };
+
             $scope.stopAnimation = function (r) {
                 $interval.cancel(promiseAnimation);
                 r.slide = r.imgs[0];
             };
+
             $scope.stop = function () {
                 $interval.cancel(promise);
             };
+
             $scope.$on('$destroy', function () {
                 $scope.stop();
                 $scope.stopAnimation();
             });
         }]
         )
+    .controller('RMSDCtrl', ['$scope', '$location', '$http', 'd3Service', '$templateCache',
+        function ($scope, $location, $http, d3Service, $templateCache) {
+            $scope.heatmapData = {};
+            var baseUrl = 'http://modflex.org/phps/',
+                session = $scope.sessionObject.sessionId;
+
+            $scope.updateRMSD = function () {
+                var pdbs = [];// ['1dfjI', '2z64A', '4fs7A', '4df0A'];
+                $scope.analysisCart.forEach(function (i) {
+                    pdbs.push(i.pdb + i.chain);
+                });
+                pdbs.sort();
+                var pdbst = pdbs.join(",");
+
+                var req = {
+                    method: 'GET',
+                    url: baseUrl + 'rmsdMatrix.php?jobID=' + session + '&pdbs=' + pdbst,
+                    headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+                    cache: $templateCache
+                };
+
+                $scope.heatmapData.labels = pdbs;
+                $scope.heatmapData.data = [];
+                $scope.heatmapData.maxScore = 0;
+
+                d3Service.d3().then(function (d3) {
+                    $http(req).then(function successCallback(response) {
+                        console.log(response.data);
+                        if (response.data) {
+                            pdbs.forEach(function (p) {
+                                $scope.heatmapData.data.push(
+                                    {
+                                        pdb1: p,
+                                        pdb2: p,
+                                        value: 0,
+                                        i1: pdbs.indexOf(p) + 1,
+                                        i2: pdbs.indexOf(p) + 1
+                                    });
+
+                            });
+                            response.data.forEach(function (a) {
+                                $scope.heatmapData.maxScore = $scope.heatmapData.maxScore < a[2]
+                                    ? a[2] : $scope.heatmapData.maxScore;
+
+                                $scope.heatmapData.data.push({
+                                    pdb1: a[0],
+                                    pdb2: a[1],
+                                    value: a[2],
+                                    i1: pdbs.indexOf(a[0]) + 1,
+                                    i2: pdbs.indexOf(a[1]) + 1
+                                });
+                                $scope.heatmapData.data.push({
+                                    pdb2: a[0],
+                                    pdb1: a[1],
+                                    value: a[2],
+                                    i2: pdbs.indexOf(a[0]) + 1,
+                                    i1: pdbs.indexOf(a[1]) + 1
+                                });
+                            });
+
+                            console.log($scope.heatmapData);
+
+                        } else {
+                            //set some error message
+                        }
+
+                    }, function errorCallback(response) {
+//                    r.modelingStatus = 'error';
+//                    r.modelingMsg = 'Error occured. ';
+                    });
+
+
+                });
+
+            };
+        }
+    ])
     ;

@@ -141,3 +141,10 @@ img-representative-tmb {
     padding:0;
     margin:1px
 }
+
+/*d3*/
+text.mono {
+        font-size: 9pt;
+        font-family: Consolas, courier;
+        fill: #aaa;
+      }

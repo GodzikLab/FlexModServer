@@ -15,7 +15,8 @@ angular
         'ngRoute',
         'ngAnimate',
         'ui.bootstrap',
-        'LocalStorageModule'
+        'LocalStorageModule',
+        'modFlexApp.directives'
     ])
     .config(['localStorageServiceProvider', function (localStorageServiceProvider) {
             localStorageServiceProvider.setPrefix('ls');
@@ -45,3 +46,5 @@ angular
                 redirectTo: '/'
             });
     });
+angular.module('d3', []);
+angular.module('modFlexApp.directives', ['d3']);
