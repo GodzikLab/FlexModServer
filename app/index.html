@@ -59,9 +59,6 @@
                             <li  ng-class="{
                                         active: isActive('/contact')
                                     }"><a ng-href="#/contact">Contact</a></li>
-                            <!--                            <li  ng-class="{
-                                                                    active: isActive('/search')
-                                                                }"><a ng-href="#/search">{Search*}</a></li>-->
                         </ul>
                     </div>
                 </div>
@@ -112,10 +109,12 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/1.1.1/ui-bootstrap-tpls.js"></script>
         <!-- build:js({.tmp,app}) scripts/scripts.js -->
         <script src="scripts/app.js"></script>
-        
+
         <script src="scripts/services/ngD3.js"></script>
-        
+
         <script src="scripts/directives/d3Heatmap.js"></script>
+        
+        <script src="scripts/directives/pdbthumbs.js"></script>
         <script src="scripts/controllers/main.js"></script>
         <script src="scripts/controllers/about.js"></script>
         <script src="scripts/controllers/search.js"></script>

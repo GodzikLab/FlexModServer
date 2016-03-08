@@ -17,6 +17,8 @@ angular.module('modFlexApp')
             var promiseAnimation;
             // uncomment when developing UI
 //            $scope.useTestFasta();
+//
+            $scope.pdbToMaster = [];
             // temp function go generate array of images for spinning
             var assignImageStack = function (hits) {
                 for (var i in hits) {
@@ -25,6 +27,7 @@ angular.module('modFlexApp')
                     //{{r.pdb}}{{r.chain}}.{{hit.masterID}}.pdb.jpg
                     for (var r in rhits) {
                         imgs.push(rhits[r].pdb + rhits[r].chain + "." + hits[i].masterID + ".pdb.jpg");
+                        $scope.pdbToMaster[rhits[r].pdb + rhits[r].chain] = hits[i].masterID
                     }
                     Array.prototype.push.apply(imgs, imgs);
                     for (var r = 0; r < rhits.length; r++) {
@@ -73,7 +76,7 @@ angular.module('modFlexApp')
             };
 
             $scope.clearSelection = function () {
-                 $scope.analysisCart.forEach(function (i) {
+                $scope.analysisCart.forEach(function (i) {
                     i.selected = false;
                 });
                 $scope.analysisCart = [];
@@ -247,6 +250,8 @@ angular.module('modFlexApp')
             };
 
             $scope.stopAnimation = function (r) {
+                if (!r)
+                    return;
                 $interval.cancel(promiseAnimation);
                 r.slide = r.imgs[0];
             };
@@ -265,6 +270,9 @@ angular.module('modFlexApp')
         function ($scope, $location, $http, d3Service, $templateCache) {
             $scope.heatmapData = {};
             $scope.matrixReady = true;
+            $scope.selectedPair = ["Select pair for comparison"];
+            $scope.selectedPairSlides = [];
+
             var baseUrl = 'http://modflex.org/phps/',
                 session = $scope.sessionObject.sessionId;
 
@@ -290,7 +298,7 @@ angular.module('modFlexApp')
 
                 d3Service.d3().then(function (d3) {
                     $http(req).then(function successCallback(response) {
-                        console.log(response.data);
+//                        console.log(response.data);
                         if (response.data) {
                             pdbs.forEach(function (p) {
                                 $scope.heatmapData.data.push(
@@ -323,9 +331,10 @@ angular.module('modFlexApp')
                                 });
                             });
 
-                            console.log($scope.heatmapData);
+//                            console.log($scope.heatmapData);
                             $scope.matrixReady = true;
-
+                            $scope.selectedPair = ["Select pair for comparison"];
+                             $scope.selectedPairSLides = [];
                         } else {
                             //set some error message
                         }
@@ -338,6 +347,15 @@ angular.module('modFlexApp')
 
                 });
 
+            };
+
+            $scope.selectPair = function (d, i) {
+                $scope.$apply(function () {
+                    $scope.selectedPair = [d.pdb1, d.pdb2];
+                    $scope.selectedPairSlides = [
+                        d.pdb1+"."+$scope.pdbToMaster[d.pdb1]+".pdb.jpg",
+                        d.pdb2+"."+$scope.pdbToMaster[d.pdb2]+".pdb.jpg"];
+                });
             };
         }
     ])

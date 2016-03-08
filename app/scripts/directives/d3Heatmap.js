@@ -37,7 +37,7 @@
                                 svg.selectAll("*").remove();
 
                                 var margin = {top: 25, right: 25, bottom: 15, left: 25},
-                                gridMin = 40, gridMax = 100,
+                                gridMin = 35, gridMax = 100,
                                     width = 430 - margin.left - margin.right,
                                     gridSize = Math.min(gridMax, Math.max(gridMin, Math.floor(width / (newdata.labels.length + 2)))),
                                     height = gridSize * (newdata.labels.length + 1) - margin.top - margin.bottom,
@@ -82,7 +82,7 @@
                                     });
 
                                 var colorScale = d3.scale.linear()
-                                    .domain([0, 0.0001, newdata.maxScore / 3, newdata.maxScore / 1.5, newdata.maxScore*0.9])
+                                    .domain([0, 0.0001, newdata.maxScore / 3, newdata.maxScore / 1.5, newdata.maxScore * 0.9])
                                     .range(['white', 'green', 'yellow', 'orange', 'red']);
 
                                 var gCards = svgview.append("g");
@@ -105,7 +105,10 @@
                                     .attr("class", "card bordered")
                                     .attr("width", gridSize)
                                     .attr("height", gridSize)
-                                    .style("fill", 'white').attr("transform", "translate(10,0)");
+                                    .style("fill", 'white').attr("transform", "translate(10,0)")
+                                    .on("click", function (d, i) {
+                                        scope.$parent.selectPair(d, i);
+                                    });
 
                                 cards.transition().duration(1000)
                                     .style("fill", function (d) {
@@ -119,7 +122,7 @@
                                 var dLabels = svgview.append("g");
                                 var dataLabels = dLabels.selectAll(".dataLabel")
                                     .data(newdata.data, function (d) {
-                                         return d.pdb1 + ':' + d.pdb2;
+                                        return d.pdb1 + ':' + d.pdb2;
                                     });
 
                                 dataLabels.enter().append("text")
@@ -135,6 +138,9 @@
                                     .style("text-anchor", "left")
                                     .attr("class", function (d, i) {
                                         return  "mono cardvalues";
+                                    })
+                                    .on("click", function (d, i) {
+                                        scope.$parent.selectPair(d, i);
                                     });
 
                                 cards.exit().remove();

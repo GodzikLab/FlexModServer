@@ -65,19 +65,34 @@
                             Select cluster representatives to perform analysis.
                         </div> 
                         <div class="row" ng-show="hasSelection">
-                            <div class="col-xs-12 col-sm-3">
+                            <div class="col-xs-12 col-sm-2">
                                 <ul class="list-group">
                                     <li class="list-group-item" ng-repeat="m in analysisCart| orderBy:'pdb'">
                                         {{m.pdb}}{{m.chain}} </li>
                                 </ul>
                             </div>
-                            <div class="col-xs-12 col-sm-9" ng-controller="RMSDCtrl">
-                                
-                                <a type="button" class="btn btn-primary" ng-click="openPOSALink()" ng-disabled="analysisCart.length < 2">Open POSA</a>
-                                <a type="button" class="btn btn-primary" ng-click="updateRMSD()" ng-disabled="analysisCart.length < 2"></i> Update RMSD matrix</a>
-                                <div class="well">
-                                    <div ng-show="!matrixReady"><i class="fa fa-4x fa-spinner fa-spin"></i></div>
-                                    <div d3-heatmap data="heatmapData" ng-show="matrixReady"></div> </div>
+                            <div class="col-xs-12 col-sm-10" ng-controller="RMSDCtrl">
+                                <div class="row">
+                                    <div class="col-xs-12"> 
+                                        <a type="button" class="btn btn-primary" ng-click="openPOSALink()" ng-disabled="analysisCart.length < 2">Open POSA</a>
+                                        <a type="button" class="btn btn-primary" ng-click="updateRMSD()" ng-disabled="analysisCart.length < 2">Update RMSD matrix</a>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-xs-12 col-sm-6">
+                                        <div class="well">
+                                            <div ng-show="!matrixReady"><i class="fa fa-4x fa-spinner fa-spin"></i></div>
+                                            <div d3-heatmap data="heatmapData" ng-show="matrixReady"></div> 
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-12 col-sm-6">
+                                        <div class="well">{{selectedPair.join(',')}}</div>
+                                        <div ng-show="selectedPairSlides.length > 1">
+                                            <div pdbthumbs slides="selectedPairSlides"></div>
+                                            <br/><span class="small">Mouse over to see animation</span>
+                                        </div>
+                                    </div> 
+                                </div>
                             </div>
                         </div>
                     </uib-accordion-group>
@@ -168,13 +183,7 @@
                                                             <span ng-switch-default>
                                                                 <img ng-src="http://modflex.org/thumbnails/{{r.slide}}" ng-init=" r.slide = r.imgs[0]"style="margin:auto;" ng-mouseenter="startAnimation(r)" ng-mouseleave="stopAnimation(r)" class="img-responsive img-representative-tmb">
                                                             </span>
-                                                            <!--                                                                                                                <uib-carousel interval="myInterval" no-wrap="false">
-                                                                                                                       
-                                                                                                                                                                                    <uib-slide ng-repeat="slide in r.imgs" active="$index === 0" index="$index">
-                                                                                                                                                                                        <img ng-src="http://modflex.org/thumbnails/{{slide}}" style="margin:auto;">
-                                                                                                                        
-                                                                                                                                                                                    </uib-slide>
-                                                                                                                    </uib-carousel>-->
+
                                                         </span>
                                                         <!--<img ng-src="http://www.rcsb.org/pdb/images/{{r.pdb}}_bio_r_80.jpg" style="margin:auto;" class="img-responsive img-representative-tmb">-->
 
