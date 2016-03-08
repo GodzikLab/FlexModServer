@@ -74,11 +74,13 @@
                             <div class="col-xs-12 col-sm-10" ng-controller="RMSDCtrl">
                                 <div class="row">
                                     <div class="col-xs-12"> 
-                                        <a type="button" class="btn btn-primary" ng-click="openPOSALink()" ng-disabled="analysisCart.length < 2">Open POSA</a>
-                                        <a type="button" class="btn btn-primary" ng-click="updateRMSD()" ng-disabled="analysisCart.length < 2">Update RMSD matrix</a>
+                                        <a type="button" class="btn btn-sm btn-warning" ng-click="clearSelection();">Clear selection</a>
+                                        <a type="button" class="btn btn-sm btn-primary" ng-click="openPOSALink()" ng-disabled="analysisCart.length < 2">Open POSA</a>
+                                        <a type="button" class="btn btn-sm btn-primary" ng-click="updateRMSD()" ng-disabled="analysisCart.length < 2">Update RMSD matrix</a>
                                     </div>
+                                    <br />
                                 </div>
-                                <div class="row">
+                                <div class="row" ng-show="analysisCart.length > 1">
                                     <div class="col-xs-12 col-sm-6">
                                         <div class="well">
                                             <div ng-show="!matrixReady"><i class="fa fa-4x fa-spinner fa-spin"></i></div>

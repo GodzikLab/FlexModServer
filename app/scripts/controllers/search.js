@@ -276,6 +276,13 @@ angular.module('modFlexApp')
             var baseUrl = 'http://modflex.org/phps/',
                 session = $scope.sessionObject.sessionId;
 
+            $scope.resetRMSD = function () {
+                $scope.heatmapData = {};
+                $scope.matrixReady = true;
+                $scope.selectedPair = ["Select pair for comparison"];
+                $scope.selectedPairSlides = [];
+            };
+
             $scope.updateRMSD = function () {
                 $scope.matrixReady = false;
                 var pdbs = [];// ['1dfjI', '2z64A', '4fs7A', '4df0A'];
@@ -334,7 +341,7 @@ angular.module('modFlexApp')
 //                            console.log($scope.heatmapData);
                             $scope.matrixReady = true;
                             $scope.selectedPair = ["Select pair for comparison"];
-                             $scope.selectedPairSLides = [];
+                            $scope.selectedPairSLides = [];
                         } else {
                             //set some error message
                         }
@@ -353,8 +360,8 @@ angular.module('modFlexApp')
                 $scope.$apply(function () {
                     $scope.selectedPair = [d.pdb1, d.pdb2];
                     $scope.selectedPairSlides = [
-                        d.pdb1+"."+$scope.pdbToMaster[d.pdb1]+".pdb.jpg",
-                        d.pdb2+"."+$scope.pdbToMaster[d.pdb2]+".pdb.jpg"];
+                        d.pdb1 + "." + $scope.pdbToMaster[d.pdb1] + ".pdb.jpg",
+                        d.pdb2 + "." + $scope.pdbToMaster[d.pdb2] + ".pdb.jpg"];
                 });
             };
         }
