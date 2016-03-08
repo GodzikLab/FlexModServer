@@ -277,10 +277,12 @@ angular.module('modFlexApp')
                 session = $scope.sessionObject.sessionId;
 
             $scope.resetRMSD = function () {
+
                 $scope.heatmapData = {};
                 $scope.matrixReady = true;
                 $scope.selectedPair = ["Select pair for comparison"];
                 $scope.selectedPairSlides = [];
+                $scope.clearSelection();
             };
 
             $scope.updateRMSD = function () {

@@ -30,11 +30,10 @@
 
                             // define render function
                             scope.render = function (newdata) {
+                                svg.selectAll("*").remove();
                                 if (!newdata || !newdata.data || newdata.data.length === 0) {
                                     return;
                                 }
-
-                                svg.selectAll("*").remove();
 
                                 var margin = {top: 25, right: 25, bottom: 15, left: 25},
                                 gridMin = 35, gridMax = 100,
