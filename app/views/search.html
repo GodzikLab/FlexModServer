@@ -68,7 +68,11 @@
                             <div class="col-xs-12 col-sm-2">
                                 <ul class="list-group">
                                     <li class="list-group-item" ng-repeat="m in analysisCart| orderBy:'pdb'">
-                                        {{m.pdb}}{{m.chain}} </li>
+                                        {{m.pdb}}{{m.chain}} 
+                                        <span class="glyphicon glyphicon-remove" 
+                                              ng-click="addtocart(m)" uib-popover="Remove." popover-trigger="mouseenter"  
+                                              popover-append-to-body="true" aria-hidden="true"></span>
+                                    </li>
                                 </ul>
                             </div>
                             <div class="col-xs-12 col-sm-10" ng-controller="RMSDCtrl">
