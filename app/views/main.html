@@ -27,11 +27,11 @@
             </form>
         </div>
         <uib-accordion close-others="true">
-            <uib-accordion-group is-open="false" is-disabled="false">
+            <uib-accordion-group is-open="true" is-disabled="false">
                 <uib-accordion-heading> 
                     <i class="pull-left fa fa-history"></i> My recent queries
                 </uib-accordion-heading>
-
+                <span ng-show="queries.length === 0">No recent queries</span>
                 <div ng-repeat="j in queries">
                     <a href ng-click="useQuery($index)">{{j.title}}</a>
                     <span class="text-danger" ng-click="removeQuery($index)" aria-label="Remove"><i class="fa fa-trash-o"></i></span>
