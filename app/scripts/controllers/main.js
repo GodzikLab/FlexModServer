@@ -38,7 +38,7 @@ angular.module('modFlexApp')
             }, true);
 
             $scope.$watch('sessionObject', function () {
-                if (!$scope.sessionObject.sequence) {
+                if ($scope.sessionObject.sequence) {
                     localStorageService.set('lastQuery', $scope.sessionObject);
                 }
             }, true);

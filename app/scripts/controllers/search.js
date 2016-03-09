@@ -53,14 +53,28 @@ angular.module('modFlexApp')
             $scope.sortReverse = false; // default sort order
 
             $scope.filtLigand = false;
-            $scope.hasErrors = false;
+
+            $scope.alerts = $scope.alerts || [];
+
+            $scope.addAlert = function (type, msg) {
+                if ($scope.alerts.some(function (e) {
+                    return e.msg === msg && e.type === type;
+                })) {
+                    return;
+                }
+                $scope.alerts.push({type: type, msg: msg});
+            };
+
+            $scope.closeAlert = function (index) {
+                $scope.alerts.splice(index, 1);
+            };
+
             $scope.finished = false;
             $scope.r = {};
             $scope.analysisCart = [];
             $scope.hasSelection = false;
-            // console.log('seq:' + $scope.querySequence);
-            var testSeq = $scope.querySequence,
-                session = $scope.sessionObject.sessionId;
+
+            var session = $scope.sessionObject.sessionId;
 
             $scope.addtocart = function (r) {
                 r.selected = !r.selected;
@@ -113,14 +127,13 @@ angular.module('modFlexApp')
                     method: 'POST',
                     url: baseUrl + 'startModel.php',
                     data: {
-                        sequence: testSeq,
+                        sequence: $scope.sessionObject.sequence,
                         pdbID: r.pdb,
                         chainID: r.chain,
                         sessionID: session
                     },
                     headers: {'Content-Type': 'application/x-www-form-urlencoded'}
                 };
-//                console.log(req);
 
                 $http(req).then(function successCallback(response) {
 //                    console.log(response.data);
@@ -172,16 +185,27 @@ angular.module('modFlexApp')
                 wait();
             };
             $scope.searchRequest = function () {
-//                if (!$scope.sessionObject.sequence) {
-//                    console.log("Using last query");
-//                    $scope.sessionObject = $scope.lastQuery;
-//                }
+                if (!$scope.sessionObject.sequence) {
+                    console.log("Using last query");
+                    $scope.sessionObject = $scope.lastQuery;
+                    if ($scope.sessionObject.sequence) {
+                        $scope.addAlert('warning', "Looks like you forgot to provide target sequence. We'll try to display your last search.");
+                    } else {
+                        $scope.addAlert('warning',
+                            "Looks like you forgot to provide target sequence and don't have any recent searches saved. Please go back to home page and enter your sequence.");
+                        $scope.finished = true;
+                        return;
+                    }
+                }
 
                 if ($scope.sessionObject.needSearch) {
                     var req = {
                         method: 'POST',
                         url: baseUrl + 'mastersBySequence.php',
-                        data: {sequence: testSeq, sessionID: session},
+                        data: {
+                            sequence: $scope.sessionObject.sequence,
+                            sessionID: session
+                        },
                         headers: {'Content-Type': 'application/x-www-form-urlencoded'},
                         cache: $templateCache
                     };
@@ -189,22 +213,22 @@ angular.module('modFlexApp')
 //                    console.log(response.data);
 
                         if (response.data.message) {
-                            $scope.hasErrors = true;
-                            $scope.errorMessage = response.data.message;
+                            $scope.addAlert('danger', response.data.message);
                         } else {
                             $scope.sessionObject.hits = response.data;
                             assignImageStack($scope.sessionObject.hits);
                             $scope.sessionObject.hits.forEach(parseNamesFromDesc);
                             $scope.r.hits = $scope.sessionObject.hits;
                             $scope.finished = true;
+                            $scope.sessionObject.needSearch = false;
                         }
                     }, function errorCallback(response) {
-                        $scope.hasErrors = true;
-                        $scope.errorMessage = "Error occured";
+                        $scope.addAlert('danger', "Error occured");
                     });
                 } else {
                     //this is pre-processed object, dont reset anything and dont run new search
                     console.log("wont search again");
+                    $scope.addAlert('info', "Found sequence in recent queries. Using saved results.");
                     $scope.r.hits = $scope.sessionObject.hits;
                     for (var i in $scope.r.hits) {
                         var rhits = $scope.r.hits[i].representatives;
@@ -340,7 +364,6 @@ angular.module('modFlexApp')
                                 });
                             });
 
-//                            console.log($scope.heatmapData);
                             $scope.matrixReady = true;
                             $scope.selectedPair = ["Select pair for comparison"];
                             $scope.selectedPairSLides = [];

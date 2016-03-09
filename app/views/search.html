@@ -18,9 +18,8 @@
         </tbody></table>
     </script> 
 
-    <div id='errors' ng-show='hasErrors' class="row">
-        <div class="col-sm-12 col-md-12 alert alert-danger" role="alert">{{errorMessage}}
-        </div>
+    <div id='errors'class="row">
+        <uib-alert ng-repeat="alert in alerts" type="{{alert.type}}" close="closeAlert($index)">{{alert.msg}}</uib-alert>
     </div>
 
     <uib-accordion close-others="true">
@@ -49,7 +48,7 @@
             <div class="col-sm-12 col-md-6">
                 <uib-accordion close-others="true">
                     <uib-accordion-group heading="Query sequence" is-open="true" is-disabled="false">
-                        <textarea ng-model="querySequence" editable="false" style="min-width: 100%; min-height: 90%"></textarea>
+                        <textarea ng-model="sessionObject.sequence" editable="false" style="min-width: 100%; min-height: 90%"></textarea>
                     </uib-accordion-group>
                 </uib-accordion>
             </div>
