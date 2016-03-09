@@ -11,10 +11,9 @@ angular.module('modFlexApp')
     .controller('SearchCtrl', ['$scope', '$location', '$http', '$templateCache', '$interval', '$window',
         function ($scope, $location, $http, $templateCache, $interval, $window) {
             var baseUrl = 'http://modflex.org/phps/';
-            // store the interval promise for status starck
-            var promise;
-            // store the interval promise for status starck
+            // store the interval promise for animation
             var promiseAnimation;
+
             // uncomment when developing UI
 //            $scope.useTestFasta();
 //
@@ -142,7 +141,7 @@ angular.module('modFlexApp')
                         r.modelingMsg = 'Error occured: ' + response.data.message;
                     } else {
                         r.jobId = response.data.JobId;
-                        promise = $interval(function () {
+                        r.promise = $interval(function () {
                             $scope.trackModelStatus(r);
                         }, 1000);
                     }
@@ -167,19 +166,22 @@ angular.module('modFlexApp')
                             if (response.data.Status === "Progress" || response.data.Status === "In process") {
 //                                $interval(wait, 1000);
                             } else if (response.data.Status === "Failed") {
-                                $scope.stop();
+                                $scope.stop(r.promise);
                                 r.modelingStatus = 'error';
                                 r.modelingMsg = 'modeling error occured. Click to retry. ';
+                                r.promise = {};
                             } else if (response.data.Status === "Done") {
-                                $scope.stop();
+                                $scope.stop(r.promise);
                                 r.modelUrl = response.data.url;
                                 r.modelingStatus = 'done';
                                 r.modelingMsg = 'Model ready. Click to download.';
+                                r.promise = {};
                             }
                         }, function errorCallback(response) {
-                        $scope.stop();
+                        $scope.stop(r.promise);
                         r.modelingStatus = 'error';
                         r.modelingMsg = 'Error occured. ';
+                        r.promise = {};
                     });
                 };
                 wait();
@@ -280,7 +282,7 @@ angular.module('modFlexApp')
                 r.slide = r.imgs[0];
             };
 
-            $scope.stop = function () {
+            $scope.stop = function (promise) {
                 $interval.cancel(promise);
             };
 
