@@ -40,9 +40,16 @@
                         <li>RMSD : maximum intrinsic RMSD detected for that particular cluster</li>
                         <li># of subclusters : number of subclusters found particular cluster</li>
                     </ul><br/>
-                    Select any By clicking on the <span><i class="fa fa-cloud-download"></i></span> you submit to model your query sequence with the selected model. A <span class="text-success"><i class="fa fa-floppy-o"></i></span> symbol will appear when the job has completed and the model is ready for download. 
-                    <br/><br/><b>Ligands</b>
-                    <br/><br/><b>Complex</b>
+                    Select any structure with the <span><i  class="glyphicon glyphicon-unchecked" aria-hidden="true"></i></span>. All selected structures will be listed in the <i>Analysis</i> box of the page (discussed further below).
+                    By clicking on the <span><i class="fa fa-cloud-download"></i></span> you submit to model your query sequence with the selected model. A <span class="text-success"><i class="fa fa-floppy-o"></i></span> symbol will appear when the job has completed and the model is ready for download. 
+                    <br/><br/><b>Ligands</b><br/>
+                    ModFlex.org allows to restrict model selection to those structures resolved with a ligand. Structures with a ligand are decorated with a <span><i class="fa fa-puzzle-piece"></i></span> symbol above. Clicking on the <button type="button" class="btn btn-xs ng-valid ng-not-empty ng-dirty ng-valid-parse btn-primary ng-touched" style=""> <i class="fa fa-puzzle-piece"></i> Has ligands </button> hides all structures without ligands.
+                    <br/><br/><b>Complex</b><br/>
+                    ModFlex.org allows to restrict model selection to those models resolved in complex with other chains, indicated by <span><i class="fa fa-cubes"></i></span> for each structure.
+                </p>
+                <p>
+                    <h3>Analysis box</h3>
+                    After selecting a subset of structures from the table, ModFlex displays an RMSD matrix of the complete selection to analyze the structural difference between all potential modeling templates. Moreover, for an in-detail view on all structures click on the <i>Open POSA</i> button that will forward you to a calculated multiple structure alignmnet of all and advanced tools for structural analysis. However, clicking on a matrix element / structure pair will display an animantion between the images of both structures. 
                 </p>
                 <h2>Legend</h2>
                 <ul class="list-unstyled">
