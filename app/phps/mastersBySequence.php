@@ -49,7 +49,7 @@ if (strlen($fullSequence) == 0) {
     echo(json_encode($errorMessage));
     exit();
 }
-$url = 'http://pdbflex.org/fsn/php/sequenceToPDB.php';
+$url = 'http://pdbflex.org/php/sequenceToPDB.php';
 $data = array('sequence' => $fullSequence);
 
 // use key 'http' even if you send the request to https://...
@@ -88,7 +88,7 @@ else {
 
         $pdbHitID = $pdbID . $chainID;
 
-        $url = 'http://pdbflex.org/fsn/php/pdbChainGetCluster.php?pdb=' . $pdbID . '&chain=' . $chain;
+        $url = 'http://pdbflex.org/php/pdbChainGetCluster.php?pdb=' . $pdbID . '&chain=' . $chain;
         // echo($url);
 
         $options = array(
@@ -124,7 +124,7 @@ else {
             continue;
         }
 
-        $url = "http://pdbflex.org/fsn-data/rmsdClusters/representatives/" . $clusterName . "centers.json";
+        $url = "http://pdbflex.org/fsn-data/representatives/" . $clusterName . "centers.json";
 
         $options = array(
           'http' => array(
@@ -170,7 +170,7 @@ else {
             $subClusterPDB = $parts['pdbID'];
             $subClusterChain = $parts['chain'];
 
-            $url = "http://pdbflex.org/fsn/php/getPDBInfo.php?pdb=" . $subClusterPDB . "&chain=" . $subClusterChain;
+            $url = "http://pdbflex.org/php/getPDBInfo.php?pdb=" . $subClusterPDB . "&chain=" . $subClusterChain;
             // print_r($url);
             $options = array(
               'http' => array(

@@ -29,7 +29,7 @@
 	    exit();
 	}
 
-	$url = 'http://pdbflex.org/fsn/php/alignSequences.php';
+	$url = 'http://pdbflex.org/php/alignSequences.php';
 	// $url = 'http://localhost/FSN/public_html/php/alignSequences.php';
 	$data = array('sequence' => $fullSequence,'pdbID' => '1a50','chainID' => 'A');
 	// print_r($data);
