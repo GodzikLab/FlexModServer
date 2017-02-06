@@ -30,7 +30,7 @@
 	}
 
 	$url = 'http://pdbflex.org/php/alignSequences.php';
-	// $url = 'http://localhost/FSN/public_html/php/alignSequences.php';
+	// $url = 'http://localhost/public_html/php/alignSequences.php';
 	$data = array('sequence' => $fullSequence,'pdbID' => '1a50','chainID' => 'A');
 	// print_r($data);
 	// use key 'http' even if you send the request to https://...

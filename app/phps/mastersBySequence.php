@@ -21,7 +21,7 @@ function getClusterStatistics($clusterID){
     return $averageRMSD;
 }
 
-///data/www/FSN/data/pdb_seqres.txt
+///data/www/data/pdb_seqres.txt
 require_once('functions.php');
 header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Credentials: true ");
