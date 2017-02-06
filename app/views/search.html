@@ -30,26 +30,26 @@
             <div>
                 <h2>Tutorial</h2>
                 <p>
-                    <h3>Search results</h3>
-                    Below you will find a table of BLAST search results of your query sequence against pronteins in our flexibility database. Each row contains a cluster hit and clicking on the left column will immediately forward you to <a href="pdbflex.org" target="blank">PDBFlex</a> to investigate the whole cluster in detail. 
-                    In the right column you will see members of the whole cluster selected to be representatives for the structural flexibility found within the cluster. Hovering your mouse cursor over any of the images starts an animation between each image.<br/>
-                    You can sort all returned clusters either by <br/><br/>
-                    <ul>
-                        <li>e-value : e-Value returned for that particular cluster with your search sequence</li> 
-                        <li>Identity : sequence identity for that particular cluster with your search sequence</li>
-                        <li>RMSD : maximum intrinsic RMSD detected for that particular cluster</li>
-                        <li># of subclusters : number of subclusters found particular cluster</li>
-                    </ul><br/>
-                    Select any structure with the <span><i  class="glyphicon glyphicon-unchecked" aria-hidden="true"></i></span>. All selected structures will be listed in the <i>Analysis</i> box of the page (discussed further below).
-                    By clicking on the <span><i class="fa fa-cloud-download"></i></span> you submit to model your query sequence with the selected model. A <span class="text-success"><i class="fa fa-floppy-o"></i></span> symbol will appear when the job has completed and the model is ready for download. 
-                    <br/><br/><b>Ligands</b><br/>
-                    ModFlex.org allows to restrict model selection to those structures resolved with a ligand. Structures with a ligand are decorated with a <span><i class="fa fa-puzzle-piece"></i></span> symbol above. Clicking on the <button type="button" class="btn btn-xs ng-valid ng-not-empty ng-dirty ng-valid-parse btn-primary ng-touched" style=""> <i class="fa fa-puzzle-piece"></i> Has ligands </button> hides all structures without ligands.
-                    <br/><br/><b>Complex</b><br/>
-                    ModFlex.org allows to restrict model selection to those models resolved in complex with other chains, indicated by <span><i class="fa fa-cubes"></i></span> for each structure.
+                <h3>Search results</h3>
+                Below you will find a table of BLAST search results of your query sequence against pronteins in our flexibility database. Each row contains a cluster hit and clicking on the left column will immediately forward you to <a href="pdbflex.org" target="blank">PDBFlex</a> to investigate the whole cluster in detail. 
+                In the right column you will see members of the whole cluster selected to be representatives for the structural flexibility found within the cluster. Hovering your mouse cursor over any of the images starts an animation between each image.<br/>
+                You can sort all returned clusters either by <br/><br/>
+                <ul>
+                    <li>e-value : e-Value returned for that particular cluster with your search sequence</li> 
+                    <li>Identity : sequence identity for that particular cluster with your search sequence</li>
+                    <li>RMSD : maximum intrinsic RMSD detected for that particular cluster</li>
+                    <li># of subclusters : number of subclusters found particular cluster</li>
+                </ul><br/>
+                Select any structure with the <span><i  class="glyphicon glyphicon-unchecked" aria-hidden="true"></i></span>. All selected structures will be listed in the <i>Analysis</i> box of the page (discussed further below).
+                By clicking on the <span><i class="fa fa-cloud-download"></i></span> you submit to model your query sequence with the selected model. A <span class="text-success"><i class="fa fa-floppy-o"></i></span> symbol will appear when the job has completed and the model is ready for download. 
+                <br/><br/><b>Ligands</b><br/>
+                ModFlex.org allows to restrict model selection to those structures resolved with a ligand. Structures with a ligand are decorated with a <span><i class="fa fa-puzzle-piece"></i></span> symbol above. Clicking on the <button type="button" class="btn btn-xs ng-valid ng-not-empty ng-dirty ng-valid-parse btn-primary ng-touched" style=""> <i class="fa fa-puzzle-piece"></i> Has ligands </button> hides all structures without ligands.
+                <br/><br/><b>Complex</b><br/>
+                ModFlex.org allows to restrict model selection to those models resolved in complex with other chains, indicated by <span><i class="fa fa-cubes"></i></span> for each structure.
                 </p>
                 <p>
-                    <h3>Analysis box</h3>
-                    After selecting a subset of structures from the table, ModFlex displays an RMSD matrix of the complete selection to analyze the structural difference between all potential modeling templates. Moreover, for an in-detail view on all structures click on the <i>Open POSA</i> button that will forward you to a calculated multiple structure alignmnet of all and advanced tools for structural analysis. However, clicking on a matrix element / structure pair will display an animantion between the images of both structures. 
+                <h3>Analysis box</h3>
+                After selecting a subset of structures from the table, ModFlex displays an RMSD matrix of the complete selection to analyze the structural difference between all potential modeling templates. Moreover, for an in-detail view on all structures click on the <i>Open POSA</i> button that will forward you to a calculated multiple structure alignmnet of all and advanced tools for structural analysis. However, clicking on a matrix element / structure pair will display an animantion between the images of both structures. 
                 </p>
                 <h2>Legend</h2>
                 <ul class="list-unstyled">
@@ -90,8 +90,18 @@
                             <div class="col-xs-12 col-sm-2">
                                 <ul class="list-group">
                                     <li class="list-group-item" ng-repeat="m in analysisCart| orderBy:'pdb'">
-                                        {{m.pdb}}{{m.chain}} 
-                                        <span class="glyphicon glyphicon-remove" 
+                                        {{m.pdb}}{{m.chain}} &nbsp;&nbsp; 
+                                        
+                                        <span aria-label="modeling" uib-popover="{{m.modelingMsg|| 'Click to run modeling'}}" popover-trigger="mouseenter" popover-append-to-body="true">
+                                            <span ng-switch on="m.modelingStatus">
+                                                <span ng-switch-when="started"><i class="fa fa-spinner fa-spin"></i></span>
+                                                <span ng-switch-when="done"><span class="text-success"><a ng-href="{{m.modelUrl}}" target="_blank"><i class="fa fa-floppy-o"></i></a></span></span>
+                                                <span ng-switch-when="error"><span class="text-danger" ng-click="modelingRequest(m)"><i class="fa fa-exclamation-circle"></i></span></span>
+                                                <span ng-switch-default><i class="fa fa-cloud-download" ng-click="modelingRequest(m)" ></i></span>
+                                            </span>
+                                        </span>
+                                        
+                                        <span class="glyphicon glyphicon-remove pull-right" 
                                               ng-click="addtocart(m)" uib-popover="Remove." popover-trigger="mouseenter"  
                                               popover-append-to-body="true" aria-hidden="true"></span>
                                     </li>
@@ -101,8 +111,11 @@
                                 <div class="row">
                                     <div class="col-xs-12"> 
                                         <a type="button" class="btn btn-sm btn-warning" ng-click="resetRMSD();">Clear selection</a>
+                                        <a type="button" class="btn btn-sm btn-primary" ng-click="modelAll()">Model all</a>
+
                                         <a type="button" class="btn btn-sm btn-primary" ng-click="openPOSALink()" ng-disabled="analysisCart.length < 2">Open POSA</a>
                                         <a type="button" class="btn btn-sm btn-primary" ng-click="updateRMSD()" ng-disabled="analysisCart.length < 2">Update RMSD matrix</a>
+
                                     </div>
                                     <br />
                                 </div>

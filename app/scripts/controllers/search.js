@@ -255,10 +255,7 @@ angular.module('modFlexApp')
                     p = "&pdbId[]=",
                     c = "&chainId[]=";
                 $scope.analysisCart.forEach(function (i) {
-//                    console.log(i);
-
                     q += p + i.pdb + c + i.chain;
-
                 });
                 q = q.substring(1);
                 $window.open(url + q, '_blank');
@@ -390,6 +387,13 @@ angular.module('modFlexApp')
                         d.pdb1 + "." + $scope.pdbToMaster[d.pdb1] + ".pdb.jpg",
                         d.pdb2 + "." + $scope.pdbToMaster[d.pdb2] + ".pdb.jpg"];
                 });
+            };
+
+            $scope.modelAll = function(){
+                 $scope.analysisCart.forEach(function (r) {
+                    $scope.modelingRequest(r);
+                });
+
             };
         }
     ])
