@@ -124,7 +124,7 @@ else {
             continue;
         }
 
-        $url = "http://pdbflex.org/fsn-data/representatives/" . $clusterName . "centers.json";
+        $url = "http://pdbflex.org/fsn-data/representatives/" . $clusterName;
 
         $options = array(
           'http' => array(
