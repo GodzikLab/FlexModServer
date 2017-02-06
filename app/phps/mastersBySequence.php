@@ -141,7 +141,7 @@ else {
 
         // print_r($subClusters);
 
-        $url = "http://pdbflex.org/fsn-data/completeClusters/" . $clusterName . "NNCluster.json";
+        $url = "http://pdbflex.org/fsn-data/fullClusters/" . $clusterName;
         // print_r($url);
         $options = array(
           'http' => array(
