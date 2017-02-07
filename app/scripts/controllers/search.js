@@ -23,9 +23,9 @@ angular.module('modFlexApp')
                 for (var i in hits) {
                     var rhits = hits[i].representatives;
                     var imgs = [];
-                    //{{r.pdb}}{{r.chain}}.{{hit.masterID}}.pdb.jpg
+                    //{{r.pdb}}{{r.chain}}.{{hit.masterID}}.jpg
                     for (var r in rhits) {
-                        imgs.push(rhits[r].pdb + rhits[r].chain + "." + hits[i].masterID + ".pdb.jpg");
+                        imgs.push(rhits[r].pdb + rhits[r].chain + "." + hits[i].masterID + ".jpg");
                         $scope.pdbToMaster[rhits[r].pdb + rhits[r].chain] = hits[i].masterID
                     }
                     Array.prototype.push.apply(imgs, imgs);
@@ -384,8 +384,8 @@ angular.module('modFlexApp')
                 $scope.$apply(function () {
                     $scope.selectedPair = [d.pdb1, d.pdb2];
                     $scope.selectedPairSlides = [
-                        d.pdb1 + "." + $scope.pdbToMaster[d.pdb1] + ".pdb.jpg",
-                        d.pdb2 + "." + $scope.pdbToMaster[d.pdb2] + ".pdb.jpg"];
+                        d.pdb1 + "." + $scope.pdbToMaster[d.pdb1] + ".jpg",
+                        d.pdb2 + "." + $scope.pdbToMaster[d.pdb2] + ".jpg"];
                 });
             };
 
