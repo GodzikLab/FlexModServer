@@ -8,7 +8,7 @@
                         slides: "=",
                         interval: "="
                     },
-                    template: '<img ng-src="http://modflex.org/thumbnails/{{currentSlide}}" ' +
+                    template: '<img ng-src="{{currentSlide}}" ' +
                         'style="margin:auto;" '+//ng-mouseenter="startAnimation()" ng-mouseleave="stopAnimation()" ' +
                         'class="img-responsive img-representative-tmb">',
                     link: function (scope, iElement, iAttrs) {

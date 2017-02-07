@@ -17,7 +17,7 @@ angular.module('modFlexApp')
             // uncomment when developing UI
 //            $scope.useTestFasta();
 //
-            $scope.pdbToMaster = [];
+            $scope.pdbToThumbUrl = [];
             // temp function go generate array of images for spinning
             var assignImageStack = function (hits) {
                 for (var i in hits) {
@@ -25,21 +25,22 @@ angular.module('modFlexApp')
                     var imgs = [];
                     //{{r.pdb}}{{r.chain}}.{{hit.masterID}}.jpg
                     for (var r in rhits) {
-                        var url = rhits[r].pdb + rhits[r].chain + "." + hits[i].masterID + ".jpg";
-
+                        var url = "http://modflex.org/thumbnails/"+rhits[r].pdb + rhits[r].chain + "." + hits[i].masterID + ".jpg";
+                        var pdbUrl = "http://www.rcsb.org/pdb/images/"+rhits[r].pdb +"_bio_r_80.jpg";
 
                         $.ajax({
                             url: url,
                             type: 'HEAD',
+                            async: false,
                             error:
                                 function () {
                                     //do nothing, will display default image from PDB
+                                    $scope.pdbToThumbUrl[rhits[r].pdb + rhits[r].chain] = pdbUrl;
                                 },
                             success:
                                 function () {
-                                    console.log(url + " found");
                                     imgs.push(url);
-                                    $scope.pdbToMaster[rhits[r].pdb + rhits[r].chain] = hits[i].masterID;
+                                    $scope.pdbToThumbUrl[rhits[r].pdb + rhits[r].chain] = url;
                                 }
                         });
                     }
@@ -399,8 +400,13 @@ angular.module('modFlexApp')
                 $scope.$apply(function () {
                     $scope.selectedPair = [d.pdb1, d.pdb2];
                     $scope.selectedPairSlides = [
-                        d.pdb1 + "." + $scope.pdbToMaster[d.pdb1] + ".jpg",
-                        d.pdb2 + "." + $scope.pdbToMaster[d.pdb2] + ".jpg"];
+                        $scope.pdbToThumbUrl[d.pdb1],
+                        $scope.pdbToThumbUrl[d.pdb2]
+                    ];
+
+//                    $scope.selectedPairSlides = [
+//                        d.pdb1 + "." + $scope.pdbToMaster[d.pdb1] + ".jpg",
+//                        d.pdb2 + "." + $scope.pdbToMaster[d.pdb2] + ".jpg"];
                 });
             };
 
