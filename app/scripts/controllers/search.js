@@ -25,8 +25,23 @@ angular.module('modFlexApp')
                     var imgs = [];
                     //{{r.pdb}}{{r.chain}}.{{hit.masterID}}.jpg
                     for (var r in rhits) {
-                        imgs.push(rhits[r].pdb + rhits[r].chain + "." + hits[i].masterID + ".jpg");
-                        $scope.pdbToMaster[rhits[r].pdb + rhits[r].chain] = hits[i].masterID
+                        var url = rhits[r].pdb + rhits[r].chain + "." + hits[i].masterID + ".jpg";
+
+
+                        $.ajax({
+                            url: url,
+                            type: 'HEAD',
+                            error:
+                                function () {
+                                    //do nothing, will display default image from PDB
+                                },
+                            success:
+                                function () {
+                                    console.log(url + " found");
+                                    imgs.push(url);
+                                    $scope.pdbToMaster[rhits[r].pdb + rhits[r].chain] = hits[i].masterID;
+                                }
+                        });
                     }
                     Array.prototype.push.apply(imgs, imgs);
                     for (var r = 0; r < rhits.length; r++) {
@@ -389,8 +404,8 @@ angular.module('modFlexApp')
                 });
             };
 
-            $scope.modelAll = function(){
-                 $scope.analysisCart.forEach(function (r) {
+            $scope.modelAll = function () {
+                $scope.analysisCart.forEach(function (r) {
                     $scope.modelingRequest(r);
                 });
 

@@ -91,7 +91,7 @@
                                 <ul class="list-group">
                                     <li class="list-group-item" ng-repeat="m in analysisCart| orderBy:'pdb'">
                                         {{m.pdb}}{{m.chain}} &nbsp;&nbsp; 
-                                        
+
                                         <span aria-label="modeling" uib-popover="{{m.modelingMsg|| 'Click to run modeling'}}" popover-trigger="mouseenter" popover-append-to-body="true">
                                             <span ng-switch on="m.modelingStatus">
                                                 <span ng-switch-when="started"><i class="fa fa-spinner fa-spin"></i></span>
@@ -100,7 +100,7 @@
                                                 <span ng-switch-default><i class="fa fa-cloud-download" ng-click="modelingRequest(m)" ></i></span>
                                             </span>
                                         </span>
-                                        
+
                                         <span class="glyphicon glyphicon-remove pull-right" 
                                               ng-click="addtocart(m)" uib-popover="Remove." popover-trigger="mouseenter"  
                                               popover-append-to-body="true" aria-hidden="true"></span>
@@ -227,7 +227,8 @@
 
                                                         </span>
                                                         <!--<img ng-src="http://modflex.org/thumbnails/{{r.pdb}}{{r.chain}}.{{hit.masterID}}.jpg" style="margin:auto;" class="img-responsive img-representative-tmb">-->
-                                                        <div class="text-center"><span uib-popover-template="'itemPopoverTpl.html'" popover-trigger="mouseenter" ng-init="item = r" popover-append-to-body="true">{{r.pdb}}{{r.chain}} <i class="fa fa-info-circle"></i></span></div>
+                                                        <div class="text-center">
+                                                            <span uib-popover-template="'itemPopoverTpl.html'" popover-trigger="mouseenter" ng-init="item = r" popover-append-to-body="true">{{r.pdb}}{{r.chain}} <i class="fa fa-info-circle"></i></span></div>
                                                     </li>
                                                 </ul>
                                             </div>
