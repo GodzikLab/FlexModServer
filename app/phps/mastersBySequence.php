@@ -2,7 +2,7 @@
 
 function getClusterStatistics($clusterID){
 
-    $url = 'http://pdbflex.org/fsn-data/covrms_ana/' . $clusterID;
+    $url = 'http://pdbflex.org/fsn-data/seqres.cl.covrms_ana/' . $clusterID;
 
     $options = array(
           'http' => array(
