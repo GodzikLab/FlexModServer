@@ -219,10 +219,10 @@
                                                                 <img ng-src="http://www.rcsb.org/pdb/images/{{r.pdb}}_bio_r_80.jpg" style="margin:auto;" class="img-responsive img-representative-tmb">
                                                             </span>
                                                             <span ng-switch-when="1">
-                                                                <img ng-src="http://modflex.org/thumbnails/{{r.imgs[0]}}" style="margin:auto;" class="img-responsive img-representative-tmb">
+                                                                <img ng-src="{{r.imgs[0]}}" style="margin:auto;" class="img-responsive img-representative-tmb">
                                                             </span>
                                                             <span ng-switch-default>
-                                                                <img ng-src="http://modflex.org/thumbnails/{{r.slide}}" ng-init=" r.slide = r.imgs[0]"style="margin:auto;" ng-mouseenter="startAnimation(r)" ng-mouseleave="stopAnimation(r)" class="img-responsive img-representative-tmb">
+                                                                <img ng-src="{{r.slide}}" ng-init=" r.slide = r.imgs[0]"style="margin:auto;" ng-mouseenter="startAnimation(r)" ng-mouseleave="stopAnimation(r)" class="img-responsive img-representative-tmb">
                                                             </span>
 
                                                         </span>
