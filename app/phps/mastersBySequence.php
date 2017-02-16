@@ -102,12 +102,7 @@ else {
         $context = stream_context_create($options);
         $clusterInfoJSONString = file_get_contents($url, false, $context);
         if (strcmp($clusterInfoJSONString, '{"sender":"pdbChainGetCluster.php",message":"No cluster found."}') == 0) {
-            $errorMessage = array();
-            $errorMessage['script'] = 'pdbChainGetCluster.php';
-            $errorMessage['title'] = 'No cluster found';
-            $errorMessage['message'] = 'No matching cluster was detected for your input sequence.';
-            echo(json_encode($errorMessage));
-            exit();
+            continue;
         }
 
         // echo($clusterInfoJSONString);
