@@ -40,17 +40,7 @@
 	$resultObject = json_decode($result, TRUE);
 
 	if(strcmp($resultObject["Status"] , "Done") == 0){
-		$url = $resultObject["url"];
-
-		$sessionFolder = "../jobs/".$sessionID;
-		if(!is_dir($sessionFolder))
-			mkdir($sessionFolder);
-
-		file_put_contents($sessionFolder."/".$modelJobID."model.pdb", file_get_contents($url));
-
-		$resultObject["url"] = "/jobs/".$sessionID."/".$modelJobID."model.pdb";
 		echo(json_encode($resultObject));
-
 	}else{
 		// {"JobId": "query.436554299.24757"}, {"Status": "Progress"}}
 		echo($result);
