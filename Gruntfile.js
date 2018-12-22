@@ -363,7 +363,7 @@ module.exports = function (grunt) {
                         expand: true,
                         cwd: '<%= yeoman.dist %>/',
                         src: ['**'],
-                        dest: '/var/www/html/'
+                        dest: '/data/www/html/'
                     },
                 ]
             },
