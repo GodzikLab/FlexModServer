@@ -10,7 +10,8 @@
 angular.module('modFlexApp')
     .controller('SearchCtrl', ['$scope', '$location', '$http', '$templateCache', '$interval', '$window',
         function ($scope, $location, $http, $templateCache, $interval, $window) {
-            var baseUrl = 'http://modflex.org/phps/';
+            var server = "http://13.64.37.68/"
+            var baseUrl = server + 'phps/';
             // store the interval promise for animation
             var promiseAnimation;
 
@@ -25,7 +26,7 @@ angular.module('modFlexApp')
                     var imgs = [];
                     //{{r.pdb}}{{r.chain}}.{{hit.masterID}}.jpg
                     for (var r in rhits) {
-                        var url = "http://modflex.org/thumbnails/"+rhits[r].pdb + rhits[r].chain + "." + hits[i].masterID + ".jpg";
+                        var url = server + "thumbnails/"+rhits[r].pdb + rhits[r].chain + "." + hits[i].masterID + ".jpg";
                         var pdbUrl = "http://www.rcsb.org/pdb/images/"+rhits[r].pdb +"_bio_r_80.jpg";
 
                         $.ajax({
