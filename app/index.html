@@ -52,19 +52,24 @@
                     <div class="collapse navbar-collapse" id="js-navbar-collapse">
                         <ul class="nav navbar-nav">
                             <li ng-class="{
-                                        active: isActive('/')
-                                    }"><a href="#/">Home</a></li>
+                                active: isActive('/')
+                                }"><a href="#/">Home</a></li>
                             <li  ng-class="{
-                                        active: isActive('/about')}"><a ng-href="#/about">About</a></li>
+                                 active: isActive('/about')}"><a ng-href="#/about">About</a></li>
                             <li  ng-class="{
-                                        active: isActive('/contact')
-                                    }"><a ng-href="#/contact">Contact</a></li>
+                                 active: isActive('/contact')
+                                 }"><a ng-href="#/contact">Contact</a></li>
                         </ul>
                     </div>
                 </div>
             </div>
         </div>
-
+        <div class="alert alert-warning container main" role="info"> Please be
+            advised that we have recently moved our server to a new location.
+            We tried our best to fully test all functions on the website, but if
+            something does not work for you please let us know at  <a
+                href="mailto:godziklab@gmail.com">     godziklab@gmail.com</a>.
+        </div>
         <div class="container"  ng-controller="AppCtrl">
             <div ng-view=""></div>
         </div>
@@ -113,7 +118,7 @@
         <script src="scripts/services/ngD3.js"></script>
 
         <script src="scripts/directives/d3Heatmap.js"></script>
-        
+
         <script src="scripts/directives/pdbthumbs.js"></script>
         <script src="scripts/controllers/main.js"></script>
         <script src="scripts/controllers/about.js"></script>
