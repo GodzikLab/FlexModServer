@@ -1,22 +1,24 @@
 <?php
 
-function getClusterStatistics($clusterID){
+$pdbflex = 'http://pdbflex.org';
 
-    $url = 'http://pdbflex.org/fsn-data/seqres.cl.covrms_ana/' . $clusterID;
+function getClusterStatistics($clusterID) {
+    $pdbflex = 'http://pdbflex.org';
+    $url = $pdbflex + '/fsn-data/seqres.cl.covrms_ana/' . $clusterID;
 
     $options = array(
-          'http' => array(
-            // 'header'  => "Content-type: application/x-www-form-urlencoded\r\n",
-            'method' => 'GET'
-          // 'content' => http_build_query($data),
-          ),
+      'http' => array(
+        // 'header'  => "Content-type: application/x-www-form-urlencoded\r\n",
+        'method' => 'GET'
+      // 'content' => http_build_query($data),
+      ),
     );
 
     $context = stream_context_create($options);
     $clusterStats = file_get_contents($url, false, $context);
 
-    $lines = explode('\n',$clusterStats);
-    $averageRMSD = explode('\n',str_replace('MaximumC-alphaRMSD','',str_replace(' ','',explode(':',$lines[0])[1])))[0];
+    $lines = explode('\n', $clusterStats);
+    $averageRMSD = explode('\n', str_replace('MaximumC-alphaRMSD', '', str_replace(' ', '', explode(':', $lines[0])[1])))[0];
 
     return $averageRMSD;
 }
@@ -49,7 +51,7 @@ if (strlen($fullSequence) == 0) {
     echo(json_encode($errorMessage));
     exit();
 }
-$url = 'http://pdbflex.org/php/sequenceToPDB.php';
+$url = $pdbflex + '/php/sequenceToPDB.php';
 $data = array('sequence' => $fullSequence);
 
 // use key 'http' even if you send the request to https://...
@@ -88,7 +90,7 @@ else {
 
         $pdbHitID = $pdbID . $chainID;
 
-        $url = 'http://pdbflex.org/php/pdbChainGetCluster.php?pdb=' . $pdbID . '&chain=' . $chain;
+        $url = $pdbflex + '/php/pdbChainGetCluster.php?pdb=' . $pdbID . '&chain=' . $chain;
         // echo($url);
 
         $options = array(
@@ -115,11 +117,11 @@ else {
 
         $clusterName = $masterPDBID . $masterChainID;
 
-        if(in_array($clusterName,$foundMasterIDs)){
+        if (in_array($clusterName, $foundMasterIDs)) {
             continue;
         }
 
-        $url = "http://pdbflex.org/fsn-data/representatives/" . $clusterName;
+        $url = $pdbflex + "/fsn-data/representatives/" . $clusterName;
 
         $options = array(
           'http' => array(
@@ -136,7 +138,7 @@ else {
 
         // print_r($subClusters);
 
-        $url = "http://pdbflex.org/fsn-data/fullClusters/" . $clusterName;
+        $url = $pdbflex + "/fsn-data/fullClusters/" . $clusterName;
         // print_r($url);
         $options = array(
           'http' => array(
@@ -165,7 +167,7 @@ else {
             $subClusterPDB = $parts['pdbID'];
             $subClusterChain = $parts['chain'];
 
-            $url = "http://pdbflex.org/php/getPDBInfo.php?pdb=" . $subClusterPDB . "&chain=" . $subClusterChain;
+            $url = $pdbflex + "/php/getPDBInfo.php?pdb=" . $subClusterPDB . "&chain=" . $subClusterChain;
             // print_r($url);
             $options = array(
               'http' => array(
@@ -177,12 +179,12 @@ else {
 
             $context = stream_context_create($options);
             $pdbInfoJSONString = file_get_contents($url, false, $context);
-            
-            $subclusterMembers = array();
-            try{
-                $subclusterMembers = $completeSubClusters[$subClusterPDB . $subClusterChain];
-            }catch(Exception $e){
 
+            $subclusterMembers = array();
+            try {
+                $subclusterMembers = $completeSubClusters[$subClusterPDB . $subClusterChain];
+            } catch (Exception $e) {
+                
             }
 
             $pdbInfo = json_decode($pdbInfoJSONString, TRUE);
@@ -190,7 +192,7 @@ else {
             $ligands = $pdbInfo["ligands"];
 
             // echo($subClusterID);
-            if(!in_array($pdbInfo, $subClusterArray))
+            if (!in_array($pdbInfo, $subClusterArray))
                 array_push($subClusterArray, $pdbInfo);
         }
 
@@ -214,13 +216,10 @@ else {
     }
     echo(json_encode($allMasters));
 
-    if(count($allMasters) > 0){
-        $sessionFolder = "../jobs/".$sessionID;
-        if(!is_dir($sessionFolder))
+    if (count($allMasters) > 0) {
+        $sessionFolder = "../jobs/" . $sessionID;
+        if (!is_dir($sessionFolder))
             mkdir($sessionFolder);
     }
-
 }
-
-#"http://pdbflex.org/fsn-data/rmsdClusters/fullPlots/".$clusterName."result.json";
 ?>
