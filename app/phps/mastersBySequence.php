@@ -4,7 +4,7 @@ $pdbflex = 'http://pdbflex.org';
 
 function getClusterStatistics($clusterID) {
     $pdbflex = 'http://pdbflex.org';
-    $url = $pdbflex + '/fsn-data/seqres.cl.covrms_ana/' . $clusterID;
+    $url = $pdbflex . '/fsn-data/seqres.cl.covrms_ana/' . $clusterID;
 
     $options = array(
       'http' => array(
@@ -51,7 +51,7 @@ if (strlen($fullSequence) == 0) {
     echo(json_encode($errorMessage));
     exit();
 }
-$url = $pdbflex + '/php/sequenceToPDB.php';
+$url = $pdbflex . '/php/sequenceToPDB.php';
 $data = array('sequence' => $fullSequence);
 
 // use key 'http' even if you send the request to https://...
@@ -71,6 +71,7 @@ if ($masterIDsJSONString === FALSE) {
     $errorMessage['script'] = 'mastersBySequence.php';
     $errorMessage['title'] = 'Blast fail';
     $errorMessage['message'] = 'An error occured while comparing your sequence to our database. Please make sure your sequence is correct.';
+    $errorMessage['url'] = $url;
     echo(json_encode($errorMessage));
 }
 else {
@@ -90,7 +91,7 @@ else {
 
         $pdbHitID = $pdbID . $chainID;
 
-        $url = $pdbflex + '/php/pdbChainGetCluster.php?pdb=' . $pdbID . '&chain=' . $chain;
+        $url = $pdbflex . '/php/pdbChainGetCluster.php?pdb=' . $pdbID . '&chain=' . $chain;
         // echo($url);
 
         $options = array(
@@ -121,7 +122,7 @@ else {
             continue;
         }
 
-        $url = $pdbflex + "/fsn-data/representatives/" . $clusterName;
+        $url = $pdbflex . "/fsn-data/representatives/" . $clusterName;
 
         $options = array(
           'http' => array(
@@ -138,7 +139,7 @@ else {
 
         // print_r($subClusters);
 
-        $url = $pdbflex + "/fsn-data/fullClusters/" . $clusterName;
+        $url = $pdbflex . "/fsn-data/fullClusters/" . $clusterName;
         // print_r($url);
         $options = array(
           'http' => array(
@@ -167,7 +168,7 @@ else {
             $subClusterPDB = $parts['pdbID'];
             $subClusterChain = $parts['chain'];
 
-            $url = $pdbflex + "/php/getPDBInfo.php?pdb=" . $subClusterPDB . "&chain=" . $subClusterChain;
+            $url = $pdbflex . "/php/getPDBInfo.php?pdb=" . $subClusterPDB . "&chain=" . $subClusterChain;
             // print_r($url);
             $options = array(
               'http' => array(
