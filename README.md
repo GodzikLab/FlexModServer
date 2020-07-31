@@ -1,3 +1,6 @@
+Archived. Use https://github.com/GodzikLab/ModFlex2
+
+
 # ModFlex
 
 Source code for ModFlex server
